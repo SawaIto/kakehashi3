@@ -81,12 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </span>
                 </div>
             </div>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
+            <button type="submit" class="w-full bg-green-400 hover:bg-green-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">登録</button>
         </form>
-        <div class="mt-6 text-center">
-            <a href="index.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base md:text-lg transition duration-300">
-                トップページに戻る
-            </a>
+        <div class="mt-6 text-center space-x-4">
+        <a href="login.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ログイン</a>
+        </div>
         </div>
     </div>
     <script>
