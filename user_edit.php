@@ -1,54 +1,55 @@
 <?php
 session_start();
-include("funcs.php");
+require_once 'funcs.php';
 sschk();
-
-// 管理者以外はアクセス不可
-if ($_SESSION["kanri_flg"] != 1) {
-    redirect('select.php');
-    exit;
-}
 
 $pdo = db_conn();
 
-// GETでIDを取得
-$id = $_GET['id'];
-
-// POST処理
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = $_POST['name'];
-    $lid = $_POST['lid'];
-    $kanri_flg = isset($_POST['kanri_flg']) ? 1 : 0;
-    $modify_flg = isset($_POST['modify_flg']) ? 1 : 0;
-    $view_flg = isset($_POST['view_flg']) ? 1 : 0;
-
-    $sql = "UPDATE users SET name=:name, lid=:lid, kanri_flg=:kanri_flg, modify_flg=:modify_flg, view_flg=:view_flg WHERE id=:id";
-    $stmt = $pdo->prepare($sql);
-    $stmt->bindValue(':name', $name, PDO::PARAM_STR);
-    $stmt->bindValue(':lid', $lid, PDO::PARAM_STR);
-    $stmt->bindValue(':kanri_flg', $kanri_flg, PDO::PARAM_INT);
-    $stmt->bindValue(':modify_flg', $modify_flg, PDO::PARAM_INT);
-    $stmt->bindValue(':view_flg', $view_flg, PDO::PARAM_INT);
-    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-    $status = $stmt->execute();
-
-    if($status==false) {
-        sql_error($stmt);
-    } else {
-        redirect('user_list.php?success=updated');
-        exit;
-    }
+if ($_SESSION['role'] != 'admin') {
+    redirect('home.php');
+    exit("管理者のみがユーザーを編集できます。");
 }
 
-// ユーザー情報を取得
-$stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
-$stmt->bindValue(':id', $id, PDO::PARAM_INT);
-$status = $stmt->execute();
+$user_id = $_GET['id'];
 
-if($status==false) {
-    sql_error($stmt);
-} else {
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+// ユーザー情報の取得
+$stmt = $pdo->prepare("SELECT u.*, gm.group_id FROM users u 
+                       JOIN group_members gm ON u.id = gm.user_id 
+                       WHERE u.id = ? AND gm.group_id = ?");
+$stmt->execute([$user_id, $_SESSION['group_id']]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    $_SESSION['error_message'] = "指定されたユーザーが見つかりません。";
+    redirect('user_list.php');
+}
+
+$is_admin = ($user['role'] == 'admin');
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $role = $is_admin ? 'admin' : $_POST['role'];
+
+    // パスワードが入力された場合のみ更新
+    $password_sql = "";
+    $params = [$username, $email, $role, $user_id];
+    if (!empty($_POST['password'])) {
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+        $password_sql = ", password = ?";
+        $params = [$username, $email, $role, $password, $user_id];
+    }
+
+    $sql = "UPDATE users SET username = ?, email = ?, role = ?" . $password_sql . " WHERE id = ?";
+    $stmt = $pdo->prepare($sql);
+    $status = $stmt->execute($params);
+
+    if ($status) {
+        $_SESSION['success_message'] = "ユーザー情報が正常に更新されました。";
+        redirect('user_list.php');
+    } else {
+        $error = "ユーザー情報の更新に失敗しました。";
+    }
 }
 ?>
 
@@ -57,52 +58,47 @@ if($status==false) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>ユーザー編集</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-blue-100 min-h-screen flex flex-col">
-    <?php include 'header.php'; ?>
-    
-    <div class="container mx-auto px-4 py-8 mt-32 sm:mt-20 flex-grow">
-        <form method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h2 class="text-2xl font-bold mb-6">ユーザー編集</h2>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="name">
-                    名前
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="name" type="text" name="name" value="<?= h($row['name']) ?>" required>
+<body class="bg-blue-100">
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+        <h1 class="text-4xl font-bold mb-6 text-center">ユーザー編集</h1>
+        <?php if (isset($error)): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <span class="block sm:inline text-base"><?= h($error) ?></span>
             </div>
-            <div class="mb-4">
-                <label class="block text-gray-700 text-sm font-bold mb-2" for="lid">
-                    ログインID
-                </label>
-                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="lid" type="text" name="lid" value="<?= h($row['lid']) ?>" required>
+        <?php endif; ?>
+        <form method="POST" class="space-y-6 bg-blue-50 p-6 rounded-lg border border-blue-200">
+            <div>
+                <label for="username" class="block text-base font-medium text-gray-700 mb-1">ユーザー名</label>
+                <input type="text" name="username" id="username" required class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base" value="<?= h($user['username']) ?>">
             </div>
-            <div class="mb-4">
-                <span class="block text-gray-700 text-sm font-bold mb-2">権限</span>
-                <label class="inline-flex items-center mt-3">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="kanri_flg" value="1" <?= $row['kanri_flg'] ? 'checked' : '' ?>><span class="ml-2 text-gray-700">管理者権限</span>
-                </label>
-                <label class="inline-flex items-center mt-3">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="modify_flg" value="1" <?= $row['modify_flg'] ? 'checked' : '' ?>><span class="ml-2 text-gray-700">編集権限</span>
-                </label>
-                <label class="inline-flex items-center mt-3">
-                    <input type="checkbox" class="form-checkbox h-5 w-5 text-blue-600" name="view_flg" value="1" <?= $row['view_flg'] ? 'checked' : '' ?>><span class="ml-2 text-gray-700">閲覧権限</span>
-                </label>
+            <div>
+                <label for="email" class="block text-base font-medium text-gray-700 mb-1">メールアドレス</label>
+                <input type="email" name="email" id="email" required class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base" value="<?= h($user['email']) ?>">
             </div>
-            <div class="flex items-center justify-between">
-                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    更新
-                </button>
-                <a class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="user_list.php">
-                    キャンセル
-                </a>
+            <div>
+                <label for="password" class="block text-base font-medium text-gray-700 mb-1">新しいパスワード（変更する場合のみ）</label>
+                <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base">
+            </div>
+            <div>
+                <label for="role" class="block text-base font-medium text-gray-700 mb-1">権限</label>
+                <?php if ($is_admin): ?>
+                    <input type="hidden" name="role" value="admin">
+                    <p class="mt-1 text-base text-gray-700">管理者 (変更不可)</p>
+                <?php else: ?>
+                    <select name="role" id="role" required class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base">
+                        <option value="modify" <?= $user['role'] == 'modify' ? 'selected' : '' ?>>編集者</option>
+                        <option value="view" <?= $user['role'] == 'view' ? 'selected' : '' ?>>閲覧者</option>
+                    </select>
+                <?php endif; ?>
+            </div>
+            <div class="flex items-center justify-between pt-4">
+                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 text-lg">更新</button>
+                <a href="user_list.php" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200 text-lg">キャンセル</a>
             </div>
         </form>
     </div>
-
-    <footer class="w-full mt-auto">
-        <?php include 'footer.php'; ?>
-    </footer>
 </body>
 </html>

@@ -1,20 +1,24 @@
 <?php
-//必ずsession_startは最初に記述
+require_once 'funcs.php';
+
 session_start();
 
-//SESSIONを初期化（空っぽにする）
+// セッション変数を全て解除する
 $_SESSION = array();
 
-//Cookieに保存してある"SessionIDの保存期間を過去にして破棄
-if (isset($_COOKIE[session_name()])) { //session_name()は、セッションID名を返す関数
-    setcookie(session_name(), '', time()-42000, '/');
+// セッションを切断するにはセッションクッキーも削除する。
+// Note: セッション情報だけでなくセッションを破壊する。
+if (ini_get("session.use_cookies")) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000,
+        $params["path"], $params["domain"],
+        $params["secure"], $params["httponly"]
+    );
 }
 
-//サーバ側での、セッションIDの破棄
+// 最終的に、セッションを破壊する
 session_destroy();
 
-//処理後、index.phpへリダイレクト
-header("Location: login.php");
-exit();
-
+// ログインページにリダイレクト
+redirect('login.php');
 ?>
