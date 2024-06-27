@@ -59,6 +59,14 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
                 <?php endif; ?>
                 <a href="schedule_view.php" class="block bg-blue-300 hover:bg-blue-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">スケジュール表示</a>
             </div>
+            <div class="grid grid-cols-2 gap-4">
+                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify'): ?>
+                    <a href="memo_input.php" class="block bg-orange-500 hover:bg-orange-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">メモ登録</a>
+                <?php else: ?>
+                    <div></div>
+                <?php endif; ?>
+                <a href="memo_view.php" class="block bg-orange-300 hover:bg-orange-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">メモ表示</a>
+            </div>
         </div>
     </div>
 </body>

@@ -12,7 +12,7 @@ if ($_SESSION['kanri_flg'] != 1 && $_SESSION['modify_flg'] != 1) {
 $user_id = $_SESSION['user_id'];
 
 // ユーザー一覧の取得（現在のユーザーを除く）
-$stmt = $pdo->prepare("SELECT id, name FROM users WHERE id != :current_user_id");
+$stmt = $pdo->prepare("SELECT id, username FROM users WHERE id != :current_user_id");
 $stmt->bindValue(':current_user_id', $user_id, PDO::PARAM_INT);
 $stmt->execute();
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -86,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $e->getMessage();
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -94,67 +93,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title><?= $memo ? 'メモ編集' : 'メモ作成' ?></title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-blue-100 min-h-screen flex flex-col">
-    <?php include 'header.php'; ?>
-    
-    <div class="container mx-auto px-4 py-8 mt-32 sm:mt-20 flex-grow">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h2 class="text-2xl font-bold mb-6 text-center"><?= $memo ? 'メモ編集' : 'メモ作成' ?></h2>
-            <form action="memo_edit.php" method="post">
-                <?php if($memo): ?>
-                    <input type="hidden" name="id" value="<?= $memo['id'] ?>">
-                <?php endif; ?>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-xl font-bold mb-2" for="category">
-                        カテゴリー:
-                    </label>
-                    <select name="category" id="category" class="border border-blue-500 rounded-md px-3 py-2 text-gray-700 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
-                        <option value="買い物" <?= ($memo && $memo['category'] == '買い物') ? 'selected' : '' ?>>買い物</option>
-                        <option value="予定" <?= ($memo && $memo['category'] == '予定') ? 'selected' : '' ?>>予定</option>
-                        <option value="その他" <?= ($memo && $memo['category'] == 'その他') ? 'selected' : '' ?>>その他</option>
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-xl font-bold mb-2" for="title">
-                        表題:
-                    </label>
-                    <input class="border border-blue-500 rounded-md px-3 py-2 text-gray-700 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" id="title" type="text" name="title" value="<?= $memo ? h($memo['title']) : '' ?>" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-xl font-bold mb-2" for="content">
-                        内容:
-                    </label>
-                    <textarea class="border border-blue-500 rounded-md px-3 py-2 text-gray-700 text-xl focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" id="content" name="content" rows="4" required><?= $memo ? h($memo['content']) : '' ?></textarea>
-                </div>
-                <div class="mb-4">
-                    <label class="inline-flex items-center">
-                        <input type="checkbox" name="is_private" class="form-checkbox" <?= $memo && $memo['is_private'] ? 'checked' : '' ?>>
-                        <span class="ml-2">プライベートメモ（共有しない）</span>
-                    </label>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 text-xl font-bold mb-2">共有するユーザー:</label>
+<body class="bg-blue-100">
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center"><?= $memo ? 'メモ編集' : 'メモ作成' ?></h1>
+        <form action="memo_edit.php" method="post" class="space-y-4">
+            <?php if($memo): ?>
+                <input type="hidden" name="id" value="<?= $memo['id'] ?>">
+            <?php endif; ?>
+            <div>
+                <label for="category" class="block text-lg font-semibold">カテゴリー:</label>
+                <select name="category" id="category" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <option value="買い物" <?= ($memo && $memo['category'] == '買い物') ? 'selected' : '' ?>>買い物</option>
+                    <option value="予定" <?= ($memo && $memo['category'] == '予定') ? 'selected' : '' ?>>予定</option>
+                    <option value="その他" <?= ($memo && $memo['category'] == 'その他') ? 'selected' : '' ?>>その他</option>
+                </select>
+            </div>
+            <div>
+                <label for="title" class="block text-lg font-semibold">表題:</label>
+                <input type="text" id="title" name="title" value="<?= $memo ? h($memo['title']) : '' ?>" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="content" class="block text-lg font-semibold">内容:</label>
+                <textarea id="content" name="content" rows="4" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"><?= $memo ? h($memo['content']) : '' ?></textarea>
+            </div>
+            <div>
+                <label class="inline-flex items-center">
+                    <input type="checkbox" name="is_private" class="form-checkbox text-blue-500" <?= $memo && $memo['is_private'] ? 'checked' : '' ?>>
+                    <span class="ml-2 text-lg">プライベートメモ（共有しない）</span>
+                </label>
+            </div>
+            <div>
+                <p class="text-lg font-semibold mb-2">共有するユーザー:</p>
+                <div class="space-y-2">
                     <?php foreach ($users as $user): ?>
-                        <label class="inline-flex items-center mt-3">
-                            <input type="checkbox" name="shared_users[]" value="<?= $user['id'] ?>" class="form-checkbox" 
+                        <label class="inline-flex items-center">
+                            <input type="checkbox" name="shared_users[]" value="<?= $user['id'] ?>" class="form-checkbox text-blue-500" 
                                 <?= (in_array($user['id'], $shared_users)) ? 'checked' : '' ?>>
-                            <span class="ml-2"><?= h($user['name']) ?></span>
+                            <span class="ml-2"><?= h($user['username']) ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
-                <div class="flex items-center justify-between">
-                    <input class="bg-blue-500 hover:bg-blue-700 text-white font-bold text-xl py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" value="<?= $memo ? '更新' : '保存' ?>">
-                    <a href="memo_view.php" class="text-blue-500 hover:text-blue-700">キャンセル</a>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-lg transition duration-300">
+                    <?= $memo ? '更新' : '保存' ?>
+                </button>
+                <a href="memo_view.php" class="text-blue-500 hover:text-blue-700 transition duration-300">キャンセル</a>
+            </div>
+        </form>
     </div>
-
-    <footer class="w-full mt-auto">
-        <?php include 'footer.php'; ?>
-    </footer>
 </body>
-</html> 
+</html>
