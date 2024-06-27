@@ -55,12 +55,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>管理者登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6">管理者登録</h1>
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">管理者登録</h1>
         <?php if (isset($error)): ?>
-            <p class="text-red-500 mb-4"><?= h($error) ?></p>
+            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4" id="adminRegisterForm" autocomplete="off">
             <div>
@@ -73,14 +74,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div>
                 <label for="password" class="block text-lg font-semibold">パスワード：</label>
-                <input type="password" id="password" name="password" required class="w-full p-2 border rounded" autocomplete="new-password">
+                <div class="relative">
+                    <input type="password" id="password" name="password" required class="w-full p-2 border rounded pr-10" autocomplete="new-password">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility()">
+                        <i id="passwordToggleIcon" class="fas fa-eye"></i>
+                    </span>
+                </div>
             </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded text-lg">登録</button>
+            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
         </form>
+        <div class="mt-6 text-center">
+            <a href="index.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base md:text-lg transition duration-300">
+                トップページに戻る
+            </a>
+        </div>
     </div>
     <script>
     window.onload = function() {
         document.getElementById('adminRegisterForm').reset();
+    }
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('password');
+        const passwordToggleIcon = document.getElementById('passwordToggleIcon');
+        
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordToggleIcon.classList.remove('fa-eye');
+            passwordToggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            passwordToggleIcon.classList.remove('fa-eye-slash');
+            passwordToggleIcon.classList.add('fa-eye');
+        }
     }
     </script>
 </body>
