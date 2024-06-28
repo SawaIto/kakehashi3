@@ -33,7 +33,6 @@
 </header>
 
 <body>
-あいうえお
 <script>
     function scrollToComment() {
         // Get the target element
