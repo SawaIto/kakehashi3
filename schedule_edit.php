@@ -75,36 +75,38 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6">スケジュール編集</h1>
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center">スケジュール編集</h1>
         <?php if (isset($error)): ?>
-            <p class="text-red-500 mb-4"><?= h($error) ?></p>
+            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4">
             <div>
                 <label for="date" class="block text-lg font-semibold">日付：</label>
-                <input type="date" id="date" name="date" value="<?= h($schedule['date']) ?>" required class="w-full p-2 border rounded">
+                <input type="date" id="date" name="date" value="<?= h($schedule['date']) ?>" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
             </div>
             <div>
                 <label for="content" class="block text-lg font-semibold">内容：</label>
-                <textarea id="content" name="content" required class="w-full p-2 border rounded"><?= h($schedule['content']) ?></textarea>
+                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"><?= h($schedule['content']) ?></textarea>
             </div>
             <div>
-                <p class="text-lg font-semibold">共有先：</p>
-                <?php foreach ($group_members as $member): ?>
-                    <label class="block">
-                        <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" <?= in_array($member['id'], $shared_with) ? 'checked' : '' ?>>
-                        <?= h($member['username']) ?>
-                    </label>
-                <?php endforeach; ?>
+                <p class="text-lg font-semibold mb-2">共有先：</p>
+                <div class="space-y-2">
+                    <?php foreach ($group_members as $member): ?>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" <?= in_array($member['id'], $shared_with) ? 'checked' : '' ?> class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
+                            <span><?= h($member['username']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
             </div>
-            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded text-lg">更新</button>
+            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
         </form>
         
         <!-- ホームに戻るボタン -->
         <div class="mt-6 text-center">
-            <a href="home.php" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
-                ホームに戻る
+            <a href="schedule_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+                スケジュール一覧に戻る
             </a>
         </div>
     </div>
