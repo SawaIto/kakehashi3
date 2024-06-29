@@ -15,16 +15,14 @@ $memo_id = $_GET['id'];
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category = $_POST['category'];
     $content = $_POST['content'];
-    $importance = $_POST['importance'];
-    $due_date = $_POST['due_date'];
     $shared_with = isset($_POST['shared_with']) ? $_POST['shared_with'] : [];
 
     if (empty($category) || empty($content)) {
         $error = 'カテゴリー、表題、内容を入力してください。';
     } else {
         // メモ更新
-        $stmt = $pdo->prepare("UPDATE memos SET category = ?, content = ?, importance = ?, due_date = ? WHERE id = ? AND group_id = ?");
-        $status = $stmt->execute([$category, $content, $importance, $due_date, $memo_id, $_SESSION['group_id']]);
+        $stmt = $pdo->prepare("UPDATE memos SET category = ?, content = ? = ? WHERE id = ? AND group_id = ?");
+        $status = $stmt->execute([$category, $content, $memo_id, $_SESSION['group_id']]);
 
         if ($status) {
             // 共有設定を一旦削除
@@ -70,16 +68,18 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-blue-100">
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ編集</h1>
-        <?php if (isset($error)): ?>
+        <?php if (isset($error)) : ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4">
@@ -87,7 +87,6 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <label for="category" class="block text-lg font-semibold">カテゴリー：</label>
                 <select id="category" name="category" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="買い物" <?= ($memo['category'] == '買い物') ? 'selected' : '' ?>>買い物</option>
-                    <option value="スケジュール" <?= ($memo['category'] == 'スケジュール') ? 'selected' : '' ?>>スケジュール</option>
                     <option value="やること" <?= ($memo['category'] == 'やること') ? 'selected' : '' ?>>やること</option>
                     <option value="その他" <?= ($memo['category'] == 'その他') ? 'selected' : '' ?>>その他</option>
                 </select>
@@ -97,21 +96,9 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"><?= h($memo['content']) ?></textarea>
             </div>
             <div>
-                <label for="importance" class="block text-lg font-semibold">重要度：</label>
-                <select id="importance" name="importance" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <option value="3" <?= ($memo['importance'] == 3) ? 'selected' : '' ?>>高</option>
-                    <option value="2" <?= ($memo['importance'] == 2) ? 'selected' : '' ?>>普通</option>
-                    <option value="1" <?= ($memo['importance'] == 1) ? 'selected' : '' ?>>低</option>
-                </select>
-            </div>
-            <div>
-                <label for="due_date" class="block text-lg font-semibold">期限：</label>
-                <input type="date" id="due_date" name="due_date" value="<?= h($memo['due_date']) ?>" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-            </div>
-            <div>
                 <p class="text-lg font-semibold">共有先：</p>
                 <div class="space-y-2">
-                    <?php foreach ($group_members as $member): ?>
+                    <?php foreach ($group_members as $member) : ?>
                         <label class="flex items-center">
                             <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" <?= in_array($member['id'], $shared_with) ? 'checked' : '' ?> class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
                             <span><?= h($member['username']) ?></span>
@@ -121,7 +108,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
         </form>
-        
+
         <!-- ホームに戻るボタン -->
         <div class="mt-6 text-center">
             <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
@@ -130,4 +117,5 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </body>
+
 </html>

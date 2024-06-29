@@ -12,14 +12,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 $is_admin_or_editor = ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify');
 
-// 完了状態の更新
-if (isset($_POST['toggle_complete'])) {
-    $memo_id = $_POST['memo_id'];
-    $stmt = $pdo->prepare("UPDATE memos SET is_completed = NOT is_completed WHERE id = :id AND user_id = :user_id");
-    $stmt->execute([':id' => $memo_id, ':user_id' => $user_id]);
-    header("Location: memo_view.php");
-    exit;
-}
 
 // 検索とフィルタリング
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -125,13 +117,10 @@ $importance_levels = ['低', '普通', '高'];
             <table class="w-full mb-6 bg-blue-50 border-collapse border border-blue-200">
                 <thead>
                     <tr class="bg-blue-100">
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">状態</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">カテゴリー</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">内容</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">重要度</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">期限</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">作成者</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">共有先</th>
+                        <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">区分</th>
+                        <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">内容</th>
+                        <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">作成</th>
+                        <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">共有</th>
                         <?php if ($is_admin_or_editor) : ?>
                             <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">操作</th>
                         <?php endif; ?>
@@ -141,22 +130,13 @@ $importance_levels = ['低', '普通', '高'];
                     <?php if (count($memos) > 0) : ?>
                         <?php foreach ($memos as $memo) : ?>
                             <tr class="hover:bg-blue-100 transition-colors duration-200">
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200">
-                                    <form method="POST" class="inline">
-                                        <input type="hidden" name="memo_id" value="<?= $memo['id'] ?>">
-                                        <button type="submit" name="toggle_complete" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-2 py-1 rounded-lg text-sm transition duration-300">
-                                            <?= $memo['is_completed'] ? '完了済み' : '完了した' ?>
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['category']) ?></td>
+
+                                <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['category']) ?></td>
                                 <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['content']) ?></td>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($importance_levels[$memo['importance'] - 1]) ?></td>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['due_date']) ?></td>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['creator']) ?></td>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['shared_with'] ?: '共有なし') ?></td>
+                                <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['creator']) ?></td>
+                                <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['shared_with'] ?: '共有なし') ?></td>
                                 <?php if ($is_admin_or_editor) : ?>
-                                    <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200">
+                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200">
                                         <a href="memo_edit.php?id=<?= $memo['id'] ?>" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
                                         <a href="memo_delete.php?id=<?= $memo['id'] ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
                                     </td>
@@ -165,7 +145,7 @@ $importance_levels = ['低', '普通', '高'];
                         <?php endforeach; ?>
                     <?php else : ?>
                         <tr>
-                            <td colspan="<?= $is_admin_or_editor ? 8 : 7 ?>" class="text-sm sm:text-base md:text-lg p-2 border border-blue-200 text-center">メモがありません。</td>
+                            <td colspan="<?= $is_admin_or_editor ? 8 : 7 ?>" class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 text-center">メモがありません。</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

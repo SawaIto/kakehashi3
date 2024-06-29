@@ -54,16 +54,18 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-blue-100">
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ登録</h1>
-        <?php if (isset($error)): ?>
+        <?php if (isset($error)) : ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4">
@@ -72,40 +74,28 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <select id="category" name="category" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <option value="" disabled selected>選択してください</option>
                     <option value="買い物">買い物</option>
-                    <option value="スケジュール">スケジュール</option>
                     <option value="やること">やること</option>
                     <option value="その他">その他</option>
                 </select>
             </div>
-             <div>
+            <div>
                 <label for="content" class="block text-lg font-semibold">内容：</label>
                 <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"></textarea>
             </div>
             <div>
-                <label for="importance" class="block text-lg font-semibold">重要度：</label>
-                <select id="importance" name="importance" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <option value="3">高</option>
-                    <option value="2" selected>普通</option>
-                    <option value="1">低</option>
-                </select>
-            </div>
-            <div>
-                <label for="due_date" class="block text-lg font-semibold">期限：</label>
-                <input type="date" id="due_date" name="due_date" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-            </div>
-            <div>
                 <p class="text-lg font-semibold">共有先：</p>
                 <div class="space-y-2">
-                    <?php foreach ($group_members as $member): ?>
+                    <?php foreach ($group_members as $member) : ?>
                         <label class="flex items-center">
                             <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
                             <span><?= h($member['username']) ?></span>
                         </label>
                     <?php endforeach; ?>
                 </div>
+            </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
         </form>
-        
+
         <!-- ホームに戻るボタン -->
         <div class="mt-6 text-center">
             <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
@@ -129,4 +119,5 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 </body>
+
 </html>

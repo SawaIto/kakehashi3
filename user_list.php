@@ -81,11 +81,11 @@ if (isset($_SESSION['error_message'])) {
         
         <div class="mt-6 text-center space-x-4">
             <?php if ($_SESSION['role'] == 'admin'): ?>
-                <a href="user_register.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+                <a href="user_register.php" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
                     新規ユーザー追加
                 </a>
             <?php endif; ?>
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
                 ホームに戻る
             </a>
         </div>

@@ -88,11 +88,11 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- ホームに戻るボタンとスケジュール登録ボタン -->
         <div class="mt-6 text-center space-x-2">
             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify'): ?>
-                <a href="schedule_input.php" class="bg-blue-500 hover:bg-blue-300 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+                <a href="schedule_input.php" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
                     スケジュール登録
                 </a>
             <?php endif; ?>
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
                 ホームに戻る
             </a>
         </div>
