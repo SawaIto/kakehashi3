@@ -1,0 +1,82 @@
+<?php
+session_start();
+include("funcs.php");
+sschk();
+$pdo = db_conn();
+
+if (!isset($_SESSION['user_id'])) {
+    redirect('login.php');
+    exit;
+}
+
+$group_id = $_SESSION['group_id'];
+
+// 全ての写真を取得
+$stmt = $pdo->prepare("SELECT * FROM photos WHERE group_id = ? ORDER BY upload_date DESC");
+$stmt->execute([$group_id]);
+$photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>スライドショー</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: "メイリオ", Meiryo, sans-serif; }
+    </style>
+</head>
+<body class="bg-black">
+    <div class="fixed top-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white z-10">
+        <h1 class="text-3xl font-bold text-center">スライドショー</h1>
+    </div>
+
+    <div id="slideshow" class="flex items-center justify-center h-screen">
+        <img id="currentImage" src="" alt="Slideshow Image" class="max-w-full max-h-full object-contain">
+    </div>
+
+    <div class="fixed bottom-0 left-0 right-0 p-4 bg-black bg-opacity-50 text-white">
+        <p id="imageComment" class="text-center text-lg"></p>
+    </div>
+
+    <div class="fixed bottom-4 right-4 space-x-2">
+        <button id="prevButton" class="bg-white text-black py-2 px-4 rounded">前へ</button>
+        <button id="nextButton" class="bg-white text-black py-2 px-4 rounded">次へ</button>
+        <a href="photo_view.php" class="inline-block bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
+            写真一覧に戻る
+        </a>
+    </div>
+
+    <script>
+        const photos = <?= json_encode($photos) ?>;
+        let currentIndex = 0;
+
+        function showPhoto(index) {
+            const photo = photos[index];
+            document.getElementById('currentImage').src = `uploads/${photo.file_name}`;
+            document.getElementById('imageComment').textContent = photo.comment;
+        }
+
+        function nextPhoto() {
+            currentIndex = (currentIndex + 1) % photos.length;
+            showPhoto(currentIndex);
+        }
+
+        function prevPhoto() {
+            currentIndex = (currentIndex - 1 + photos.length) % photos.length;
+            showPhoto(currentIndex);
+        }
+
+        document.getElementById('nextButton').addEventListener('click', nextPhoto);
+        document.getElementById('prevButton').addEventListener('click', prevPhoto);
+
+        // 初期表示
+        showPhoto(currentIndex);
+
+        // 5秒ごとに自動で次の写真に切り替え
+        setInterval(nextPhoto, 5000);
+    </script>
+</body>
+</html>

@@ -21,12 +21,14 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-blue-100">
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-4xl font-bold mb-6 text-center">ようこそ、<?= h($user['username']) ?>さん</h1>
@@ -40,34 +42,37 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
         </div>
         <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
-                <?php if ($user['role'] == 'admin'): ?>
+                <?php if ($user['role'] == 'admin') : ?>
                     <a href="user_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ユーザー登録</a>
-                <?php else: ?>
+                <?php else : ?>
                     <div></div>
                 <?php endif; ?>
-                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify'): ?>
+                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
                     <a href="user_list.php" class="block bg-green-300 hover:bg-green-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ユーザー一覧</a>
-                <?php else: ?>
+                <?php else : ?>
                     <div></div>
                 <?php endif; ?>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify'): ?>
+                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
                     <a href="schedule_input.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">スケジュール登録</a>
-                <?php else: ?>
+                <?php else : ?>
                     <div></div>
                 <?php endif; ?>
                 <a href="schedule_view.php" class="block bg-blue-300 hover:bg-blue-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">スケジュール表示</a>
             </div>
             <div class="grid grid-cols-2 gap-4">
-                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify'): ?>
+                <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
                     <a href="memo_input.php" class="block bg-orange-500 hover:bg-orange-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">メモ登録</a>
-                <?php else: ?>
+                <?php else : ?>
                     <div></div>
                 <?php endif; ?>
                 <a href="memo_view.php" class="block bg-orange-300 hover:bg-orange-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">メモ表示</a>
+                <a href="photo_upload.php" class="block bg-pink-400 hover:bg-pink-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">写真アップロード</a>
+                <a href="photo_view.php" class="block bg-pink-300 hover:bg-pink-400 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">写真一覧</a>
             </div>
-        </div>
+    </div>
     </div>
 </body>
+
 </html>

@@ -1,0 +1,64 @@
+<?php
+session_start();
+require_once 'funcs.php';
+sschk();
+
+$pdo = db_conn();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST['name'];
+    $description = $_POST['description'];
+
+    if (empty($name)) {
+        $error = 'アルバム名を入力してください。';
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO albums (group_id, name, description) VALUES (?, ?, ?)");
+        $status = $stmt->execute([$_SESSION['group_id'], $name, $description]);
+
+        if ($status) {
+            $_SESSION['success_message'] = 'アルバムが正常に作成されました。';
+            redirect('album_view.php');
+        } else {
+            $error = 'アルバムの作成に失敗しました。';
+        }
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アルバム作成</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: "メイリオ", Meiryo, sans-serif; }
+    </style>
+</head>
+<body class="bg-blue-100">
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">アルバム作成</h1>
+        <?php if (isset($error)): ?>
+            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
+        <?php endif; ?>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label for="name" class="block text-lg font-semibold">アルバム名：</label>
+                <input type="text" id="name" name="name" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="description" class="block text-lg font-semibold">説明：</label>
+                <textarea id="description" name="description" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"></textarea>
+            </div>
+            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">作成</button>
+        </form>
+        
+        <div class="mt-6 text-center">
+            <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+                アルバム一覧に戻る
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -5,9 +5,9 @@ sschk();
 
 $pdo = db_conn();
 
-if ($_SESSION['role'] != 'admin') {
+if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
     redirect('home.php');
-    exit("管理者のみがユーザー一覧を閲覧できます。");
+    exit("管理者またはmodify権限のユーザーのみがユーザー一覧を閲覧できます。");
 }
 
 $stmt = $pdo->prepare("SELECT u.id, u.username, u.email, u.role FROM users u
@@ -56,7 +56,9 @@ if (isset($_SESSION['error_message'])) {
                         <th class="text-left text-base font-semibold p-2 border border-blue-200">ユーザー名</th>
                         <th class="text-left text-base font-semibold p-2 border border-blue-200">メールアドレス</th>
                         <th class="text-left text-base font-semibold p-2 border border-blue-200">権限</th>
-                        <th class="text-left text-base font-semibold p-2 border border-blue-200">操作</th>
+                        <?php if ($_SESSION['role'] == 'admin'): ?>
+                            <th class="text-left text-base font-semibold p-2 border border-blue-200">操作</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,10 +67,12 @@ if (isset($_SESSION['error_message'])) {
                             <td class="text-base p-2 border border-blue-200"><?= h($user['username']) ?></td>
                             <td class="text-base p-2 border border-blue-200"><?= h($user['email']) ?></td>
                             <td class="text-base p-2 border border-blue-200"><?= h($user['role']) ?></td>
-                            <td class="text-base p-2 border border-blue-200">
-                                <a href="user_edit.php?id=<?= $user['id'] ?>" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
-                                <a href="user_delete.php?id=<?= $user['id'] ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当にこのユーザーを削除しますか？');">削除</a>
-                            </td>
+                            <?php if ($_SESSION['role'] == 'admin'): ?>
+                                <td class="text-base p-2 border border-blue-200">
+                                    <a href="user_edit.php?id=<?= $user['id'] ?>" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
+                                    <a href="user_delete.php?id=<?= $user['id'] ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当にこのユーザーを削除しますか？');">削除</a>
+                                </td>
+                            <?php endif; ?>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -76,9 +80,11 @@ if (isset($_SESSION['error_message'])) {
         </div>
         
         <div class="mt-6 text-center space-x-4">
-            <a href="user_register.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                新規ユーザー追加
-            </a>
+            <?php if ($_SESSION['role'] == 'admin'): ?>
+                <a href="user_register.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+                    新規ユーザー追加
+                </a>
+            <?php endif; ?>
             <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
                 ホームに戻る
             </a>

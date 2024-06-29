@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2024-06-27 15:49:14
+-- 生成日時: 2024-06-29 10:34:39
 -- サーバのバージョン： 10.4.32-MariaDB
 -- PHP のバージョン: 8.2.12
 
@@ -20,6 +20,50 @@ SET time_zone = "+00:00";
 --
 -- データベース: `kakehashi2`
 --
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `albums`
+--
+
+CREATE TABLE `albums` (
+  `id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `albums`
+--
+
+INSERT INTO `albums` (`id`, `group_id`, `name`, `description`, `created_at`) VALUES
+(1, 5, 'JAM', '', '2024-06-29 04:42:30'),
+(2, 5, 'test', NULL, '2024-06-29 04:58:11');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `album_photos`
+--
+
+CREATE TABLE `album_photos` (
+  `album_id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `album_photos`
+--
+
+INSERT INTO `album_photos` (`album_id`, `photo_id`) VALUES
+(1, 1),
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4);
 
 -- --------------------------------------------------------
 
@@ -76,21 +120,26 @@ INSERT INTO `group_members` (`id`, `group_id`, `user_id`, `created_at`, `updated
 CREATE TABLE `memos` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `category` varchar(255) NOT NULL,
-  `title` varchar(255) NOT NULL,
+  `group_id` int(11) DEFAULT NULL,
+  `category` enum('買い物','スケジュール','やること','その他') NOT NULL,
   `content` text NOT NULL,
   `is_private` tinyint(1) DEFAULT 0,
   `is_completed` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `importance` int(11) DEFAULT 3 COMMENT '重要度（1-5）',
+  `due_date` date DEFAULT NULL COMMENT '期限日'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- テーブルのデータのダンプ `memos`
 --
 
-INSERT INTO `memos` (`id`, `user_id`, `category`, `title`, `content`, `is_private`, `is_completed`, `created_at`, `updated_at`) VALUES
-(1, 11, '買い物', 'ｓｓ', 'ああああ\r\nあああ\r\nあああ\r\n', 0, 0, '2024-06-27 13:41:30', '2024-06-27 13:45:57');
+INSERT INTO `memos` (`id`, `user_id`, `group_id`, `category`, `content`, `is_private`, `is_completed`, `created_at`, `updated_at`, `importance`, `due_date`) VALUES
+(3, 11, 5, '買い物', 'なんでもいい\r\n1kgだよ', 0, 0, '2024-06-27 23:46:40', '2024-06-27 23:49:00', 2, '2024-07-05'),
+(4, 11, 5, 'その他', 'ひみつ', 0, 0, '2024-06-28 00:15:08', '2024-06-28 00:15:08', 3, '2024-06-12'),
+(5, 12, 5, 'その他', 'かおるテスト', 0, 0, '2024-06-28 00:27:22', '2024-06-28 01:34:31', 2, NULL),
+(6, 12, 5, 'その他', 'かおるてすと佐和共有', 0, 0, '2024-06-28 00:27:41', '2024-06-28 00:48:43', 2, '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -104,6 +153,74 @@ CREATE TABLE `memo_shares` (
   `user_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `memo_shares`
+--
+
+INSERT INTO `memo_shares` (`id`, `memo_id`, `user_id`, `created_at`) VALUES
+(4, 3, 12, '2024-06-28 00:14:48'),
+(5, 3, 16, '2024-06-28 00:14:48'),
+(8, 4, 12, '2024-06-28 01:34:04');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `photos`
+--
+
+CREATE TABLE `photos` (
+  `id` int(11) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `file_name` varchar(255) NOT NULL,
+  `comment` text DEFAULT NULL,
+  `upload_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `photos`
+--
+
+INSERT INTO `photos` (`id`, `group_id`, `user_id`, `file_name`, `comment`, `upload_date`) VALUES
+(1, 5, 11, '667f908e7652d_動画テロップ (8).png', '地球倫理', '2024-06-29 04:41:50'),
+(2, 5, 11, '667f90a28e065_IMG_20240615_123327_623.jpg', '', '2024-06-29 04:42:10'),
+(3, 5, 11, '667f944341f32_動画テロップ (7).png', '', '2024-06-29 04:57:39'),
+(4, 5, 11, '667f9463145ef_動画テロップ (6).png', '', '2024-06-29 04:58:11');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `photo_comments`
+--
+
+CREATE TABLE `photo_comments` (
+  `id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `comment` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `photo_tags`
+--
+
+CREATE TABLE `photo_tags` (
+  `id` int(11) NOT NULL,
+  `photo_id` int(11) NOT NULL,
+  `tag` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `photo_tags`
+--
+
+INSERT INTO `photo_tags` (`id`, `photo_id`, `tag`) VALUES
+(1, 1, 'JAM'),
+(2, 1, '2024');
 
 -- --------------------------------------------------------
 
@@ -188,6 +305,20 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`
 --
 
 --
+-- テーブルのインデックス `albums`
+--
+ALTER TABLE `albums`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `group_id` (`group_id`);
+
+--
+-- テーブルのインデックス `album_photos`
+--
+ALTER TABLE `album_photos`
+  ADD PRIMARY KEY (`album_id`,`photo_id`),
+  ADD KEY `photo_id` (`photo_id`);
+
+--
 -- テーブルのインデックス `groups`
 --
 ALTER TABLE `groups`
@@ -208,7 +339,10 @@ ALTER TABLE `group_members`
 ALTER TABLE `memos`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_memos_user_id` (`user_id`),
-  ADD KEY `idx_memos_category` (`category`);
+  ADD KEY `idx_memos_category` (`category`),
+  ADD KEY `idx_memos_importance` (`importance`),
+  ADD KEY `idx_memos_due_date` (`due_date`),
+  ADD KEY `fk_memos_group` (`group_id`);
 
 --
 -- テーブルのインデックス `memo_shares`
@@ -217,6 +351,29 @@ ALTER TABLE `memo_shares`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_memo_shares_memo_id` (`memo_id`),
   ADD KEY `idx_memo_shares_user_id` (`user_id`);
+
+--
+-- テーブルのインデックス `photos`
+--
+ALTER TABLE `photos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `group_id` (`group_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- テーブルのインデックス `photo_comments`
+--
+ALTER TABLE `photo_comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `photo_id` (`photo_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- テーブルのインデックス `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `photo_id` (`photo_id`);
 
 --
 -- テーブルのインデックス `schedules`
@@ -248,6 +405,12 @@ ALTER TABLE `users`
 --
 
 --
+-- テーブルの AUTO_INCREMENT `albums`
+--
+ALTER TABLE `albums`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- テーブルの AUTO_INCREMENT `groups`
 --
 ALTER TABLE `groups`
@@ -263,13 +426,31 @@ ALTER TABLE `group_members`
 -- テーブルの AUTO_INCREMENT `memos`
 --
 ALTER TABLE `memos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- テーブルの AUTO_INCREMENT `memo_shares`
 --
 ALTER TABLE `memo_shares`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- テーブルの AUTO_INCREMENT `photos`
+--
+ALTER TABLE `photos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- テーブルの AUTO_INCREMENT `photo_comments`
+--
+ALTER TABLE `photo_comments`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- テーブルの AUTO_INCREMENT `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- テーブルの AUTO_INCREMENT `schedules`
@@ -294,6 +475,19 @@ ALTER TABLE `users`
 --
 
 --
+-- テーブルの制約 `albums`
+--
+ALTER TABLE `albums`
+  ADD CONSTRAINT `albums_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
+
+--
+-- テーブルの制約 `album_photos`
+--
+ALTER TABLE `album_photos`
+  ADD CONSTRAINT `album_photos_ibfk_1` FOREIGN KEY (`album_id`) REFERENCES `albums` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `album_photos_ibfk_2` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE;
+
+--
 -- テーブルの制約 `groups`
 --
 ALTER TABLE `groups`
@@ -310,6 +504,7 @@ ALTER TABLE `group_members`
 -- テーブルの制約 `memos`
 --
 ALTER TABLE `memos`
+  ADD CONSTRAINT `fk_memos_group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
   ADD CONSTRAINT `memos_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
@@ -318,6 +513,26 @@ ALTER TABLE `memos`
 ALTER TABLE `memo_shares`
   ADD CONSTRAINT `memo_shares_ibfk_1` FOREIGN KEY (`memo_id`) REFERENCES `memos` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `memo_shares_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- テーブルの制約 `photos`
+--
+ALTER TABLE `photos`
+  ADD CONSTRAINT `photos_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`),
+  ADD CONSTRAINT `photos_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- テーブルの制約 `photo_comments`
+--
+ALTER TABLE `photo_comments`
+  ADD CONSTRAINT `photo_comments_ibfk_1` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `photo_comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- テーブルの制約 `photo_tags`
+--
+ALTER TABLE `photo_tags`
+  ADD CONSTRAINT `photo_tags_ibfk_1` FOREIGN KEY (`photo_id`) REFERENCES `photos` (`id`) ON DELETE CASCADE;
 
 --
 -- テーブルの制約 `schedules`
