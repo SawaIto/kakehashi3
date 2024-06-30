@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">ユーザー登録</h1>
         <?php if (isset($success_message)): ?>
@@ -89,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
             const passwordToggleIcon = document.getElementById('passwordToggleIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 passwordToggleIcon.classList.remove('fa-eye');

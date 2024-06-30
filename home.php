@@ -13,7 +13,7 @@ $stmt->execute([$_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 // グループ情報を取得
-$stmt = $pdo->prepare("SELECT * FROM groups WHERE id = ?");
+$stmt = $pdo->prepare("SELECT * FROM `groups` WHERE id = ?");
 $stmt->execute([$_SESSION['group_id']]);
 $group = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -30,6 +30,7 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
 </head>
 
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">ようこそ、<?= h($user['username']) ?>さん</h1>
         <div class="flex justify-between items-center mb-4">

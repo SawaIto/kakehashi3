@@ -38,17 +38,18 @@ if (isset($_SESSION['error_message'])) {
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center">ユーザー一覧</h1>
-        
+
         <?php if (isset($success_message)): ?>
             <p class="text-green-500 mb-4 text-center"><?= h($success_message) ?></p>
         <?php endif; ?>
-        
+
         <?php if (isset($error_message)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error_message) ?></p>
         <?php endif; ?>
-        
+
         <div class="overflow-x-auto">
             <table class="w-full mb-6 bg-blue-50 border-collapse border border-blue-200">
                 <thead>
@@ -78,7 +79,7 @@ if (isset($_SESSION['error_message'])) {
                 </tbody>
             </table>
         </div>
-        
+
         <div class="mt-6 text-center space-x-4">
             <?php if ($_SESSION['role'] == 'admin'): ?>
                 <a href="user_register.php" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">

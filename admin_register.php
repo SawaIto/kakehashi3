@@ -8,44 +8,50 @@ $pdo = db_conn();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    if (strlen($_POST['password']) < 6) {
+        $error = "パスワードは6文字以上で設定してください";
+    }else{
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    try {
-        // まず、同じメールアドレスが既に登録されていないか確認
-        $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
-        $check_stmt->execute([$email]);
-        $user_exists = $check_stmt->fetchColumn();
+        try {
+            // まず、同じメールアドレスが既に登録されていないか確認
+            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+            $check_stmt->execute([$email]);
+            $user_exists = $check_stmt->fetchColumn();
 
-        if ($user_exists) {
-            $error = "このメールアドレスは既に登録されています。";
-        } else {
-            // ユーザー登録
-            $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'admin')");
-            $stmt->execute([$username, $email, $password]);
-
-            // 登録が成功したかどうかチェック
-            if ($stmt->rowCount() > 0) {
-                $user_id = $pdo->lastInsertId();
-
-                // グループ作成
-                $stmt = $pdo->prepare("INSERT INTO groups (admin_id, name) VALUES (?, ?)");
-                $stmt->execute([$user_id, $username . "'s Group"]);
-                $group_id = $pdo->lastInsertId();
-
-                // グループメンバーに管理者を追加
-                $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
-                $stmt->execute([$group_id, $user_id]);
-
-                $_SESSION['success_message'] = "管理者登録が完了しました。";
-                header("Location: registration_success.php");
-                exit();
+            if ($user_exists) {
+                $error = "このメールアドレスは既に登録されています。";
             } else {
-                $error = "管理者登録に失敗しました。";
+                // ユーザー登録
+                $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'admin')");
+                $stmt->execute([$username, $email, $password]);
+
+                // 登録が成功したかどうかチェック
+                if ($stmt->rowCount() > 0) {
+                    $user_id = $pdo->lastInsertId();
+
+                    // グループ作成
+                    $stmt = $pdo->prepare("INSERT INTO `groups` (admin_id, name) VALUES (?, ?)");
+                    $stmt->execute([$user_id, $username . "'s Group"]);
+                    $group_id = $pdo->lastInsertId();
+
+                    // グループメンバーに管理者を追加
+                    $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
+                    $stmt->execute([$group_id, $user_id]);
+
+                    $_SESSION['success_message'] = "管理者登録が完了しました。";
+                    header("Location: registration_success.php");
+                    exit();
+                } else {
+                    $error = "管理者登録に失敗しました。";
+                }
             }
+        } catch (PDOException $e) {
+            $error = "エラーが発生しました: " . $e->getMessage();
         }
-    } catch (PDOException $e) {
-        $error = "エラーが発生しました: " . $e->getMessage();
+
     }
+
 }
 ?>
 <!DOCTYPE html>
@@ -95,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     function togglePasswordVisibility() {
         const passwordInput = document.getElementById('password');
         const passwordToggleIcon = document.getElementById('passwordToggleIcon');
-        
+
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             passwordToggleIcon.classList.remove('fa-eye');

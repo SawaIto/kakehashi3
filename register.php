@@ -8,18 +8,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $lid = $_POST['lid'];
     $lpw = $_POST['lpw'];
-    
+
     // パスワードのハッシュ化
     $hashed_password = password_hash($lpw, PASSWORD_DEFAULT);
-    
+
     // データベース接続
     $pdo = db_conn();
-    
+
     try {
         $pdo->beginTransaction();
 
         // グループの作成
-        $sql = "INSERT INTO groups (name) VALUES (:group_name)";
+        $sql = "INSERT INTO `groups` (name) VALUES (:group_name)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':group_name', $name . "'s Group", PDO::PARAM_STR);
         $stmt->execute();
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="bg-blue-100 min-h-screen">
     <?php include 'header0.php'; ?>
-    
+
     <main class="flex-grow container mx-auto px-4 py-2">
         <div class="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <h2 class="text-2xl font-bold mb-6 text-center">新規管理者登録</h2>

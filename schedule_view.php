@@ -6,7 +6,11 @@ sschk();
 $pdo = db_conn();
 
 $current_date = isset($_GET['date']) ? $_GET['date'] : date('Y-m-d');
-$display_period = isset($_GET['period']) ? $_GET['period'] : 'future';
+// $display_period = isset($_GET['period']) ? $_GET['period'] : 'future';
+
+// 期間指定の処理
+$start_date = isset($_GET['start_date']) ? $_GET['start_date'] : '';
+$end_date = isset($_GET['end_date']) ? $_GET['end_date'] : '';
 
 $query = "SELECT s.id, s.date, s.content, u.username as creator,
           GROUP_CONCAT(DISTINCT su.username SEPARATOR ', ') as shared_with
@@ -16,11 +20,18 @@ $query = "SELECT s.id, s.date, s.content, u.username as creator,
           LEFT JOIN users su ON ss.user_id = su.id
           WHERE s.group_id = ? AND (s.user_id = ? OR ss.user_id = ?)";
 
-if ($display_period == 'future') {
-    $query .= " AND s.date >= ?";
-    $params = [$_SESSION['group_id'], $_SESSION['user_id'], $_SESSION['user_id'], $current_date];
-} else {
-    $params = [$_SESSION['group_id'], $_SESSION['user_id'], $_SESSION['user_id']];
+// 期間指定をクエリに追加
+$params = [$_SESSION['group_id'], $_SESSION['user_id'], $_SESSION['user_id']];
+// if ($start_date && $end_date) {
+//     $query .= " AND s.date BETWEEN ? AND ?";
+//     array_push($params, $start_date, $end_date);
+// } elseif ($display_period == 'future') {
+//     $query .= " AND s.date >= ?";
+//     array_push($params, $current_date);
+// }
+if ($start_date && $end_date) {
+    $query .= " AND s.date BETWEEN ? AND ?";
+    array_push($params, $start_date, $end_date);
 }
 
 $query .= " GROUP BY s.id ORDER BY s.date ASC";
@@ -40,19 +51,29 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center">スケジュール表示</h1>
-        
+
         <?php if (isset($_SESSION['success_message'])): ?>
             <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
-        
+
+        <!-- 期間指定フォーム -->
+        <form method="GET" action="" class="mb-6 text-center">
+            <label for="start_date" class="mr-2">開始日:</label>
+            <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mr-4 p-2 border rounded">
+            <label for="end_date" class="mr-2">終了日:</label>
+            <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mr-4 p-2 border rounded">
+            <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">検索</button>
+        </form>
+
         <div class="mb-4 text-center space-x-2">
             <a href="?period=future" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">今後のスケジュール</a>
             <a href="?period=all" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">すべてのスケジュール</a>
         </div>
-        
+
         <div class="overflow-x-auto">
             <table class="w-full mb-6 bg-blue-50 border-collapse border border-blue-200">
                 <thead>
@@ -84,7 +105,7 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </tbody>
             </table>
         </div>
-        
+
         <!-- ホームに戻るボタンとスケジュール登録ボタン -->
         <div class="mt-6 text-center space-x-2">
             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify'): ?>

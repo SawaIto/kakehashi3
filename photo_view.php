@@ -17,8 +17,8 @@ $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
 $tag = isset($_GET['tag']) ? $_GET['tag'] : '';
 
-$query = "SELECT DISTINCT p.*, u.username FROM photos p 
-          JOIN users u ON p.user_id = u.id 
+$query = "SELECT DISTINCT p.*, u.username FROM photos p
+          JOIN users u ON p.user_id = u.id
           LEFT JOIN photo_tags pt ON p.id = pt.photo_id
           WHERE p.group_id = :group_id";
 $params = [':group_id' => $group_id];
@@ -71,6 +71,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
 </head>
 
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
 

@@ -63,6 +63,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ登録</h1>
         <?php if (isset($error)) : ?>

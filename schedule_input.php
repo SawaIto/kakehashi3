@@ -56,6 +56,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-100">
+    <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">スケジュール登録</h1>
         <?php if (isset($error)): ?>
@@ -83,7 +84,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
         </form>
-        
+
         <!-- ホームに戻るボタン -->
         <div class="mt-6 text-center">
         <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
