@@ -75,7 +75,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+    <div class="container mx-auto mt-10 p-2 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">スケジュール編集</h1>
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>

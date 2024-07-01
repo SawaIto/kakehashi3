@@ -52,7 +52,7 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-blue-100">
     <?include 'header_test.php';?>
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-4xl">
+    <div class="container mx-auto mt-10 p-2 bg-white rounded-lg shadow-md max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center">スケジュール表示</h1>
 
         <?php if (isset($_SESSION['success_message'])): ?>
@@ -69,7 +69,7 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">検索</button>
         </form>
 
-        <div class="mb-4 text-center space-x-2">
+        <div class="mb-4 text-center space-x-1">
             <a href="?period=future" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">今後のスケジュール</a>
             <a href="?period=all" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">すべてのスケジュール</a>
         </div>
@@ -90,14 +90,14 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <tbody>
                     <?php foreach ($schedules as $schedule): ?>
                         <tr class="hover:bg-blue-100 transition-colors duration-200">
-                            <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200 whitespace-nowrap"><?= h($schedule['date']) ?></td>
-                            <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
-                            <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($schedule['creator']) ?></td>
-                            <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 whitespace-nowrap"><?= h($schedule['date']) ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200"><?= h($schedule['creator']) ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify'): ?>
                                 <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200">
-                                    <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
-                                    <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700 ml-2" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                    <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700 text-center">編集</a>
+                                    <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700 text-center" onclick="return confirm('本当に削除しますか？');">削除</a>
                                 </td>
                             <?php endif; ?>
                         </tr>
