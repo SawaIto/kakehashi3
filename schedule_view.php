@@ -49,29 +49,47 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スケジュール表示</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function toggleSearchFilter() {
+            var searchFilter = document.getElementById('searchFilter');
+            searchFilter.classList.toggle('hidden');
+        }
+        function toggleExtraColumns() {
+            var extraColumns = document.querySelectorAll('.extra-column');
+            extraColumns.forEach(function(column) {
+                column.classList.toggle('hidden');
+            });
+        }
+    </script>
 </head>
 <body class="bg-blue-100">
     <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-2 bg-white rounded-lg shadow-md max-w-4xl">
-        <h1 class="text-3xl font-bold mb-6 text-center">スケジュール表示</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-center">スケジュール表示</h1>
+            <button onclick="toggleExtraColumns()" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-1 px-2 rounded-lg text-xs transition duration-300">
+                詳細表示
+            </button>
+        </div>
 
         <?php if (isset($_SESSION['success_message'])): ?>
             <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
             <?php unset($_SESSION['success_message']); ?>
         <?php endif; ?>
 
-        <!-- 期間指定フォーム -->
-        <form method="GET" action="" class="mb-6 text-center">
-            <label for="start_date" class="mr-2">開始日:</label>
-            <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mr-4 p-2 border rounded">
-            <label for="end_date" class="mr-2">終了日:</label>
-            <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mr-4 p-2 border rounded">
-            <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">検索</button>
-        </form>
+        <button onclick="toggleSearchFilter()" class="mb-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            検索フィルタを表示/非表示
+        </button>
 
-        <div class="mb-4 text-center space-x-1">
-            <a href="?period=future" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">今後のスケジュール</a>
-            <a href="?period=all" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">すべてのスケジュール</a>
+        <!-- 期間指定フォーム -->
+        <div id="searchFilter" class="hidden">
+            <form method="GET" action="" class="mb-6 text-center">
+                <label for="start_date" class="mr-2">開始日:</label>
+                <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mr-4 p-2 border rounded">
+                <label for="end_date" class="mr-2">終了日:</label>
+                <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mr-4 p-2 border rounded">
+                <button type="submit" class="bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">検索</button>
+            </form>
         </div>
 
         <div class="overflow-x-auto">
@@ -80,10 +98,10 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <tr class="bg-blue-100">
                         <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 whitespace-nowrap">日付</th>
                         <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">内容</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">作成者</th>
-                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">共有先</th>
+                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">作成者</th>
+                        <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">共有先</th>
                         <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify'): ?>
-                            <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200">操作</th>
+                            <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">操作</th>
                         <?php endif; ?>
                     </tr>
                 </thead>
@@ -92,10 +110,10 @@ $schedules = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <tr class="hover:bg-blue-100 transition-colors duration-200">
                             <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 whitespace-nowrap"><?= h($schedule['date']) ?></td>
                             <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
-                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200"><?= h($schedule['creator']) ?></td>
-                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 extra-column hidden"><?= h($schedule['creator']) ?></td>
+                            <td class="text-sm sm:text-base md:text-lg p-1 border border-blue-200 extra-column hidden"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify'): ?>
-                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200">
+                                <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                     <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700 text-center">編集</a>
                                     <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700 text-center" onclick="return confirm('本当に削除しますか？');">削除</a>
                                 </td>
