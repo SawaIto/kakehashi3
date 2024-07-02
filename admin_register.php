@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="email" id="email" name="email" required class="w-full p-2 border rounded" autocomplete="new-password">
             </div>
             <div>
-                <label for="password" class="block text-lg font-semibold">パスワード：</label>
+                <label for="password" class="block text-lg font-semibold">パスワード(6文字以上)：</label>
                 <div class="relative">
                     <input type="password" id="password" name="password" required class="w-full p-2 border rounded pr-10" autocomplete="new-password">
                     <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility()">

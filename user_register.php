@@ -11,9 +11,11 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    
+    // emailの処理
+    $email = ($role === 'view' && empty($_POST['email'])) ? null : $_POST['email'];
 
     // ユーザー登録
     $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
@@ -58,8 +60,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="username" name="username" required class="w-full p-2 border rounded">
             </div>
             <div>
-                <label for="email" class="block text-lg font-semibold">メールアドレス：</label>
-                <input type="email" id="email" name="email" required class="w-full p-2 border rounded">
+                <label for="role" class="block text-lg font-semibold">権限：</label>
+                <select id="role" name="role" required class="w-full p-2 border rounded" onchange="toggleEmailField()">
+                    <option value="modify">編集者</option>
+                    <option value="view">閲覧者</option>
+                </select>
+            </div>
+            <div id="emailField">
+                <label for="email" class="block text-lg font-semibold">メールアドレス(編集者は必須)：</label>
+                <input type="email" id="email" name="email" class="w-full p-2 border rounded">
             </div>
             <div>
                 <label for="password" class="block text-lg font-semibold">パスワード：</label>
@@ -70,18 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </span>
                 </div>
             </div>
-            <div>
-                <label for="role" class="block text-lg font-semibold">権限：</label>
-                <select id="role" name="role" required class="w-full p-2 border rounded">
-                    <option value="modify">編集者</option>
-                    <option value="view">閲覧者</option>
-                </select>
-            </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
-
         </form>
         <div class="mt-6 text-center">
-        <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
                 ホームに戻る
             </a>
         </div>
@@ -101,6 +102,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 passwordToggleIcon.classList.add('fa-eye');
             }
         }
+
+        function toggleEmailField() {
+            const role = document.getElementById('role').value;
+            const emailField = document.getElementById('emailField');
+            const emailInput = document.getElementById('email');
+
+            if (role === 'view') {
+                emailField.style.display = 'none';
+                emailInput.removeAttribute('required');
+            } else {
+                emailField.style.display = 'block';
+                emailInput.setAttribute('required', 'required');
+            }
+        }
+
+        // 初期表示時にも実行
+        toggleEmailField();
     </script>
 </body>
 </html>
