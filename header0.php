@@ -6,22 +6,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>かけはし</title>
 </head>
-<body>
-    <header class="h-26 fixed top-0 left-0 mb-5 w-full bg-white shadow-md z-50 flex flex-col sm:flex-row justify-between items-center px-5 py-2">
-        <div class="flex items-center">
-            <a href="index.php" class="flex title-font font-medium items-center text-gray-900 mb-2 sm:mb-0">
-                <img src="./img/header_logo.png" alt="橋のロゴ" style="width: 90px; height: 60px;" class="mr-4">
-            </a>
-            <span class="text-base text-gray-900">かけはしへようこそ</span>
-        </div>
-        <div class="container-fluid">
-            <nav class="flex flex-col sm:flex-row">
-                <ul class="flex justify-end items-center space-x-6">
-                    <li class="text-xs sm:text-base hover:text-white hover:bg-yellow-500"><a href="login.php">ログイン</a></li>
-                    <li class="text-xs sm:text-base hover:text-white hover:bg-yellow-500"><a href="register.php">新規管理者登録</a></li>
-                </ul>
+    <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
+        <div class="container mx-auto px-4 py-4 sm:py-6 flex justify-between items-center">
+            <img src="./img/header_logo.png" alt="かけはしロゴ" class="h-12 sm:h-16">
+            <nav class="flex justify-end space-x-2 w-full sm:w-auto">
+                <a href="logout.php" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                    ログアウト
+                </a>
+                <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                    ホーム
+                </a>
             </nav>
         </div>
     </header>
-    <main class="pt-32"> <!-- メインコンテンツのための余白 -->
-</body>
