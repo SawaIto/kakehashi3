@@ -42,14 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>ログイン</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+    <style>
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script>
+    function autofillAndSubmit() {
+      const form = document.getElementById('login-form');
+      const usernameInput = form.querySelector('#username');
+      const passwordInput = form.querySelector('#password');
+
+      usernameInput.value = 'まさえ';
+      passwordInput.value = 'masae110';
+
+      form.submit();
+    }
+  </script>
 </head>
 <body class="bg-blue-100">
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">ログイン</h1>
-        <?php if (isset($error)): ?>
-            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
-        <?php endif; ?>
-        <form method="POST" class="space-y-4">
+    <div class="flex justify-center">
+      <button class="bg-blue-700 hover:bg-green-700 text-white font-bold text-4xl py-5 px-6 rounded mb-4" onclick="autofillAndSubmit()">正恵さん用<br>スタートボタン</button>
+    </div>
+
+        <form id="login-form" method="POST" class="space-y-4 hidden">
             <div>
                 <label for="username" class="block text-lg font-semibold">ユーザー名：</label>
                 <input type="username" id="username" name="username" required class="w-full p-2 border rounded">
@@ -65,11 +82,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <button type="submit" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300 w-full">ログイン</button>
         </form>
-        <div class="mt-6 text-center space-x-4">
-        <a href="admin_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">管理者登録</a>
-        </div>
         <div class="mt-6 text-right space-x-4">
-        <a href="login_auto_template.php" class="text-black font-bold text-base">special_login</a>
+        <a href="login.php" class="text-black font-bold text-base">一般ログインページへ</a>
         </div>
     </div>
     <script>

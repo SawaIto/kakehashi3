@@ -63,29 +63,40 @@ $importance_levels = ['低', '普通', '高'];
 <!DOCTYPE html>
 <html lang="ja" class="h-full">
 
+<!DOCTYPE html>
+<html lang="ja" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ一覧</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        function toggleSearchFilter() {
-            var searchFilter = document.getElementById('searchFilter');
-            searchFilter.classList.toggle('hidden');
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        function toggleExtraColumns() {
-            var extraColumns = document.querySelectorAll('.extra-column');
-            extraColumns.forEach(function(column) {
-                column.classList.toggle('hidden');
-            });
+        main {
+            flex: 1 0 auto;
+            padding-top: 64px;
+            /* ヘッダーの高さ分 */
+            padding-bottom: 64px;
+            /* フッターの高さ分 */
         }
-    </script>
+
+        .content-wrapper {
+            max-height: calc(100vh - 128px);
+            /* ヘッダーとフッターの高さを引いた値 */
+            overflow-y: auto;
+        }
+    </style>
 </head>
+<?php include 'header0.php'; ?>
 
-<body class="flex flex-col min-h-full bg-gray-100">
-    <!-- <? include 'header_test.php'; ?> -->
-    <main class="flex-grow">
+<body class="bg-gray-100">
+    <main class="flex-grow mb-40 mt-14">
         <div class="container mx-auto mt-5 p-2 bg-white rounded-lg shadow-md max-w-4xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
                 <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">メモ一覧</h1>
@@ -103,7 +114,7 @@ $importance_levels = ['低', '普通', '高'];
                     </button>
                 </div>
             </div> -->
-            <!-- <?php if (isset($_SESSION['success_message'])) : ?>
+                <!-- <?php if (isset($_SESSION['success_message'])) : ?>
                 <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
                 <?php unset($_SESSION['success_message']); ?>
             <?php endif; ?>
@@ -113,8 +124,8 @@ $importance_levels = ['低', '普通', '高'];
                 <?php unset($_SESSION['error_message']); ?>
             <?php endif; ?> -->
 
-            <!-- 検索とフィルタリングフォーム -->
-            <!-- <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
+                <!-- 検索とフィルタリングフォーム -->
+                <!-- <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
                 <form action="" method="GET" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                     <div class="flex-grow">
                         <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">
@@ -132,8 +143,8 @@ $importance_levels = ['低', '普通', '高'];
                         <a href="memo_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">リセット</a>
                     </div>
                 </form>-->
-            </div> 
-            <div class="overflow-x-auto"> 
+            </div>
+            <div class="overflow-x-auto">
                 <table class="w-full mb-6 border-collapse border border-blue-200">
                     <thead>
                         <tr class="bg-blue-100">
@@ -151,10 +162,9 @@ $importance_levels = ['低', '普通', '高'];
                             <?php foreach ($memos as $memo) : ?>
                                 <tr class="hover:bg-blue-100 transition-colors duration-200">
                                     <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['category']) ?></td>
-                                    <td class="text-sm sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['content']) ?></td>
+                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 whitespace-pre-wrap"><?= h($memo['content']) ?></td>
                                     <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden"><?= h($memo['creator']) ?></td>
-                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden"><?= h($memo['shared_with'] ?: '共有なし') ?></td>
-                                    <?php if ($is_admin_or_editor) : ?>
+                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden"><?= h($memo['shared_with'] ?: '共有なし') ?></td> <?php if ($is_admin_or_editor) : ?>
                                         <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                             <a href="memo_edit.php?id=<?= $memo['id'] ?>" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
                                             <a href="memo_delete.php?id=<?= $memo['id'] ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
@@ -174,6 +184,6 @@ $importance_levels = ['低', '普通', '高'];
         </div>
     </main>
 </body>
-<? include 'footer_memo.php'; ?>
+<?php include 'footer_memo.php'; ?>
 
 </html>

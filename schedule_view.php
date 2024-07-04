@@ -72,21 +72,24 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
             });
         }
     </script>
-        <style>
+    <style>
         .content-wrapper {
-            height: calc(100vh - 64px); /* ヘッダーの高さを引いた値 */
+            height: calc(100vh - 64px);
+            /* ヘッダーの高さを引いた値 */
             overflow-y: auto;
         }
     </style>
 </head>
 
-<? include 'header0.php'; ?>
+<?php include 'header0.php'; ?>
+
 <body class="bg-gray-100">
-<div class="pt-20 sm:pt-24"> <!-- この行を追加 -->
-    <main class="container mx-auto mt-5 mb-40">
-        <div class="bg-white rounded-lg shadow-md p-1 sm:p-6">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
-                <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">スケジュール表示</h1>
+    <div class="pt-16 sm:pt-20">
+        <main class="container mx-auto mt-5 mb-40">
+            <div class="bg-white rounded-lg shadow-md p-1 sm:p-6">
+                <div class="text-center mb-6">
+                    <h1 class="text-2xl sm:text-3xl font-bold">スケジュール表示</h1>
+                </div>
                 <!-- <div class="flex justify-end space-x-2 w-full sm:w-auto">
                     <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                         <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
@@ -102,7 +105,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                 </div>
             </div> -->
 
-            <!-- <?php if (isset($_SESSION['success_message'])) : ?>
+                <!-- <?php if (isset($_SESSION['success_message'])) : ?>
                 <p class="text-green-500 mb-4 text-center text-sm sm:text-base"><?= h($_SESSION['success_message']) ?></p>
                 <?php unset($_SESSION['success_message']); ?>
             <?php endif; ?>
@@ -124,50 +127,51 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                 </form>
             </div> -->
 
-            <div class="overflow-x-auto">
-            <div class="inline-block w-full py-1 px-1 align-middle sm:px-6 lg:px-8">
-                    <?php foreach ($schedulesByYear as $year => $yearSchedules): ?>
-                        <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4"><?= h($year) ?>年</h3>
-                        <table class="min-w-full border-collapse border border-blue-200">
-                            <thead>
-                                <tr class="bg-blue-100">
-                                    <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">日付</th>
-                                    <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">内容</th>
-                                    <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">作成</th>
-                                    <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">共有</th>
-                                    <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">操作</th>
-                                    <?php endif; ?>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($yearSchedules as $schedule) : ?>
-                                    <?php
-                                    $date = new DateTime($schedule['date']);
-                                    $formattedDate = $date->format('n/j') . '(' . $weekdays[$date->format('w')] . ')';
-                                    ?>
-                                    <tr class="hover:bg-blue-50 transition-colors duration-200">
-                                        <td class="text-xs sm:text-sm p-2 border border-blue-200"><?= h($formattedDate) ?></td>
-                                        <td class="text-xs sm:text-sm p-2 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
-                                        <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['creator']) ?></td>
-                                        <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
+                <div class="overflow-x-auto">
+                    <div class="inline-block w-full py-1 px-1 align-middle sm:px-6 lg:px-8">
+                        <?php foreach ($schedulesByYear as $year => $yearSchedules) : ?>
+                            <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4"><?= h($year) ?>年</h3>
+                            <table class="min-w-full border-collapse border border-blue-200">
+                                <thead>
+                                    <tr class="bg-blue-100">
+                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">日付</th>
+                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">内容</th>
+                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">作成</th>
+                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">共有</th>
                                         <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden">
-                                                <div class="flex justify-around">
-                                                    <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
-                                                    <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
-                                                </div>
-                                            </td>
+                                            <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">操作</th>
                                         <?php endif; ?>
                                     </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                        </table>
-                    <?php endforeach; ?>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($yearSchedules as $schedule) : ?>
+                                        <?php
+                                        $date = new DateTime($schedule['date']);
+                                        $formattedDate = $date->format('n/j') . '(' . $weekdays[$date->format('w')] . ')';
+                                        ?>
+                                        <tr class="hover:bg-blue-50 transition-colors duration-200">
+                                            <td class="text-xs sm:text-sm p-2 border border-blue-200"><?= h($formattedDate) ?></td>
+                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
+                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['creator']) ?></td>
+                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
+                                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                                <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden">
+                                                    <div class="flex justify-around">
+                                                        <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
+                                                        <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                                    </div>
+                                                </td>
+                                            <?php endif; ?>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
+        </main>
 </body>
-<? include 'footer_schedule.php'; ?>
+<?php include 'footer_schedule.php'; ?>
+
 </html>

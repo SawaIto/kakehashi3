@@ -7,7 +7,7 @@
     <title>かけはし</title>
 </head>
     <header class="bg-white shadow-md fixed top-0 left-0 right-0 z-50">
-        <div class="container mx-auto px-4 py-4 sm:py-6 flex justify-between items-center">
+        <div class="container mx-auto px-4 py-2 sm:py-2 flex justify-between items-center">
             <img src="./img/header_logo.png" alt="かけはしロゴ" class="h-12 sm:h-16">
             <nav class="flex justify-end space-x-2 w-full sm:w-auto">
                 <a href="logout.php" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">

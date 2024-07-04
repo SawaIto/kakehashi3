@@ -12,8 +12,8 @@ if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category = $_POST['category'];
-    $content = $_POST['content'];
-    $is_private = isset($_POST['is_private']) ? 1 : 0;
+    $content = preg_replace('/^\s*\n/', '', trim($_POST['content'])); // 先頭の空白行を削除
+    $content = preg_replace('/\r\n|\r|\n/', "\n", $content); // 改行の標準化
     $importance = $_POST['importance'];
     $due_date = $_POST['due_date'] ?: null;
     $shared_with = isset($_POST['shared_with']) ? $_POST['shared_with'] : [];
@@ -22,9 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $error = 'カテゴリー、内容を入力してください。';
     } else {
         // メモ登録
-        $stmt = $pdo->prepare("INSERT INTO memos (group_id, user_id, category,  content, is_private, importance, due_date) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $status = $stmt->execute([$_SESSION['group_id'], $_SESSION['user_id'], $category, $content, $is_private, $importance, $due_date]);
-
+        $stmt = $pdo->prepare("INSERT INTO memos (group_id, user_id, category, content, is_private, importance, due_date) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $status = $stmt->execute([$_SESSION['group_id'], $_SESSION['user_id'], $category, $content, $is_private, $importance, $due_date]);        // ... 他のコード ...
         if ($status) {
             $memo_id = $pdo->lastInsertId();
 
@@ -62,8 +61,8 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-blue-100">
-    <?include 'header_test.php';?>
+<body class="bg-gray-200">
+    <? include 'header_test.php'; ?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ登録</h1>
         <?php if (isset($error)) : ?>
@@ -81,20 +80,19 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div>
                 <label for="content" class="block text-lg font-semibold">内容：</label>
-                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"></textarea>
-            </div>
-            <div>
-                <p class="text-lg font-semibold">共有先：</p>
-                <div class="space-y-2">
-                    <?php foreach ($group_members as $member) : ?>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
-                            <span><?= h($member['username']) ?></span>
-                        </label>
-                    <?php endforeach; ?>
+                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 whitespace-pre-line" rows="4"></textarea>
+                <div>
+                    <p class="text-lg font-semibold">共有先：</p>
+                    <div class="space-y-2">
+                        <?php foreach ($group_members as $member) : ?>
+                            <label class="flex items-center">
+                                <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
+                                <span><?= h($member['username']) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
+                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
         </form>
 
         <!-- ホームに戻るボタン -->

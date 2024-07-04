@@ -4,26 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
-<footer class="bg-gray-300 text-white py-4 text-center fixed bottom-0 left-0 right-0 z-50">
-    <div class="flex flex-col sm:flex-row justify-between items-start mr-2 sm:items-center mb-4 sm:mb-6">
-                <div class="flex justify-end space-x-2 w-full sm:w-auto">
-                <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                    ホーム
-                </a>
-                <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                    <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                        新規登録
-                    </a>
-                <?php endif; ?>
-                <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                    検索
-                </button>
-                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                    詳細表示
-                </button>
-            </div>
+<footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-end mb-4 space-x-2">
+            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                ホーム
+            </a>
+            <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                検索
+            </button>
+            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                詳細表示
+            </button>
+            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                新規登録
+            </a>
+            <?php endif; ?>
         </div>
 
         <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
@@ -43,8 +43,22 @@
             </form>
         </div>
 
-        <p class="text-sm text-gray-600">&copy; 2024 sawasawasawa. All rights reserved.</p>
+        <p class="text-sm text-gray-600 text-center">&copy; 2024 sawasawasawa. All rights reserved.</p>
     </div>
 </footer>
+
+<script>
+    function toggleSearchFilter() {
+        var searchFilter = document.getElementById('searchFilter');
+        searchFilter.classList.toggle('hidden');
+    }
+
+    function toggleExtraColumns() {
+        var extraColumns = document.querySelectorAll('.extra-column');
+        extraColumns.forEach(function(column) {
+            column.classList.toggle('hidden');
+        });
+    }
+</script>
 </body>
 </html>

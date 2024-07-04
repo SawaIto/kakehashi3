@@ -70,7 +70,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
     </style>
 </head>
 
-<body class="bg-blue-100">
+<body class="bg-gray-100">
     <?include 'header_test.php';?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
@@ -128,6 +128,9 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         <div class="mt-6 text-center space-y-2 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row justify-center items-center">
             <a href="photo_upload.php" class="w-full sm:w-auto bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
                 新規写真アップロード
+            </a>
+            <a href="album_create.php" class="w-full sm:w-auto bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
+                アルバムを作成する
             </a>
             <a href="album_view.php" class="w-full sm:w-auto bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
                 アルバム一覧

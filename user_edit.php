@@ -107,20 +107,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
     </div>
     <script>
-        function toggleEmailField() {
-            const role = document.getElementById('role').value;
-            const emailField = document.getElementById('emailField');
-            const emailInput = document.getElementById('email');
+    function toggleEmailField() {
+    const role = document.getElementById('role').value;
+    const emailField = document.getElementById('emailField');
+    const emailInput = document.getElementById('email');
 
-            if (role === 'view') {
-                emailField.style.display = 'none';
-                emailInput.value = ''; // メールアドレスの値をクリア
-                emailInput.removeAttribute('required');
-            } else {
-                emailField.style.display = 'block';
-                emailInput.setAttribute('required', 'required');
-            }
-        }
+    if (role === 'view') {
+        emailField.style.display = 'none';
+        emailInput.value = ''; // メールアドレスの値を空文字列にする
+        emailInput.removeAttribute('required');
+    } else {
+        emailField.style.display = 'block';
+        emailInput.setAttribute('required', 'required');
+    }
+}
 
         // 初期表示時にも実行
         toggleEmailField();

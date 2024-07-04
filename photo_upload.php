@@ -12,45 +12,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $tags = $is_view_role ? [] : (isset($_POST['tags']) ? explode(',', $_POST['tags']) : []);
     $album_id = $is_view_role ? null : $_POST['album_id'];
     $new_album_name = $is_view_role ? '' : $_POST['new_album_name'];
-    $file = $_FILES['photo'];
+    $files = $_FILES['photos'];
 
-    if (empty($file['name'])) {
+    if (empty($files['name'][0])) {
         $error = '写真を選択してください。';
     } else {
-        $filename = uniqid() . '.jpg'; // JPEG形式に変換するためファイル名を設定
         $upload_dir = __DIR__ . '/uploads/';
         if (!file_exists($upload_dir)) {
             mkdir($upload_dir, 0777, true);
         }
-        $upload_file = $upload_dir . $filename;
 
-        // 画像をJPEG形式に変換して保存
-        $image_info = getimagesize($file['tmp_name']);
-        $image_type = $image_info[2];
-
-        if ($image_type == IMAGETYPE_JPEG) {
-            $image = imagecreatefromjpeg($file['tmp_name']);
-        } elseif ($image_type == IMAGETYPE_PNG) {
-            $image = imagecreatefrompng($file['tmp_name']);
-        } elseif ($image_type == IMAGETYPE_GIF) {
-            $image = imagecreatefromgif($file['tmp_name']);
-        } else {
-            $error = '対応していない画像形式です。';
-            $image = false;
+        // 新しいアルバムを作成（view権限以外）
+        if (!$is_view_role && !empty($new_album_name)) {
+            $stmt = $pdo->prepare("INSERT INTO albums (group_id, name) VALUES (?, ?)");
+            $stmt->execute([$_SESSION['group_id'], $new_album_name]);
+            $album_id = $pdo->lastInsertId();
         }
 
-        if ($image) {
+        $success_count = 0;
+        for ($i = 0; $i < count($files['name']); $i++) {
+            $filename = uniqid() . '.jpg';
+            $upload_file = $upload_dir . $filename;
+
+            // 画像をJPEG形式に変換して保存
+            $image_info = getimagesize($files['tmp_name'][$i]);
+            $image_type = $image_info[2];
+
+            if ($image_type == IMAGETYPE_JPEG) {
+                $image = imagecreatefromjpeg($files['tmp_name'][$i]);
+            } elseif ($image_type == IMAGETYPE_PNG) {
+                $image = imagecreatefrompng($files['tmp_name'][$i]);
+            } elseif ($image_type == IMAGETYPE_GIF) {
+                $image = imagecreatefromgif($files['tmp_name'][$i]);
+            } else {
+                continue; // 対応していない形式はスキップ
+            }
+
+            // 画像のリサイズと圧縮
+            $max_width = 1920;
+            $max_height = 1080;
+            list($width, $height) = getimagesize($files['tmp_name'][$i]);
+            $ratio = min($max_width / $width, $max_height / $height);
+            if ($ratio < 1) {
+                $new_width = $width * $ratio;
+                $new_height = $height * $ratio;
+                $new_image = imagecreatetruecolor($new_width, $new_height);
+                imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+                $image = $new_image;
+            }
+
             // 画質を落としてJPEG形式で保存
-            $quality = 75; // 画質を0から100の範囲で設定
+            $quality = 75;
             if (imagejpeg($image, $upload_file, $quality)) {
                 imagedestroy($image);
-
-                // 新しいアルバムを作成（view権限以外）
-                if (!$is_view_role && !empty($new_album_name)) {
-                    $stmt = $pdo->prepare("INSERT INTO albums (group_id, name) VALUES (?, ?)");
-                    $stmt->execute([$_SESSION['group_id'], $new_album_name]);
-                    $album_id = $pdo->lastInsertId();
-                }
 
                 $stmt = $pdo->prepare("INSERT INTO photos (group_id, user_id, file_name, comment) VALUES (?, ?, ?, ?)");
                 $status = $stmt->execute([$_SESSION['group_id'], $_SESSION['user_id'], $filename, $comment]);
@@ -75,14 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         }
                     }
 
-                    $_SESSION['success_message'] = '写真が正常にアップロードされました。';
-                    redirect('photo_view.php');
-                } else {
-                    $error = '写真のアップロードに失敗しました。';
+                    $success_count++;
                 }
-            } else {
-                $error = '画像の変換に失敗しました。';
             }
+        }
+
+        if ($success_count > 0) {
+            $_SESSION['success_message'] = $success_count . '枚の写真が正常にアップロードされました。';
+            redirect('photo_view.php');
+        } else {
+            $error = '写真のアップロードに失敗しました。';
         }
     }
 }
@@ -104,6 +120,17 @@ if (!$is_view_role) {
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: "メイリオ", Meiryo, sans-serif; }
+        #drop_zone {
+            border: 2px dashed #ccc;
+            border-radius: 20px;
+            width: 100%;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        #drop_zone.dragover {
+            background-color: #e9e9e9;
+        }
     </style>
 </head>
 <body class="bg-blue-100">
@@ -112,11 +139,12 @@ if (!$is_view_role) {
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
-        <form method="POST" enctype="multipart/form-data" class="space-y-4">
-            <div>
-                <label for="photo" class="block text-lg font-semibold">写真：</label>
-                <input type="file" id="photo" name="photo" accept="image/*" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+        <form method="POST" enctype="multipart/form-data" class="space-y-4" id="upload-form">
+            <div id="drop_zone" class="mb-4">
+                <p>ここに写真をドラッグ＆ドロップするか、クリックして選択してください</p>
+                <input type="file" id="photos" name="photos[]" accept="image/*" required multiple class="hidden">
             </div>
+            <div id="preview" class="grid grid-cols-3 gap-2 mb-4"></div>
             <?php if (!$is_view_role): ?>
                 <div>
                     <label for="comment" class="block text-lg font-semibold">コメント：</label>
@@ -149,5 +177,45 @@ if (!$is_view_role) {
             </a>
         </div>
     </div>
+
+    <script>
+        const dropZone = document.getElementById('drop_zone');
+        const fileInput = document.getElementById('photos');
+        const preview = document.getElementById('preview');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            fileInput.files = e.dataTransfer.files;
+            updatePreview();
+        });
+
+        fileInput.addEventListener('change', updatePreview);
+
+        function updatePreview() {
+            preview.innerHTML = '';
+            for (let file of fileInput.files) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.classList.add('w-full', 'h-32', 'object-cover', 'rounded');
+                    preview.appendChild(img);
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>
