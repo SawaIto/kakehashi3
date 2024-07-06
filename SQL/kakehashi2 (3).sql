@@ -73,7 +73,7 @@ INSERT INTO `album_photos` (`album_id`, `photo_id`) VALUES
 
 CREATE TABLE `groups` (
   `id` int(11) NOT NULL,
-  `admin_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -83,7 +83,7 @@ CREATE TABLE `groups` (
 -- テーブルのデータのダンプ `groups`
 --
 
-INSERT INTO `groups` (`id`, `admin_id`, `name`, `created_at`, `updated_at`) VALUES
+INSERT INTO `groups` (`id`, `user_id`, `name`, `created_at`, `updated_at`) VALUES
 (5, 11, 'さわ\'s Group', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
 (6, 17, 'テスト\'s Group', '2024-06-27 12:46:03', '2024-06-27 12:46:03');
 
@@ -323,7 +323,7 @@ ALTER TABLE `album_photos`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_groups_admin_id` (`admin_id`);
+  ADD KEY `idx_groups_user_id` (`user_id`);
 
 --
 -- テーブルのインデックス `group_members`
@@ -491,7 +491,7 @@ ALTER TABLE `album_photos`
 -- テーブルの制約 `groups`
 --
 ALTER TABLE `groups`
-  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `groups_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- テーブルの制約 `group_members`

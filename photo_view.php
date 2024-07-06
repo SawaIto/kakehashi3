@@ -69,10 +69,10 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         }
     </style>
 </head>
-
+<?php include 'header0.php'; ?>
 <body class="bg-gray-100">
     <?include 'header_test.php';?>
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
 
         <?php if (isset($_SESSION['success_message'])) : ?>

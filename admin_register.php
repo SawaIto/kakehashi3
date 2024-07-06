@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $user_id = $pdo->lastInsertId();
 
                     // グループ作成
-                    $stmt = $pdo->prepare("INSERT INTO `groups` (admin_id, name) VALUES (?, ?)");
+                    $stmt = $pdo->prepare("INSERT INTO `groups` (user_id, name) VALUES (?, ?)");
                     $stmt->execute([$user_id, $username . "'s Group"]);
                     $group_id = $pdo->lastInsertId();
 

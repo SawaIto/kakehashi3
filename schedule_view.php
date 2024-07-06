@@ -78,6 +78,10 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
             /* ヘッダーの高さを引いた値 */
             overflow-y: auto;
         }
+
+        .overflow-x-auto.schedule_table table td:first-of-type {
+            width: 90px;
+        }
     </style>
 </head>
 
@@ -127,7 +131,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                 </form>
             </div> -->
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto schedule_table">
                     <div class="inline-block w-full py-1 px-1 align-middle sm:px-6 lg:px-8">
                         <?php foreach ($schedulesByYear as $year => $yearSchedules) : ?>
                             <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4"><?= h($year) ?>年</h3>
