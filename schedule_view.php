@@ -59,6 +59,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>スケジュール表示</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
     <script>
         function toggleSearchFilter() {
             var searchFilter = document.getElementById('searchFilter');
@@ -75,61 +76,28 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
     <style>
         .content-wrapper {
             height: calc(100vh - 64px);
-            /* ヘッダーの高さを引いた値 */
             overflow-y: auto;
         }
 
         .overflow-x-auto.schedule_table table td:first-of-type {
             width: 90px;
         }
+
+        .meta-info {
+            font-size: 0.5rem;
+            color: #666;
+        }
     </style>
 </head>
 
-<?php include 'header0.php'; ?>
-
-<body class="bg-gray-100">
+<body class="bg-gray-200">
+    <?php include 'header0.php'; ?>
     <div class="pt-16 sm:pt-20">
         <main class="container mx-auto mt-5 mb-40">
             <div class="bg-white rounded-lg shadow-md p-1 sm:p-6">
                 <div class="text-center mb-6">
                     <h1 class="text-2xl sm:text-3xl font-bold">スケジュール表示</h1>
                 </div>
-                <!-- <div class="flex justify-end space-x-2 w-full sm:w-auto">
-                    <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                        <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                            新規登録
-                        </a>
-                    <?php endif; ?>
-                    <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                        検索
-                    </button>
-                    <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                        詳細表示
-                    </button>
-                </div>
-            </div> -->
-
-                <!-- <?php if (isset($_SESSION['success_message'])) : ?>
-                <p class="text-green-500 mb-4 text-center text-sm sm:text-base"><?= h($_SESSION['success_message']) ?></p>
-                <?php unset($_SESSION['success_message']); ?>
-            <?php endif; ?>
-
-            <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
-                <form method="GET" action="" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
-                    <div class="flex-grow">
-                        <label for="start_date" class="block text-sm font-medium text-gray-700">開始日:</label>
-                        <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    </div>
-                    <div class="flex-grow">
-                        <label for="end_date" class="block text-sm font-medium text-gray-700">終了日:</label>
-                        <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    </div>
-                    <div class="flex space-x-2">
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">検索</button>
-                        <a href="<?= $_SERVER['PHP_SELF'] ?>" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">リセット</a>
-                    </div>
-                </form>
-            </div> -->
 
                 <div class="overflow-x-auto schedule_table">
                     <div class="inline-block w-full py-1 px-1 align-middle sm:px-6 lg:px-8">
@@ -140,10 +108,8 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                     <tr class="bg-blue-100">
                                         <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">日付</th>
                                         <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">内容</th>
-                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">作成</th>
-                                        <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">共有</th>
                                         <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                                            <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center">操作</th>
+                                            <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center w-16">操作</th>
                                         <?php endif; ?>
                                     </tr>
                                 </thead>
@@ -155,14 +121,20 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                         ?>
                                         <tr class="hover:bg-blue-50 transition-colors duration-200">
                                             <td class="text-xs sm:text-sm p-2 border border-blue-200"><?= h($formattedDate) ?></td>
-                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 whitespace-pre-wrap"><?= h($schedule['content']) ?></td>
-                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['creator']) ?></td>
-                                            <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden text-center"><?= h($schedule['shared_with'] ?: '共有なし') ?></td>
+                                            <td class="text-xs sm:text-sm p-2 border border-blue-200">
+                                                <div class="whitespace-pre-wrap"><?= h($schedule['content']) ?></div>
+                                                <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                                <div class="meta-info extra-column hidden text-end">
+                                                    作成: <?= h($schedule['creator']) ?><br>
+                                                    共有: <?= h($schedule['shared_with'] ?: '共有なし') ?>
+                                                </div>
+                                            </td>
+                                            <?php endif; ?>
                                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                                                <td class="text-xs sm:text-sm p-2 border border-blue-200 extra-column hidden">
-                                                    <div class="flex justify-around">
-                                                        <a href="schedule_edit.php?id=<?= h($schedule['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
-                                                        <a href="schedule_delete.php?id=<?= h($schedule['id']) ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                                <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
+                                                    <div class="flex flex-col space-y-2">
+                                                        <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded">編集</a>
+                                                        <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？');">削除</a>
                                                     </div>
                                                 </td>
                                             <?php endif; ?>
@@ -175,7 +147,8 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                 </div>
             </div>
         </main>
+    </div>
+    <?php include 'footer_schedule.php'; ?>
 </body>
-<?php include 'footer_schedule.php'; ?>
 
 </html>

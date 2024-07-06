@@ -41,8 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ログイン</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <style>
+    <link rel="stylesheet" href="styles/main.css">
+   <style>
     .hidden {
       display: none;
     }
@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
   </script>
 </head>
-<body class="bg-blue-100">
+<body class="bg-gray-200">
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
     <div class="flex justify-center">
       <button class="bg-blue-700 hover:bg-green-700 text-white font-bold text-4xl py-5 px-6 rounded mb-4" onclick="autofillAndSubmit()">正恵さん用<br>スタートボタン</button>

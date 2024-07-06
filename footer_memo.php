@@ -39,7 +39,7 @@
         <?php endif; ?>
 
         <!-- 検索とフィルタリングフォーム -->
-        <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
+        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
             <form action="" method="GET" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow text-black">
                     <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">

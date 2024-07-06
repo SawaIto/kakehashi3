@@ -118,8 +118,8 @@ if (!$is_view_role) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>写真アップロード</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: "メイリオ", Meiryo, sans-serif; }
+    <link rel="stylesheet" href="styles/main.css">
+   <style>
         #drop_zone {
             border: 2px dashed #ccc;
             border-radius: 20px;
@@ -134,8 +134,8 @@ if (!$is_view_role) {
     </style>
 </head>
 <?php include 'header0.php'; ?>
-<body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+<body class="bg-gray-200">
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>

@@ -66,9 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ユーザー編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+<body class="bg-gray-200">
+<?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-4xl font-bold mb-6 text-center">ユーザー編集</h1>
         <?php if (isset($error)): ?>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">

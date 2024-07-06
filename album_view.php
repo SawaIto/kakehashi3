@@ -51,8 +51,8 @@ if (isset($_POST['remove_from_album'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>アルバム一覧</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
     <style>
-        body { font-family: "メイリオ", Meiryo, sans-serif; }
         .modal {
             display: none;
             position: fixed;
@@ -113,8 +113,9 @@ if (isset($_POST['remove_from_album'])) {
         }
     </style>
 </head>
-<body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+<body class="bg-gray-200">
+<?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>
 
         <?php if (isset($_SESSION['success_message'])) : ?>
@@ -125,7 +126,7 @@ if (isset($_POST['remove_from_album'])) {
         <?php if (!$album_id): ?>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <?php foreach ($albums as $album): ?>
-                    <div class="bg-gray-100 p-4 rounded-lg shadow">
+                    <div class="bg-gray-200 p-4 rounded-lg shadow">
                         <h2 class="text-xl font-bold mb-2"><?= h($album['name']) ?></h2>
                         <p class="text-sm text-gray-600 mb-2"><?= h($album['description']) ?></p>
                         <p class="text-xs text-gray-500"><?= h($album['created_at']) ?></p>
@@ -138,7 +139,7 @@ if (isset($_POST['remove_from_album'])) {
             <p class="text-gray-600 mb-4"><?= h($current_album['description']) ?></p>
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <?php foreach ($photos as $index => $photo): ?>
-                    <div class="bg-gray-100 p-4 rounded-lg shadow">
+                    <div class="bg-gray-200 p-4 rounded-lg shadow">
                         <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal('uploads/<?= h($photo['file_name']) ?>', '<?= h($photo['comment']) ?>', '<?= h($photo['username']) ?>', <?= $index ?>)">
                         <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
                         <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>

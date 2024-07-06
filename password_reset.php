@@ -11,7 +11,7 @@ include("funcs.php");
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>パスワード再発行</title>
 </head>
-<body class="bg-blue-100 min-h-screen flex flex-col">
+<body class="bg-gray-200 min-h-screen flex flex-col">
     <?php include 'header0.php'; ?>
     
     <main class="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">

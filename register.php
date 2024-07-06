@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>新規管理者登録</title>
 </head>
-<body class="bg-blue-100 min-h-screen">
+<body class="bg-gray-200 min-h-screen">
     <?php include 'header0.php'; ?>
 
     <main class="flex-grow container mx-auto px-4 py-2">

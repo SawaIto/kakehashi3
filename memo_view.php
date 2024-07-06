@@ -71,6 +71,7 @@ $importance_levels = ['低', '普通', '高'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ一覧</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
     <style>
         body {
             display: flex;
@@ -91,13 +92,19 @@ $importance_levels = ['低', '普通', '高'];
             /* ヘッダーとフッターの高さを引いた値 */
             overflow-y: auto;
         }
+
+
+        .meta-info {
+            font-size: 0.5rem;
+            color: #666;
+        }
     </style>
 </head>
 <?php include 'header0.php'; ?>
 
-<body class="bg-gray-100">
-    <main class="flex-grow mb-40 mt-14">
-        <div class="container mx-auto mt-5 p-2 bg-white rounded-lg shadow-md max-w-4xl">
+<body class="bg-gray-200">
+    <main class="flex-grow mb-40">
+        <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-4xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
                 <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">メモ一覧</h1>
                 <!-- <div class="flex justify-end space-x-2 w-full sm:w-auto">
@@ -125,7 +132,7 @@ $importance_levels = ['低', '普通', '高'];
             <?php endif; ?> -->
 
                 <!-- 検索とフィルタリングフォーム -->
-                <!-- <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
+                <!-- <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
                 <form action="" method="GET" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                     <div class="flex-grow">
                         <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">
@@ -150,10 +157,8 @@ $importance_levels = ['低', '普通', '高'];
                         <tr class="bg-blue-100">
                             <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">区分</th>
                             <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">内容</th>
-                            <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">作成</th>
-                            <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">共有</th>
                             <?php if ($is_admin_or_editor) : ?>
-                                <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden">操作</th>
+                                <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden w-16">操作</th>
                             <?php endif; ?>
                         </tr>
                     </thead>
@@ -162,12 +167,20 @@ $importance_levels = ['低', '普通', '高'];
                             <?php foreach ($memos as $memo) : ?>
                                 <tr class="hover:bg-blue-100 transition-colors duration-200">
                                     <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200"><?= h($memo['category']) ?></td>
-                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 whitespace-pre-wrap"><?= h($memo['content']) ?></td>
-                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden"><?= h($memo['creator']) ?></td>
-                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden"><?= h($memo['shared_with'] ?: '共有なし') ?></td> <?php if ($is_admin_or_editor) : ?>
+                                    <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200">
+                                        <div class="whitespace-pre-wrap"><?= rtrim(h($memo['content'])) ?></div>
+                                        <?php if ($is_admin_or_editor) : ?>
+                                            <div class="meta-info extra-column hidden text-end mt-2">
+                                                作成: <?= h($memo['creator']) ?><br>
+                                                共有: <?= h($memo['shared_with'] ?: '共有なし') ?>
+                                            </div>
+                                        <?php endif; ?>
+                                    </td> <?php if ($is_admin_or_editor) : ?>
                                         <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
-                                            <a href="memo_edit.php?id=<?= $memo['id'] ?>" class="text-blue-500 hover:text-blue-700 mr-2">編集</a>
-                                            <a href="memo_delete.php?id=<?= $memo['id'] ?>" class="text-red-500 hover:text-red-700" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                            <div class="flex flex-col space-y-2">
+                                                <a href="memo_edit.php?id=<?= $memo['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded">編集</a>
+                                                <a href="memo_delete.php?id=<?= $memo['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                            </div>
                                         </td>
                                     <?php endif; ?>
                                 </tr>

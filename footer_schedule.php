@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 <footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
@@ -26,7 +27,7 @@
             <?php endif; ?>
         </div>
 
-        <div id="searchFilter" class="hidden mb-4 bg-gray-100 p-4 rounded-lg">
+        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
             <form method="GET" action="" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow">
                     <label for="start_date" class="block text-sm font-medium text-gray-700">開始日:</label>

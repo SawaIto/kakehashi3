@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン - かけはし</title>
+    <title>フッター</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
     <style>
         @media (max-width: 640px) {
             .footer-links {
@@ -14,10 +15,10 @@
             }
             .footer-links a {
                 margin: 0.3rem;
-                font-size: 0.9rem;
+                font-size: 0.6rem;
             }
             .copyright {
-                font-size: 0.6rem;
+                font-size: 0.7rem;
             }
         }
     </style>
@@ -36,9 +37,6 @@
                 </a>
                 <a href="contact.php" class="text-black text-sm hover:underline px-1 py-1">
                     お問い合わせ
-                </a>
-                <a href="about.php" class="text-black text-sm hover:underline px-1 py-1">
-                    かけはしについて
                 </a>
             </div>
             <p class="copyright text-xs text-gray-600 text-center">&copy; 2024 かけはし. All rights reserved.</p>

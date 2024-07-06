@@ -62,6 +62,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>写真一覧</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
     <script src="https://hammerjs.github.io/dist/hammer.min.js"></script>
     <style>
         body {
@@ -70,8 +71,8 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
     </style>
 </head>
 <?php include 'header0.php'; ?>
-<body class="bg-gray-100">
-    <?include 'header_test.php';?>
+<body class="bg-gray-200">
+<?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
 
@@ -111,7 +112,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </form>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($photos as $index => $photo) : ?>
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <div class="bg-gray-200 p-4 rounded-lg shadow">
                     <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
                     <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
                     <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
@@ -265,7 +266,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
                     commentList.innerHTML = '';
                     comments.forEach(comment => {
                         const commentElement = document.createElement('div');
-                        commentElement.className = 'mb-2 p-2 bg-gray-100 rounded';
+                        commentElement.className = 'mb-2 p-2 bg-gray-200 rounded';
                         commentElement.textContent = `${comment.username}: ${comment.comment}`;
                         commentList.appendChild(commentElement);
                     });

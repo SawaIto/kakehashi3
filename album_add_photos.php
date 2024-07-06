@@ -55,12 +55,11 @@ if (isset($_POST['add_to_album'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>アルバムに写真を追加</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { font-family: "メイリオ", Meiryo, sans-serif; }
-    </style>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
+<body class="bg-gray-200">
+<?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
         <h2 class="text-2xl font-bold mb-4"><?= h($album['name']) ?></h2>
 
@@ -71,7 +70,7 @@ if (isset($_POST['add_to_album'])) {
 
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($available_photos as $photo): ?>
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
+                <div class="bg-gray-200 p-4 rounded-lg shadow">
                     <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded">
                     <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
                     <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>

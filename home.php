@@ -26,18 +26,19 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ホーム</title>
     <script src="https://cdn.tailwindcss.com"></script>
-<body class="bg-gray-100">
-    <div class="container mx-auto m-5 p-6 bg-white rounded-lg shadow-md max-w-md">
+    <link rel="stylesheet" href="styles/main.css">
+<body class="flex items-center justify-center min-h-screen bg-gray-200">
+    <div class="container mx-auto m-2 p-2 bg-white rounded-lg shadow-md max-w-md">
     <div class="container mx-auto px-4 py-2 sm:py-4 flex justify-center items-center">
     <img src="./img/header_logo.png" alt="かけはしロゴ" class="h-26 sm:h-24">
     </div>
-        <h1 class="text-3xl font-bold my-6 text-center">ようこそ、<?= h($user['username']) ?>さん</h1>
+        <h1 class="text-xl font-bold my-3 text-center">ようこそ、<?= h($user['username']) ?>さん</h1>
         <div class="flex justify-between items-center mb-4">
-            <p class="text-base sm:text-base sm:text-xl">グループ名: <?= h($group['name']) ?></p>
-            <a href="profile.php" class="bg-gray-300 hover:bg-gray-500 text-black font-bold px-3 py-1 rounded text-sm transition duration-300">プロフィール</a>
+            <p class="text-base">グループ名: <?= h($group['name']) ?></p>
+            <a href="mypage.php" class="bg-gray-300 hover:bg-gray-500 text-black font-bold px-3 py-1 rounded text-sm transition duration-300">マイページ</a>
         </div>
         <div class="flex justify-between items-center mb-6">
-            <p class="text-base sm:text-base sm:text-xl">ユーザー権限: <?= h($user['role']) ?></p>
+            <p class="text-base">ユーザー権限: <?= h($user['role']) ?></p>
             <a href="logout.php" class="bg-red-200 hover:bg-red-300 text-black font-bold px-3 py-1 rounded text-sm transition duration-300">ログアウト</a>
         </div>
         <div class="space-y-4">

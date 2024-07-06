@@ -74,10 +74,12 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモ編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles/main.css">
 </head>
 
-<body class="bg-blue-100">
-    <div class="container mx-auto mt-10 p-2 bg-white rounded-lg shadow-md max-w-2xl">
+<body class="bg-gray-200">
+<?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ編集</h1>
         <?php if (isset($error)) : ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
