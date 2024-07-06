@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2024-06-29 10:34:39
+-- 生成日時: 2024-07-06 06:11:14
 -- サーバのバージョン： 10.4.32-MariaDB
 -- PHP のバージョン: 8.2.12
 
@@ -40,8 +40,7 @@ CREATE TABLE `albums` (
 --
 
 INSERT INTO `albums` (`id`, `group_id`, `name`, `description`, `created_at`) VALUES
-(1, 5, 'JAM', '', '2024-06-29 04:42:30'),
-(2, 5, 'test', NULL, '2024-06-29 04:58:11');
+(4, 7, 'いらすとや', '', '2024-07-04 16:56:26');
 
 -- --------------------------------------------------------
 
@@ -59,11 +58,10 @@ CREATE TABLE `album_photos` (
 --
 
 INSERT INTO `album_photos` (`album_id`, `photo_id`) VALUES
-(1, 1),
-(2, 1),
-(2, 2),
-(2, 3),
-(2, 4);
+(4, 11),
+(4, 12),
+(4, 13),
+(4, 26);
 
 -- --------------------------------------------------------
 
@@ -85,7 +83,9 @@ CREATE TABLE `groups` (
 
 INSERT INTO `groups` (`id`, `user_id`, `name`, `created_at`, `updated_at`) VALUES
 (5, 11, 'さわ\'s Group', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
-(6, 17, 'テスト\'s Group', '2024-06-27 12:46:03', '2024-06-27 12:46:03');
+(6, 17, 'テスト\'s Group', '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
+(7, 18, 'さわ\'s Group', '2024-07-04 15:43:32', '2024-07-04 15:43:32'),
+(8, 21, 'さわこまる\'s Group', '2024-07-06 01:54:33', '2024-07-06 01:54:33');
 
 -- --------------------------------------------------------
 
@@ -106,10 +106,11 @@ CREATE TABLE `group_members` (
 --
 
 INSERT INTO `group_members` (`id`, `group_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(5, 5, 11, '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
-(6, 5, 12, '2024-06-27 06:20:26', '2024-06-27 06:20:26'),
-(8, 5, 16, '2024-06-27 07:50:37', '2024-06-27 07:50:37'),
-(9, 6, 17, '2024-06-27 12:46:03', '2024-06-27 12:46:03');
+(9, 6, 17, '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
+(10, 7, 18, '2024-07-04 15:43:32', '2024-07-04 15:43:32'),
+(11, 7, 19, '2024-07-04 15:44:03', '2024-07-04 15:44:03'),
+(12, 7, 20, '2024-07-04 15:48:00', '2024-07-04 15:48:00'),
+(13, 8, 21, '2024-07-06 01:54:33', '2024-07-06 01:54:33');
 
 -- --------------------------------------------------------
 
@@ -136,10 +137,14 @@ CREATE TABLE `memos` (
 --
 
 INSERT INTO `memos` (`id`, `user_id`, `group_id`, `category`, `content`, `is_private`, `is_completed`, `created_at`, `updated_at`, `importance`, `due_date`) VALUES
-(3, 11, 5, '買い物', 'なんでもいい\r\n1kgだよ', 0, 0, '2024-06-27 23:46:40', '2024-06-27 23:49:00', 2, '2024-07-05'),
-(4, 11, 5, 'その他', 'ひみつ', 0, 0, '2024-06-28 00:15:08', '2024-06-28 00:15:08', 3, '2024-06-12'),
-(5, 12, 5, 'その他', 'かおるテスト', 0, 0, '2024-06-28 00:27:22', '2024-06-28 01:34:31', 2, NULL),
-(6, 12, 5, 'その他', 'かおるてすと佐和共有', 0, 0, '2024-06-28 00:27:41', '2024-06-28 00:48:43', 2, '0000-00-00');
+(5, 12, 5, 'その他', 'かおるテスト', 0, 1, '2024-06-28 00:27:22', '2024-06-29 08:50:06', 2, NULL),
+(6, 12, 5, 'その他', 'かおるてすと佐和共有', 0, 0, '2024-06-28 00:27:41', '2024-06-28 00:48:43', 2, '0000-00-00'),
+(8, 12, 5, 'やること', 'ｍｍｍｍ', 0, 1, '2024-06-29 08:49:57', '2024-06-29 08:50:26', 3, '2024-07-09'),
+(10, 18, 7, '買い物', 'あ\r\nあ\r\nあ', 0, 0, '2024-07-04 16:09:35', '2024-07-04 16:09:35', NULL, NULL),
+(11, 18, 7, 'やること', 'あいうえお　かか\nっきい', NULL, 0, '2024-07-04 16:18:42', '2024-07-04 16:18:42', NULL, NULL),
+(12, 18, 7, 'その他', 'あ', NULL, 0, '2024-07-04 16:23:54', '2024-07-04 16:23:54', NULL, NULL),
+(13, 18, 7, '買い物', 'あ', NULL, 0, '2024-07-04 16:26:33', '2024-07-04 16:26:33', NULL, NULL),
+(14, 18, 7, '買い物', 'あ', NULL, 0, '2024-07-04 16:32:43', '2024-07-04 16:32:43', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -159,9 +164,8 @@ CREATE TABLE `memo_shares` (
 --
 
 INSERT INTO `memo_shares` (`id`, `memo_id`, `user_id`, `created_at`) VALUES
-(4, 3, 12, '2024-06-28 00:14:48'),
-(5, 3, 16, '2024-06-28 00:14:48'),
-(8, 4, 12, '2024-06-28 01:34:04');
+(10, 10, 19, '2024-07-04 16:09:35'),
+(11, 10, 20, '2024-07-04 16:09:35');
 
 -- --------------------------------------------------------
 
@@ -184,9 +188,26 @@ CREATE TABLE `photos` (
 
 INSERT INTO `photos` (`id`, `group_id`, `user_id`, `file_name`, `comment`, `upload_date`) VALUES
 (1, 5, 11, '667f908e7652d_動画テロップ (8).png', '地球倫理', '2024-06-29 04:41:50'),
-(2, 5, 11, '667f90a28e065_IMG_20240615_123327_623.jpg', '', '2024-06-29 04:42:10'),
 (3, 5, 11, '667f944341f32_動画テロップ (7).png', '', '2024-06-29 04:57:39'),
-(4, 5, 11, '667f9463145ef_動画テロップ (6).png', '', '2024-06-29 04:58:11');
+(8, 5, 11, '667fc7e06eccc_window_amado_open.png', '', '2024-06-29 08:37:52'),
+(9, 5, 12, '667fcb5aefd06_hakusyu_boy1-1.png', '', '2024-06-29 08:52:42'),
+(10, 5, 12, '667fcb660c1b5_chizu_color.png', '', '2024-06-29 08:52:54'),
+(11, 7, 18, '6686d21d1fced.jpg', '', '2024-07-04 16:47:25'),
+(12, 7, 18, '6686d21d22d2e.jpg', '', '2024-07-04 16:47:25'),
+(13, 7, 18, '6686d21d27258.jpg', '', '2024-07-04 16:47:25'),
+(14, 7, 18, '6686d21d2994a.jpg', '', '2024-07-04 16:47:25'),
+(15, 7, 18, '6686d21d2c33c.jpg', '', '2024-07-04 16:47:25'),
+(16, 7, 18, '6686d21d2d004.jpg', '', '2024-07-04 16:47:25'),
+(17, 7, 18, '6686d21d2eb82.jpg', '', '2024-07-04 16:47:25'),
+(18, 7, 18, '6686d21d30373.jpg', '', '2024-07-04 16:47:25'),
+(19, 7, 18, '6686d21d3177c.jpg', '', '2024-07-04 16:47:25'),
+(20, 7, 18, '6686d21d3274e.jpg', '', '2024-07-04 16:47:25'),
+(21, 7, 18, '6686d21d373f7.jpg', '', '2024-07-04 16:47:25'),
+(22, 7, 18, '6686d21d38737.jpg', '', '2024-07-04 16:47:25'),
+(23, 7, 19, '66887c29bfebd.jpg', '', '2024-07-05 23:05:13'),
+(24, 7, 18, '6688b24709c31.jpg', '', '2024-07-06 02:56:07'),
+(25, 7, 18, '6688b2478662b.jpg', '', '2024-07-06 02:56:07'),
+(26, 7, 18, '6688b2869e9f0.jpg', '', '2024-07-06 02:57:11');
 
 -- --------------------------------------------------------
 
@@ -220,7 +241,8 @@ CREATE TABLE `photo_tags` (
 
 INSERT INTO `photo_tags` (`id`, `photo_id`, `tag`) VALUES
 (1, 1, 'JAM'),
-(2, 1, '2024');
+(2, 1, '2024'),
+(3, 8, 'テスト');
 
 -- --------------------------------------------------------
 
@@ -248,7 +270,12 @@ INSERT INTO `schedules` (`id`, `group_id`, `user_id`, `date`, `content`, `create
 (4, 5, 11, '2024-07-05', 'テスト\r\nテスト', '2024-06-27 11:48:21', '2024-06-27 11:48:21'),
 (5, 5, 11, '2024-07-04', 'あああ\r\nあああ\r\nあああ\r\nああ\r\n', '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
 (6, 5, 11, '2024-06-29', '名古屋一泊', '2024-06-27 12:56:04', '2024-06-27 12:56:04'),
-(7, 5, 12, '2024-07-04', '僕だけの秘密', '2024-06-27 12:57:27', '2024-06-27 12:57:27');
+(7, 5, 12, '2024-07-04', '僕だけの秘密', '2024-06-27 12:57:27', '2024-06-27 12:57:27'),
+(8, 5, 12, '2024-07-02', 'ハローワーク', '2024-06-29 08:49:15', '2024-06-29 08:49:15'),
+(9, 7, 18, '2024-07-18', 'あああ', '2024-07-04 16:34:17', '2024-07-04 16:34:17'),
+(10, 7, 18, '2024-07-09', 'あ\r\nあ\r\nあ', '2024-07-04 16:34:33', '2024-07-04 16:34:33'),
+(11, 7, 18, '2024-07-19', 'げんこつ山の狸さん\r\n最多最多チューリップの花が　　　咲いた', '2024-07-04 16:35:17', '2024-07-04 16:35:17'),
+(12, 7, 18, '2025-06-06', 'aaa', '2024-07-06 03:04:36', '2024-07-06 03:04:36');
 
 -- --------------------------------------------------------
 
@@ -272,7 +299,8 @@ INSERT INTO `schedule_shares` (`id`, `schedule_id`, `user_id`, `created_at`, `up
 (5, 4, 12, '2024-06-27 11:48:21', '2024-06-27 11:48:21'),
 (6, 5, 12, '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
 (7, 5, 16, '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
-(8, 6, 12, '2024-06-27 12:56:04', '2024-06-27 12:56:04');
+(8, 6, 12, '2024-06-27 12:56:04', '2024-06-27 12:56:04'),
+(9, 9, 19, '2024-07-04 16:34:17', '2024-07-04 16:34:17');
 
 -- --------------------------------------------------------
 
@@ -283,7 +311,7 @@ INSERT INTO `schedule_shares` (`id`, `schedule_id`, `user_id`, `created_at`, `up
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
+  `email` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `role` enum('admin','modify','view') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -295,10 +323,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(11, 'さわ', 'sawa110291@gmail.com', '$2y$10$43sXvwpxeHvuyvyd0UQAlecvjBP/BEu4BhjozahTKmyoBRXvHARC2', 'admin', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
-(12, 'かおる', 'sawatin@yahoo.co.jp', '$2y$10$NkOZmlE4UM89ce13RbFRqOJPC487mdiyGp5JYE9Y.cb2skqwXH5LG', 'modify', '2024-06-27 06:20:26', '2024-06-27 06:20:26'),
-(16, 'まさえ', 'sawa291@yahoo.co.jp', '$2y$10$fkPTJMQ.vnCQdo.opfsvcuZWkgWEuyHwOLBmD0JUmVavv7aIehWf6', 'view', '2024-06-27 07:50:37', '2024-06-27 07:50:47'),
-(17, 'テスト', 'sawasawa@gmail.com', '$2y$10$WbVz.3uYtVD/S.XTVEaH1utZrG4QR3euTjk/BGa1QG5hQfor7I2g6', 'admin', '2024-06-27 12:46:03', '2024-06-27 12:46:03');
+(11, '', NULL, '$2y$10$43sXvwpxeHvuyvyd0UQAlecvjBP/BEu4BhjozahTKmyoBRXvHARC2', 'admin', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
+(12, '', NULL, '$2y$10$NkOZmlE4UM89ce13RbFRqOJPC487mdiyGp5JYE9Y.cb2skqwXH5LG', 'modify', '2024-06-27 06:20:26', '2024-06-27 06:20:26'),
+(16, '', NULL, '$2y$10$fkPTJMQ.vnCQdo.opfsvcuZWkgWEuyHwOLBmD0JUmVavv7aIehWf6', 'view', '2024-06-27 07:50:37', '2024-07-02 11:51:04'),
+(17, '', NULL, '$2y$10$WbVz.3uYtVD/S.XTVEaH1utZrG4QR3euTjk/BGa1QG5hQfor7I2g6', 'admin', '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
+(18, 'さわ', 'sawa110291@gmail.com', '$2y$10$6gKmxdLrxsV9xCoV8OJYUe0jFpKZc.TB19i8brwk.79LzPmAYKGpG', 'admin', '2024-07-04 15:43:32', '2024-07-04 15:52:08'),
+(19, 'まさえ', NULL, '$2y$10$Z.x4mbDGtGPCkyidCy4b5OUE6IyR99tMuZKXvBB2.YxQvi/Mdtlce', 'view', '2024-07-04 15:44:03', '2024-07-04 15:44:03'),
+(20, 'かおる', 'sawatin@yahoo.co.jp', '$2y$10$ahmgZM1zqtvtTaBhSkKD/.gIBt/Ckdtwctp8slIsh06K/ua.ezhc6', 'modify', '2024-07-04 15:48:00', '2024-07-06 02:10:43'),
+(21, 'さわこまる', 'sawa1@yahoo.co.jp', '$2y$10$0d3FrqDxVx37LJPdyriI4u2eYi4JhXQIt7xqcGa6kEQEFWs71RqsG', 'admin', '2024-07-06 01:54:33', '2024-07-06 01:54:33');
 
 --
 -- ダンプしたテーブルのインデックス
@@ -323,7 +355,7 @@ ALTER TABLE `album_photos`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `idx_groups_user_id` (`user_id`);
+  ADD KEY `idx_groups_user_id` (`user_id`) USING BTREE;
 
 --
 -- テーブルのインデックス `group_members`
@@ -396,9 +428,7 @@ ALTER TABLE `schedule_shares`
 -- テーブルのインデックス `users`
 --
 ALTER TABLE `users`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idx_users_email` (`email`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- ダンプしたテーブルの AUTO_INCREMENT
@@ -408,37 +438,37 @@ ALTER TABLE `users`
 -- テーブルの AUTO_INCREMENT `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- テーブルの AUTO_INCREMENT `groups`
 --
 ALTER TABLE `groups`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- テーブルの AUTO_INCREMENT `group_members`
 --
 ALTER TABLE `group_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- テーブルの AUTO_INCREMENT `memos`
 --
 ALTER TABLE `memos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- テーブルの AUTO_INCREMENT `memo_shares`
 --
 ALTER TABLE `memo_shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- テーブルの AUTO_INCREMENT `photos`
 --
 ALTER TABLE `photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- テーブルの AUTO_INCREMENT `photo_comments`
@@ -450,25 +480,25 @@ ALTER TABLE `photo_comments`
 -- テーブルの AUTO_INCREMENT `photo_tags`
 --
 ALTER TABLE `photo_tags`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- テーブルの AUTO_INCREMENT `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- テーブルの AUTO_INCREMENT `schedule_shares`
 --
 ALTER TABLE `schedule_shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- テーブルの AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- ダンプしたテーブルの制約
