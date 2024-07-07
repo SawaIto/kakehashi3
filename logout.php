@@ -1,7 +1,7 @@
 <?php
 require_once 'funcs.php';
 
-session_start();
+
 
 // セッション変数を全て解除する
 $_SESSION = array();

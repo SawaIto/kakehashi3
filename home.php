@@ -1,7 +1,6 @@
 <?php
 require_once 'funcs.php';
 
-session_start();
 sschk();
 
 // データベース接続

@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'funcs.php';
 sschk();
 
@@ -72,7 +71,7 @@ if (isset($_SESSION['error_message'])) {
                         <th class="text-left sm:text-base text-xs font-semibold p-2 border border-blue-200">メールアドレス</th>
                         <th class="text-left sm:text-base text-xs font-semibold p-2 border border-blue-200">権限</th>
                         <?php if ($_SESSION['role'] == 'admin') : ?>
-                            <th class="text-left sm:text-base text-xs font-semibold p-2 border border-blue-200 w-16">操作</th>
+                            <th class="text-left sm:text-base text-xs font-semibold p-2 border border-blue-200 w-16 sm:w-24">操作</th>
                         <?php endif; ?>
                     </tr>
                 </thead>

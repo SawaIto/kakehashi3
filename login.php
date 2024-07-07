@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($user && password_verify($password, $user['password'])) {
         // ログイン成功
-        session_start();
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
@@ -56,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="bg-gray-200 sm:mt-5 mt-15">
     <?php include 'header.php'; ?>
     <main class="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
-        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+        <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md mt-25 sm:mt-15 ">
             <h1 class="text-3xl font-bold mb-6 text-center">ログイン</h1>
             <?php if (isset($error)): ?>
                 <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>

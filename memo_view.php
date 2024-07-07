@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("funcs.php");
 sschk();
 $pdo = db_conn();
@@ -158,7 +157,7 @@ $importance_levels = ['低', '普通', '高'];
                             <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">区分</th>
                             <th class="text-left text-xs sm:text-base md:text-lg font-semibold p-2 border border-blue-200">内容</th>
                             <?php if ($is_admin_or_editor) : ?>
-                                <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden w-16">操作</th>
+                                <th class="text-left text-sm sm:text-base md:text-lg font-semibold p-2 border border-blue-200 extra-column hidden w-16 sm:w-24">操作</th>
                             <?php endif; ?>
                         </tr>
                     </thead>

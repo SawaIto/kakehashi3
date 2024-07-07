@@ -1,59 +1,68 @@
 <?php
-session_start();
 require_once 'funcs.php';
 sschk();
 
 $pdo = db_conn();
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
-    redirect('photo_view.php');
-    exit;
+if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
+    redirect('home.php');
+    exit("スケジュールの編集権限がありません。");
 }
 
 $photo_id = $_GET['id'];
 
-// 写真情報の取得
-$stmt = $pdo->prepare("SELECT * FROM photos WHERE id = ? AND group_id = ?");
-$stmt->execute([$photo_id, $_SESSION['group_id']]);
-$photo = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$photo) {
-    redirect('photo_view.php');
-    exit;
-}
-
-// タグの取得
-$stmt = $pdo->prepare("SELECT tag FROM photo_tags WHERE photo_id = ?");
-$stmt->execute([$photo_id]);
-$tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $comment = $_POST['comment'];
-    $new_tags = isset($_POST['tags']) ? explode(',', $_POST['tags']) : [];
+    $date = $_POST['date'];
+    $content = $_POST['content'];
+    $shared_with = isset($_POST['shared_with']) ? $_POST['shared_with'] : [];
 
-    // 写真情報の更新
-    $stmt = $pdo->prepare("UPDATE photos SET comment = ? WHERE id = ?");
-    $status = $stmt->execute([$comment, $photo_id]);
-
-    if ($status) {
-        // タグの更新
-        $stmt = $pdo->prepare("DELETE FROM photo_tags WHERE photo_id = ?");
-        $stmt->execute([$photo_id]);
-
-        foreach ($new_tags as $tag) {
-            $tag = trim($tag);
-            if (!empty($tag)) {
-                $stmt = $pdo->prepare("INSERT INTO photo_tags (photo_id, tag) VALUES (?, ?)");
-                $stmt->execute([$photo_id, $tag]);
-            }
-        }
-
-        $_SESSION['success_message'] = '写真情報が正常に更新されました。';
-        redirect('photo_view.php');
+    if (empty($date) || empty($content)) {
+        $error = '日付と内容を入力してください。';
     } else {
-        $error = '写真情報の更新に失敗しました。';
+        // スケジュール更新
+        $stmt = $pdo->prepare("UPDATE photos SET date = ?, content = ? WHERE id = ? AND group_id = ?");
+        $status = $stmt->execute([$date, $content, $schedule_id, $_SESSION['group_id']]);
+
+        if ($status) {
+            // 共有設定を一旦削除
+            $stmt = $pdo->prepare("DELETE FROM schedule_shares WHERE schedule_id = ?");
+            $stmt->execute([$schedule_id]);
+
+            // 新しい共有設定を追加
+            foreach ($shared_with as $user_id) {
+                $stmt = $pdo->prepare("INSERT INTO schedule_shares (schedule_id, user_id) VALUES (?, ?)");
+                $stmt->execute([$schedule_id, $user_id]);
+            }
+
+            $_SESSION['success_message'] = 'スケジュールが正常に更新されました。';
+            redirect('schedule_view.php');
+        } else {
+            $error = 'スケジュールの更新に失敗しました。';
+        }
     }
 }
+
+// スケジュール情報取得
+$stmt = $pdo->prepare("SELECT * FROM schedules WHERE id = ? AND group_id = ?");
+$stmt->execute([$schedule_id, $_SESSION['group_id']]);
+$schedule = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$schedule) {
+    redirect('schedule_view.php');
+    exit("スケジュールが見つかりません。");
+}
+
+// 共有情報取得
+$stmt = $pdo->prepare("SELECT user_id FROM schedule_shares WHERE schedule_id = ?");
+$stmt->execute([$schedule_id]);
+$shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+// グループメンバー取得
+$stmt = $pdo->prepare("SELECT u.id, u.username FROM users u
+                      JOIN group_members gm ON u.id = gm.user_id
+                      WHERE gm.group_id = ? AND u.id != ?");
+$stmt->execute([$_SESSION['group_id'], $_SESSION['user_id']]);
+$group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -61,37 +70,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>写真編集</title>
+    <title>スケジュール編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">写真編集</h1>
+    <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center">フォト修正必要</h1>
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4">
             <div>
-                <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full mb-4 rounded">
+                <label for="date" class="block text-lg font-semibold">日付：</label>
+                <input type="date" id="date" name="date" value="<?= h($schedule['date']) ?>" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
             </div>
             <div>
-                <label for="comment" class="block text-lg font-semibold">コメント：</label>
-                <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"><?= h($photo['comment']) ?></textarea>
+                <label for="content" class="block text-lg font-semibold">内容：</label>
+                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"><?= h($schedule['content']) ?></textarea>
             </div>
             <div>
-                <label for="tags" class="block text-lg font-semibold">タグ：</label>
-                <input type="text" id="tags" name="tags" value="<?= h(implode(',', $tags)) ?>" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="カンマ区切りで入力">
+                <p class="text-lg font-semibold mb-2">共有先：</p>
+                <div class="space-y-2">
+                    <?php foreach ($group_members as $member): ?>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" <?= in_array($member['id'], $shared_with) ? 'checked' : '' ?> class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
+                            <span><?= h($member['username']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
             </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
         </form>
-        
+
+        <!-- ホームに戻るボタン -->
         <div class="mt-6 text-center">
-            <a href="photo_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                写真一覧に戻る
+            <a href="schedule_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+                スケジュール一覧に戻る
             </a>
         </div>
     </div>
 </body>
+
+<?php include 'footer_schedule.php'; ?>
 </html>

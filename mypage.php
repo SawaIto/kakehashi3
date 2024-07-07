@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once 'funcs.php';
 sschk();
 
@@ -49,11 +48,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">マイページ編集</h1>
-        
+
         <?php if (isset($_SESSION['success_message'])): ?>
             <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
             <?php unset($_SESSION['success_message']); ?>
@@ -97,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         function togglePasswordVisibility() {
             const passwordInput = document.getElementById('password');
             const passwordToggleIcon = document.getElementById('passwordToggleIcon');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 passwordToggleIcon.classList.remove('fa-eye');

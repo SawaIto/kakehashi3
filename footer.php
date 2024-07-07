@@ -35,7 +35,7 @@
                 <a href="terms_of_service.php" class="text-black text-sm hover:underline px-1 py-1">
                     利用規約
                 </a>
-                <a href="contact.php" class="text-black text-sm hover:underline px-1 py-1">
+                <a href="contact_form_pre_login.php" class="text-black text-sm hover:underline px-1 py-1">
                     お問い合わせ
                 </a>
             </div>

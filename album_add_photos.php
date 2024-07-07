@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("funcs.php");
 sschk();
 $pdo = db_conn();
@@ -57,7 +56,7 @@ if (isset($_POST['add_to_album'])) {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
@@ -91,4 +90,5 @@ if (isset($_POST['add_to_album'])) {
         </div>
     </div>
 </body>
+<?php include 'footer_photo.php'; ?>
 </html>

@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once 'funcs.php';
 sschk();
 
@@ -109,7 +109,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                         <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">日付</th>
                                         <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">内容</th>
                                         <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                                            <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center w-16">操作</th>
+                                            <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center w-16 sm:w-24">操作</th>
                                         <?php endif; ?>
                                     </tr>
                                 </thead>

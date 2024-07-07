@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("funcs.php");
 sschk();
 $pdo = db_conn();
@@ -113,7 +112,7 @@ if (isset($_POST['remove_from_album'])) {
         }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>
@@ -124,7 +123,7 @@ if (isset($_POST['remove_from_album'])) {
         <?php endif; ?>
 
         <?php if (!$album_id): ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <?php foreach ($albums as $album): ?>
                     <div class="bg-gray-200 p-4 rounded-lg shadow">
                         <h2 class="text-xl font-bold mb-2"><?= h($album['name']) ?></h2>
@@ -137,7 +136,7 @@ if (isset($_POST['remove_from_album'])) {
         <?php else: ?>
             <h2 class="text-2xl font-bold mb-4"><?= h($current_album['name']) ?></h2>
             <p class="text-gray-600 mb-4"><?= h($current_album['description']) ?></p>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <?php foreach ($photos as $index => $photo): ?>
                     <div class="bg-gray-200 p-4 rounded-lg shadow">
                         <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal('uploads/<?= h($photo['file_name']) ?>', '<?= h($photo['comment']) ?>', '<?= h($photo['username']) ?>', <?= $index ?>)">

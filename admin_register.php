@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once 'funcs.php';
 
 // データベース接続
@@ -65,8 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
 <body class="bg-gray-200">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">管理者登録</h1>
+<?php include 'header.php'; ?>
+    <div class="container mx-auto mt-25 sm:mt-20 p-3 bg-white rounded-lg shadow-md max-w-md">
+        <h1 class="text-3xl font-bold mb-3 text-center">管理者登録</h1>
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
@@ -115,4 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
     </script>
 </body>
+    
+    <?php include 'footer.php'; ?>
+
 </html>

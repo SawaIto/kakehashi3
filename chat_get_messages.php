@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("funcs.php");
 sschk();
 $pdo = db_conn();
