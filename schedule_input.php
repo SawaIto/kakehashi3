@@ -70,6 +70,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     </style>
 </head>
+<<<<<<< HEAD
 <body class="bg-gray-200">
     <?php include 'header0.php'; ?>
     <main>
@@ -109,6 +110,33 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ホームに戻る
                         </a>
                     </div>
+=======
+<body class="bg-gray-200" id="body">
+<?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">スケジュール登録</h1>
+        <?php if (isset($error)): ?>
+            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
+        <?php endif; ?>
+        <form method="POST" class="space-y-4">
+            <div>
+                <label for="date" class="block text-lg font-semibold">日付：</label>
+                <input type="date" id="date" name="date" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+            <div>
+                <label for="content" class="block text-lg font-semibold">内容：</label>
+                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
+            </div>
+            <div>
+                <p class="text-lg font-semibold">共有先：</p>
+                <div class="space-y-2">
+                    <?php foreach ($group_members as $member): ?>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
+                            <span><?= h($member['username']) ?></span>
+                        </label>
+                    <?php endforeach; ?>
+>>>>>>> 46069e42e728b4965a60b07f1f144d48c64977eb
                 </div>
             </div>
         </div>

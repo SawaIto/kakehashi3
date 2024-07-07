@@ -218,5 +218,9 @@ if (!$is_view_role) {
         }
     </script>
 </body>
+<<<<<<< HEAD
 <?php include 'footer_schedule.php'; ?>
 </html>
+=======
+</html>
+>>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee

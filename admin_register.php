@@ -64,10 +64,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 </head>
+<<<<<<< HEAD
 <body class="bg-gray-200">
 <?php include 'header.php'; ?>
     <div class="container mx-auto mt-25 sm:mt-20 p-3 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-3 text-center">管理者登録</h1>
+=======
+<body class="bg-gray-200" id="body">
+    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+        <h1 class="text-3xl font-bold mb-6 text-center">管理者登録</h1>
+>>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
