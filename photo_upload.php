@@ -134,7 +134,7 @@ if (!$is_view_role) {
     </style>
 </head>
 <?php include 'header0.php'; ?>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
         <?php if (isset($error)): ?>

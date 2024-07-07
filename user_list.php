@@ -51,7 +51,7 @@ if (isset($_SESSION['error_message'])) {
     </style>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
     <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-4xl">
         <h1 class="text-3xl font-bold mb-6 text-center">ユーザー一覧</h1>

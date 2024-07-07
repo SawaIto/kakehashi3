@@ -13,8 +13,8 @@ if ($_SESSION['role'] != 'admin') {
 $user_id = $_GET['id'];
 
 // ユーザー情報の取得
-$stmt = $pdo->prepare("SELECT u.*, gm.group_id FROM users u 
-                       JOIN group_members gm ON u.id = gm.user_id 
+$stmt = $pdo->prepare("SELECT u.*, gm.group_id FROM users u
+                       JOIN group_members gm ON u.id = gm.user_id
                        WHERE u.id = ? AND gm.group_id = ?");
 $stmt->execute([$user_id, $_SESSION['group_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ $is_admin = ($user['role'] == 'admin');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $role = $is_admin ? 'admin' : $_POST['role'];
-    
+
     // emailの処理
     $email = ($role === 'view' || empty($_POST['email'])) ? null : $_POST['email'];
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $sql = "UPDATE users SET username = ?, email = ?, role = ?" . $password_sql . " WHERE id = ?";
     $stmt = $pdo->prepare($sql);
-    
+
     try {
         $status = $stmt->execute($params);
         if ($status) {
@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-4xl font-bold mb-6 text-center">ユーザー編集</h1>

@@ -71,7 +71,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
     </style>
 </head>
 <?php include 'header0.php'; ?>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
@@ -110,7 +110,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
                 </a>
             </div>
         </form>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($photos as $index => $photo) : ?>
                 <div class="bg-gray-200 p-4 rounded-lg shadow">
                     <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
@@ -142,11 +142,21 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </div>
     </div>
 
+<style>
+.special_popup{
+    width:90%;
+    max-width: 500px;
+}
+img#modalImage {
+    max-height: 280px;
+}
+</style>
+
     <!-- Modal -->
     <div id="photoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen p-0">
             <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-            <div class="relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded-lg shadow-xl overflow-hidden flex flex-col">
+            <div class="special_popup relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded-lg shadow-xl overflow-hidden flex flex-col">
                 <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10 bg-opacity-50 bg-gray-800">
                     <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="prevPhoto()">
                         <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -189,6 +199,44 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
             </div>
         </div>
     </div>
+
+    <footer id="footer">
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        .fixed-buttons {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .scroll-button {
+            background-color: #1f2937;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .scroll-button:hover {
+            background-color: #111827; /* bg-gray-900 */
+        }
+    </style>
+        フッター（仮）
+        <div class="fixed-buttons">
+            <a href="#body" class="scroll-button">↑</a>
+            <a href="#footer" class="scroll-button">↓</a>
+        </div>
+    </footer>
 
     <script>
         const photos = <?= json_encode($photos) ?>;
