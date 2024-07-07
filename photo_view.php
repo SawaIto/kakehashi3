@@ -66,90 +66,95 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <style>
         body {
             font-family: "メイリオ", Meiryo, sans-serif;
+            padding-top: 64px; /* ヘッダーの高さ分のパディング */
+            padding-bottom: 80px; /* フッターの高さ分のパディング */
+        }
+        @media (max-width: 640px) {
+            body {
+                padding-top: 128px; /* スマートフォン用のヘッダーの高さ */
+                padding-bottom: 120px; /* スマートフォン用のフッターの高さ */
+            }
+        }
+        .content-wrapper {
+            min-height: calc(100vh - 144px); /* ヘッダーとフッターの高さを引いた最小の高さ */
+            overflow-y: auto;
+        }
+        @media (max-width: 640px) {
+            .content-wrapper {
+                min-height: calc(100vh - 248px); /* スマートフォン用 */
+            }
         }
     </style>
 </head>
-<?php include 'header0.php'; ?>
+
 <body class="bg-gray-200" id="body">
-<?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
+    <?php include 'header0.php'; ?>
+    <div class="content-wrapper">
+        <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
 
-        <?php if (isset($_SESSION['success_message'])) : ?>
-            <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
-            <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
+            <?php if (isset($_SESSION['success_message'])) : ?>
+                <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
 
-        <form action="" method="GET" class="mb-4">
-            <div class="flex flex-wrap -mx-2 mb-4">
-                <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
-                    <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">
+            <form action="" method="GET" class="mb-4">
+                <div class="flex flex-wrap -mx-2 mb-4">
+                    <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
+                        <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">
+                    </div>
+                    <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
+                        <select name="sort" class="w-full p-2 border rounded">
+                            <option value="newest" <?= $sort == 'newest' ? 'selected' : '' ?>>新しい順</option>
+                            <option value="oldest" <?= $sort == 'oldest' ? 'selected' : '' ?>>古い順</option>
+                        </select>
+                    </div>
+                    <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
+                        <select name="tag" class="w-full p-2 border rounded">
+                            <option value="">タグ選択</option>
+                            <?php foreach ($tags as $t) : ?>
+                                <option value="<?= h($t) ?>" <?= $tag == $t ? 'selected' : '' ?>><?= h($t) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
-                <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
-                    <select name="sort" class="w-full p-2 border rounded">
-                        <option value="newest" <?= $sort == 'newest' ? 'selected' : '' ?>>新しい順</option>
-                        <option value="oldest" <?= $sort == 'oldest' ? 'selected' : '' ?>>古い順</option>
-                    </select>
+                <div class="flex justify-center space-x-4">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm">
+                        検索・ソート
+                    </button>
+                    <a href="photo_view.php" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded text-sm">
+                        検索・ソート解除
+                    </a>
                 </div>
-                <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
-                    <select name="tag" class="w-full p-2 border rounded">
-                        <option value="">タグ選択</option>
-                        <?php foreach ($tags as $t) : ?>
-                            <option value="<?= h($t) ?>" <?= $tag == $t ? 'selected' : '' ?>><?= h($t) ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+            </form>
+            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <?php foreach ($photos as $index => $photo) : ?>
+                    <div class="bg-gray-200 p-4 rounded-lg shadow">
+                        <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
+                        <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
+                        <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
+                        <p class="text-xs text-gray-500"><?= h($photo['upload_date']) ?></p>
+                        <?php if ($is_admin_or_editor) : ?>
+                            <div class="mt-2 flex justify-between">
+                                <a href="photo_edit.php?id=<?= h($photo['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
+                                <button onclick="deletePhoto(<?= h($photo['id']) ?>)" class="text-red-500 hover:text-red-700">削除</button>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
             </div>
-            <div class="flex justify-center space-x-4">
-                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm">
-                    検索・ソート
-                </button>
-                <a href="photo_view.php" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-3 rounded text-sm">
-                    検索・ソート解除
-                </a>
-            </div>
-        </form>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <?php foreach ($photos as $index => $photo) : ?>
-                <div class="bg-gray-200 p-4 rounded-lg shadow">
-                    <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
-                    <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
-                    <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
-                    <p class="text-xs text-gray-500"><?= h($photo['upload_date']) ?></p>
-                    <?php if ($is_admin_or_editor) : ?>
-                        <div class="mt-2 flex justify-between">
-                            <a href="photo_edit.php?id=<?= h($photo['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
-                            <button onclick="deletePhoto(<?= h($photo['id']) ?>)" class="text-red-500 hover:text-red-700">削除</button>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            <?php endforeach; ?>
-        </div>
-        <div class="mt-6 text-center space-y-2 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row justify-center items-center">
-            <a href="photo_upload.php" class="w-full sm:w-auto bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
-                新規写真アップロード
-            </a>
-            <a href="album_create.php" class="w-full sm:w-auto bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
-                アルバムを作成する
-            </a>
-            <a href="album_view.php" class="w-full sm:w-auto bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300 mb-2 sm:mb-0">
-                アルバム一覧
-            </a>
-            <a href="home.php" class="w-full sm:w-auto bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-lg transition duration-300">
-                ホームに戻る
-            </a>
         </div>
     </div>
 
-<style>
-.special_popup{
-    width:90%;
-    max-width: 500px;
-}
-img#modalImage {
-    max-height: 280px;
-}
-</style>
+    <style>
+    .special_popup{
+        width:90%;
+        max-width: 500px;
+    }
+    img#modalImage {
+        max-height: 280px;
+    }
+    </style>
 
     <!-- Modal -->
     <div id="photoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
@@ -199,43 +204,7 @@ img#modalImage {
         </div>
     </div>
 
-    <footer id="footer">
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        .fixed-buttons {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .scroll-button {
-            background-color: #1f2937;
-            color: white;
-            padding: 10px;
-            border-radius: 50%;
-            text-align: center;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .scroll-button:hover {
-            background-color: #111827; /* bg-gray-900 */
-        }
-    </style>
-        フッター（仮）
-        <div class="fixed-buttons">
-            <a href="#body" class="scroll-button">↑</a>
-            <a href="#footer" class="scroll-button">↓</a>
-        </div>
-    </footer>
+    <?php include 'footer_photo.php'; ?>
 
     <script>
         const photos = <?= json_encode($photos) ?>;
@@ -366,8 +335,4 @@ img#modalImage {
         }
     </script>
 </body>
-
-
-<?php include 'footer_schedule.php'; ?>
-
 </html>

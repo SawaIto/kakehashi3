@@ -11,20 +11,19 @@
 <footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex justify-end mb-4 space-x-2">
-            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                フォトフッターホーム
+            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                ーホーム
             </a>
-            <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                検索
-            </button>
-            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                詳細表示
-            </button>
-            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                新規登録
+            <a href="album_create.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                アルバム作成          
+             </a>
+            <a href="album_view.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                アルバム一覧          
+             </a>
+                <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                写真を追加
             </a>
-            <?php endif; ?>
+
         </div>
 
         <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
