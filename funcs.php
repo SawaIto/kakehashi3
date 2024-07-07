@@ -20,19 +20,11 @@ function h($str) {
 function db_conn() {
     global $config;
     try {
-<<<<<<< HEAD
         $db = $config['db'];
         $dsn = "mysql:host={$db['host']};dbname={$db['dbname']};charset={$db['charset']}";
         $pdo = new PDO($dsn, $db['user'], $db['pass']);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
-=======
-        $db_name = "mydatabase123";    //データベース名
-        $db_id   = "myuser123";      //アカウント名
-        $db_pw   = "mypassword123";          //パスワード：XAMPPはパスワード無し or MAMPはパスワード"root"に修正してください。
-        $db_host = "162.43.7.131"; //DBホスト
-        return new PDO('mysql:dbname='.$db_name.';charset=utf8;host='.$db_host, $db_id, $db_pw);
->>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee
     } catch (PDOException $e) {
         exit('DB Connection Error:'.$e->getMessage());
     }
