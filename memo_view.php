@@ -197,5 +197,4 @@ $importance_levels = ['低', '普通', '高'];
     </main>
 </body>
 <?php include 'footer_memo.php'; ?>
-
 </html>

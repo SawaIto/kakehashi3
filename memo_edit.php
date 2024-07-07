@@ -119,5 +119,5 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </body>
-
+<?php include 'footer_memo.php'; ?>
 </html>
