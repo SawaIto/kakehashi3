@@ -56,7 +56,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">スケジュール登録</h1>

@@ -90,5 +90,8 @@ if (isset($_POST['add_to_album'])) {
         </div>
     </div>
 </body>
+<<<<<<< HEAD
 <?php include 'footer_photo.php'; ?>
+=======
+>>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee
 </html>

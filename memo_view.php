@@ -101,7 +101,7 @@ $importance_levels = ['低', '普通', '高'];
 </head>
 <?php include 'header0.php'; ?>
 
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
     <main class="flex-grow mb-40">
         <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-4xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">

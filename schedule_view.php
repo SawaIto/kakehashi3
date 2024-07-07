@@ -90,7 +90,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
     </style>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-gray-200" id="body">
     <?php include 'header0.php'; ?>
     <div class="pt-16 sm:pt-20">
         <main class="container mx-auto mt-5 mb-40">
