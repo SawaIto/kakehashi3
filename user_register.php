@@ -12,26 +12,34 @@ if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $role = $_POST['role'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $password = $_POST['password'];
+    $confirm_password = $_POST['confirm_password'];
 
-    // emailの処理
-    $email = ($role === 'view' && empty($_POST['email'])) ? null : $_POST['email'];
-
-    // ユーザー登録
-    $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
-    $stmt->execute([$username, $email, $password, $role]);
-
-    // 登録が成功したかどうかチェック
-    if ($stmt->rowCount() > 0) {
-        $user_id = $pdo->lastInsertId();
-
-        // グループメンバーに追加
-        $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
-        $stmt->execute([$_SESSION['group_id'], $user_id]);
-
-        $success_message = "ユーザー登録が完了しました。";
+    // パスワードの確認
+    if ($password !== $confirm_password) {
+        $error_message = "パスワードが一致しません。";
     } else {
-        $error_message = "ユーザー登録に失敗しました。";
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+        // emailの処理
+        $email = ($role === 'view' && empty($_POST['email'])) ? null : $_POST['email'];
+
+        // ユーザー登録
+        $stmt = $pdo->prepare("INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+        $stmt->execute([$username, $email, $hashed_password, $role]);
+
+        // 登録が成功したかどうかチェック
+        if ($stmt->rowCount() > 0) {
+            $user_id = $pdo->lastInsertId();
+
+            // グループメンバーに追加
+            $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
+            $stmt->execute([$_SESSION['group_id'], $user_id]);
+
+            $success_message = "ユーザー登録が完了しました。";
+        } else {
+            $error_message = "ユーザー登録に失敗しました。";
+        }
     }
 }
 ?>
@@ -51,33 +59,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php if (isset($success_message)): ?>
             <p class="text-green-500 mb-4 text-center"><?= h($success_message) ?></p>
         <?php endif; ?>
-        <?php if (isset($error_message)): ?>
-            <p class="text-red-500 mb-4 text-center"><?= h($error_message) ?></p>
-        <?php endif; ?>
-        <form method="POST" class="space-y-4">
+        <form method="POST" class="space-y-4" id="registrationForm">
             <div>
                 <label for="username" class="block text-lg font-semibold">ユーザー名：</label>
-                <input type="text" id="username" name="username" required class="w-full p-2 border rounded">
+                <input type="text" id="username" name="username" required class="w-full p-2 border rounded" value="<?= isset($username) ? h($username) : '' ?>">
             </div>
             <div>
                 <label for="role" class="block text-lg font-semibold">権限：</label>
                 <select id="role" name="role" required class="w-full p-2 border rounded" onchange="toggleEmailField()">
-                    <option value="modify">編集者</option>
-                    <option value="view">閲覧者</option>
+                    <option value="modify" <?= isset($role) && $role === 'modify' ? 'selected' : '' ?>>編集者</option>
+                    <option value="view" <?= isset($role) && $role === 'view' ? 'selected' : '' ?>>閲覧者</option>
                 </select>
             </div>
-            <div id="emailField">
+            <div id="emailField" style="<?= isset($role) && $role === 'view' ? 'display: none;' : '' ?>">
                 <label for="email" class="block text-lg font-semibold">メールアドレス(編集者は必須)：</label>
-                <input type="email" id="email" name="email" class="w-full p-2 border rounded">
+                <input type="email" id="email" name="email" class="w-full p-2 border rounded" value="<?= isset($email) ? h($email) : '' ?>" <?= isset($role) && $role !== 'view' ? 'required' : '' ?>>
             </div>
             <div>
                 <label for="password" class="block text-lg font-semibold">パスワード：</label>
-                <div class="relative">
-                    <input type="password" id="password" name="password" required class="w-full p-2 border rounded pr-10">
-                    <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility()">
-                        <i id="passwordToggleIcon" class="fas fa-eye"></i>
-                    </span>
-                </div>
+                <input type="text" id="password" name="password" required class="w-full p-2 border rounded" value="<?= isset($password) ? h($password) : '' ?>">
+            </div>
+            <div>
+                <label for="confirm_password" class="block text-lg font-semibold">パスワード(確認用)：</label>
+                <input type="text" id="confirm_password" name="confirm_password" required class="w-full p-2 border rounded" value="<?= isset($confirm_password) ? h($confirm_password) : '' ?>">
             </div>
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
         </form>
@@ -88,21 +92,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
     <script>
-        function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const passwordToggleIcon = document.getElementById('passwordToggleIcon');
-
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                passwordToggleIcon.classList.remove('fa-eye');
-                passwordToggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordInput.type = 'password';
-                passwordToggleIcon.classList.remove('fa-eye-slash');
-                passwordToggleIcon.classList.add('fa-eye');
-            }
-        }
-
         function toggleEmailField() {
             const role = document.getElementById('role').value;
             const emailField = document.getElementById('emailField');
@@ -119,6 +108,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // 初期表示時にも実行
         toggleEmailField();
+
+        // フォーム送信時のイベントハンドラ
+        document.getElementById('registrationForm').addEventListener('submit', function(event) {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (password !== confirmPassword) {
+                event.preventDefault(); // フォームの送信を防止
+                alert('パスワードが一致しません。');
+            }
+        });
     </script>
 </body>
 </html>
