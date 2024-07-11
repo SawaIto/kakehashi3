@@ -135,8 +135,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
                         <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
                         <p class="text-xs text-gray-500"><?= h($photo['upload_date']) ?></p>
                         <?php if ($is_admin_or_editor) : ?>
-                            <div class="mt-2 flex justify-between">
-                                <a href="photo_edit.php?id=<?= h($photo['id']) ?>" class="text-blue-500 hover:text-blue-700">編集</a>
+                            <div class="mt-2 flex justify-end">
                                 <button onclick="deletePhoto(<?= h($photo['id']) ?>)" class="text-red-500 hover:text-red-700">削除</button>
                             </div>
                         <?php endif; ?>

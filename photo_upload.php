@@ -2,9 +2,17 @@
 require_once 'funcs.php';
 sschk();
 
+// ファイルアップロードの設定を調整
+ini_set('upload_max_filesize', '10M');
+ini_set('post_max_size', '10M');
+ini_set('memory_limit', '128M');
+ini_set('max_execution_time', 300);
+
 $pdo = db_conn();
 
 $is_view_role = ($_SESSION['role'] == 'view');
+
+$max_uploads = 5; // 一度にアップロードできる最大枚数
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $comment = $is_view_role ? '' : $_POST['comment'];
@@ -15,6 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (empty($files['name'][0])) {
         $error = '写真を選択してください。';
+    } elseif (count($files['name']) > $max_uploads) {
+        $error = "一度にアップロードできる写真は{$max_uploads}枚までです。";
     } else {
         $upload_dir = __DIR__ . '/uploads/';
         if (!file_exists($upload_dir)) {
@@ -72,14 +82,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $photo_id = $pdo->lastInsertId();
 
                     // タグの保存（view権限以外）
-                    if (!$is_view_role) {
-                        foreach ($tags as $tag) {
-                            $tag = trim($tag);
-                            if (!empty($tag)) {
-                                $stmt = $pdo->prepare("INSERT INTO photo_tags (photo_id, tag) VALUES (?, ?)");
-                                $stmt->execute([$photo_id, $tag]);
-                            }
-                        }
+                    // if (!$is_view_role) {
+                    //     foreach ($tags as $tag) {
+                    //         $tag = trim($tag);
+                    //         if (!empty($tag)) {
+                    //             $stmt = $pdo->prepare("INSERT INTO photo_tags (photo_id, tag) VALUES (?, ?)");
+                    //             $stmt->execute([$photo_id, $tag]);
+                    //         }
+                    //     }
 
                         // アルバムへの追加
                         if (!empty($album_id)) {
@@ -100,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = '写真のアップロードに失敗しました。';
         }
     }
-}
+// }
 
 // アルバム一覧の取得（view権限以外）
 if (!$is_view_role) {
@@ -142,13 +152,14 @@ if (!$is_view_role) {
         <form method="POST" enctype="multipart/form-data" class="space-y-4" id="upload-form">
             <div id="drop_zone" class="mb-4">
                 <p>ここに写真をドラッグ＆ドロップするか、クリックして選択してください</p>
+                <p class="text-sm text-red-500">※一度にアップロードできる写真は5枚までです。</p>
                 <input type="file" id="photos" name="photos[]" accept="image/*" required multiple class="hidden">
             </div>
             <div id="preview" class="grid grid-cols-3 gap-2 mb-4"></div>
             <?php if (!$is_view_role): ?>
                 <div>
                     <label for="comment" class="block text-lg font-semibold">コメント：</label>
-                    <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="4"></textarea>
+                    <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
                 </div>
                 <div>
                     <label for="tags" class="block text-lg font-semibold">タグ：</label>
@@ -182,6 +193,7 @@ if (!$is_view_role) {
         const dropZone = document.getElementById('drop_zone');
         const fileInput = document.getElementById('photos');
         const preview = document.getElementById('preview');
+        const maxUploads = 5;
 
         dropZone.addEventListener('click', () => fileInput.click());
 
@@ -205,6 +217,11 @@ if (!$is_view_role) {
 
         function updatePreview() {
             preview.innerHTML = '';
+            if (fileInput.files.length > maxUploads) {
+                alert(`一度にアップロードできる写真は${maxUploads}枚までです。`);
+                fileInput.value = ''; // ファイル選択をリセット
+                return;
+            }
             for (let file of fileInput.files) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -218,9 +235,5 @@ if (!$is_view_role) {
         }
     </script>
 </body>
-<<<<<<< HEAD
 <?php include 'footer_schedule.php'; ?>
 </html>
-=======
-</html>
->>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee

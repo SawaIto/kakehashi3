@@ -104,21 +104,8 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
         </form>
 
-<<<<<<< HEAD
-        <!-- ホームに戻るボタン -->
-=======
->>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee
-        <div class="mt-6 text-center">
-            <a href="schedule_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
-                スケジュール一覧に戻る
-            </a>
-        </div>
-    </div>
+   </div>
 </body>
-<<<<<<< HEAD
 
-<?php include 'footer_schedule.php'; ?>
+<?php include 'footer_photo.php'; ?>
 </html>
-=======
-</html>
->>>>>>> 7499549731cb4894573f8f953c198c6d429a6cee

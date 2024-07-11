@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>photo_footer</title>
+    <title>footer_photo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
@@ -11,19 +11,18 @@
 <footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex justify-end mb-4 space-x-2">
-            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">
-                ーホーム
-            </a>
-            <a href="album_create.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+            <a href="album_create.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
                 アルバム作成          
              </a>
-            <a href="album_view.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+            <a href="album_view.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
                 アルバム一覧          
              </a>
-                <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
                 写真を追加
             </a>
-
+            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                ホーム
+            </a>
         </div>
 
         <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
@@ -43,7 +42,7 @@
             </form>
         </div>
 
-        <p class="text-sm text-gray-600 text-center">&copy; 2024 sawasawasawa. All rights reserved.</p>
+        <p class="text-xs text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
     </div>
 </footer>
 

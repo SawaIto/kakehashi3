@@ -40,36 +40,36 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
             <p class="text-base">ユーザー権限: <?= h($user['role']) ?></p>
             <a href="logout.php" class="bg-red-200 hover:bg-red-300 text-black font-bold px-3 py-1 rounded text-sm transition duration-300">ログアウト</a>
         </div>
-        <div class="space-y-4">
+        <div class="space-y-3">
             <div class="grid grid-cols-2 gap-4">
                 <?php if ($user['role'] == 'admin') : ?>
-                    <a href="user_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">ユーザー<br>登録</a>
+                    <a href="user_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">ユーザー登録</a>
                 <?php else : ?>
                     <div></div>
                 <?php endif; ?>
                 <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
-                    <a href="user_list.php" class="block bg-green-300 hover:bg-green-500 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">ユーザー<br>一覧</a>
+                    <a href="user_list.php" class="block bg-green-300 hover:bg-green-500 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">ユーザー一覧</a>
                 <?php else : ?>
                     <div></div>
                 <?php endif; ?>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
-                    <a href="schedule_input.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">スケジュール<br>登録</a>
+                    <a href="schedule_input.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">スケジュール登録</a>
                 <?php else : ?>
                     <div></div>
                 <?php endif; ?>
-                <a href="schedule_view.php" class="block bg-blue-300 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">スケジュール<br>表示</a>
+                <a href="schedule_view.php" class="block bg-blue-300 hover:bg-blue-500 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">スケジュール表示</a>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <?php if ($user['role'] == 'admin' || $user['role'] == 'modify') : ?>
-                    <a href="memo_input.php" class="block bg-orange-500 hover:bg-orange-300 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">メモ<br>登録</a>
+                    <a href="memo_input.php" class="block bg-orange-500 hover:bg-orange-300 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">メモ登録</a>
                 <?php else : ?>
                     <div></div>
                 <?php endif; ?>
-                <a href="memo_view.php" class="block bg-orange-300 hover:bg-orange-500 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-base sm:text-xl text-center transition duration-300">メモ<br>表示</a>
-                <a href="photo_upload.php" class="block bg-pink-400 hover:bg-pink-500 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-base sm:text-xl text-center transition duration-300">写真<br>アップロード</a>
-                <a href="photo_view.php" class="block bg-pink-300 hover:bg-pink-400 text-black font-bold px-4 py-2 rounded-lg text-base sm:text-xl text-center transition duration-300">写真<br>表示</a>
+                <a href="memo_view.php" class="block bg-orange-300 hover:bg-orange-500 text-black font-bold px-3 py-2.5 rounded-lg text-sm  sm:text-xl text-center transition duration-300">メモ表示</a>
+                <a href="photo_upload.php" class="block bg-pink-400 hover:bg-pink-500 text-black font-bold px-3 py-2.5 rounded-lg text-sm  sm:text-xl text-center transition duration-300">写真追加</a>
+                <a href="photo_view.php" class="block bg-pink-300 hover:bg-pink-400 text-black font-bold px-3 py-2.5 rounded-lg text-sm sm:text-xl text-center transition duration-300">写真表示</a>
             </div>
     </div>
     </div>

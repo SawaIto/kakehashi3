@@ -1,0 +1,15 @@
+C:\xampp\htdocs\kakehashi3\fonts\glyphicons-halflings-regular.eot
+C:\xampp\htdocs\kakehashi3\fonts\glyphicons-halflings-regular.svg
+C:\xampp\htdocs\kakehashi3\fonts\glyphicons-halflings-regular.ttf
+C:\xampp\htdocs\kakehashi3\fonts\glyphicons-halflings-regular.woff
+C:\xampp\htdocs\kakehashi3\fonts\glyphicons-halflings-regular.woff2
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Black.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Bold.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-ExtraBold.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-ExtraLight.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Light.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Medium.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Regular.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-SemiBold.ttf
+C:\xampp\htdocs\kakehashi3\fonts\NotoSansJP-Thin.ttf
+C:\xampp\htdocs\kakehashi3\fonts\output.txt

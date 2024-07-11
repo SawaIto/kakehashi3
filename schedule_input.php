@@ -117,7 +117,8 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div>
                             <label for="content" class="block text-lg font-semibold">スケジュール：</label>
-                            <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"></textarea>
+                            <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
+                     
                         </div>
                         <div>
                             <p class="text-lg font-semibold">共有先：</p>
@@ -134,13 +135,6 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
                     </form>
-
-                    <!-- ホームに戻るボタン -->
-                    <div class="mt-6 text-center pb-6">
-                        <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                            ホームに戻る
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>

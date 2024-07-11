@@ -64,7 +64,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             display: flex;
             flex-direction: column;
             padding-top: 64px;
-            padding-bottom: 120px;
+            padding-bottom: 100px;
         }
         .content-wrapper {
             flex: 1;
@@ -73,7 +73,6 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 
-<<<<<<< HEAD
 <body class="bg-gray-200">
     <?php include 'header0.php'; ?>
     <main>
@@ -111,38 +110,6 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
                     </form>
-=======
-<body class="bg-gray-200" id="body">
-<?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">メモ登録</h1>
-        <?php if (isset($error)) : ?>
-            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
-        <?php endif; ?>
-        <form method="POST" class="space-y-4">
-            <div>
-                <label for="category" class="block text-lg font-semibold">カテゴリー：</label>
-                <select id="category" name="category" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                    <option value="" disabled selected>選択してください</option>
-                    <option value="買い物">買い物</option>
-                    <option value="やること">やること</option>
-                    <option value="その他">その他</option>
-                </select>
-            </div>
-            <div>
-                <label for="content" class="block text-lg font-semibold">内容：</label>
-                <textarea id="content" name="content" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 whitespace-pre-line" rows="4"></textarea>
-                <div>
-                    <p class="text-lg font-semibold">共有先：</p>
-                    <div class="space-y-2">
-                        <?php foreach ($group_members as $member) : ?>
-                            <label class="flex items-center">
-                                <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
-                                <span><?= h($member['username']) ?></span>
-                            </label>
-                        <?php endforeach; ?>
-                    </div>
->>>>>>> 46069e42e728b4965a60b07f1f144d48c64977eb
                 </div>
             </div>
         </div>
@@ -165,9 +132,4 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 </body>
-<<<<<<< HEAD
 </html>
-=======
-
-</html>
->>>>>>> 46069e42e728b4965a60b07f1f144d48c64977eb

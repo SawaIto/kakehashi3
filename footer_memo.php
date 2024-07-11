@@ -4,26 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>footer_memo</title>
 </head>
 
 <body>
-    <footer class="text-sm bg-gray-300 text-white py-4 text-center fixed bottom-0 left-0 right-0 z-50">
-        <div class="flex justify-end mb-4 sm:mb-6 mt-2">
-            <div class="flex space-x-2">
-                <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
-                    ホーム
-                </a>
-                <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+<footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-end mb-4 space-x-2">
+                <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
                     検索
                 </button>
                 <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
                     詳細
                 </button>
-                    <a href="memo_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">
+                    <a href="memo_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
                         新規登録
                     </a>
+                    <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                    ホーム
+                </a>
                     <?php endif; ?>
             </div>
         </div>
@@ -53,12 +53,12 @@
                     </select>
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">検索</button>
-                    <a href="memo_view.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">リセット</a>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">検索</button>
+                    <a href="memo_view.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">リセット</a>
                 </div>
             </form>
         </div>
-        <p class="text-black">&copy; 2024 sawasawasawa. All rights reserved.</p>
+        <p class="text-xs text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
     </footer>
     
 <script>

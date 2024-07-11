@@ -72,10 +72,29 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
 
         function toggleExtraColumns() {
             var extraColumns = document.querySelectorAll('.extra-column');
+            var isHidden = extraColumns[0].classList.contains('hidden');
             extraColumns.forEach(function(column) {
                 column.classList.toggle('hidden');
             });
+            // 状態をローカルストレージに保存
+            localStorage.setItem('extraColumnsVisible', isHidden ? 'true' : 'false');
         }
+
+        // ページ読み込み時に実行する関数
+        function loadExtraColumnsState() {
+            var isVisible = localStorage.getItem('extraColumnsVisible') === 'true';
+            var extraColumns = document.querySelectorAll('.extra-column');
+            extraColumns.forEach(function(column) {
+                if (isVisible) {
+                    column.classList.remove('hidden');
+                } else {
+                    column.classList.add('hidden');
+                }
+            });
+        }
+
+        // ページ読み込み時に状態を復元
+        document.addEventListener('DOMContentLoaded', loadExtraColumnsState);
     </script>
     <style>
         .content-wrapper {
@@ -84,7 +103,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
         }
 
         .overflow-x-auto.schedule_table table td:first-of-type {
-            width: 90px;
+            width: 70px;
         }
 
         .meta-info {
@@ -169,24 +188,24 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                                 </div>
                                                 <div class="schedule-content"><?= nl2br(h($schedule['content'])) ?></div>
                                            
-                                                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-    <div class="meta-info extra-column hidden text-end">
-        <?php if ($schedule['updated_at'] != $schedule['created_at']) : ?>
-            編集者: <?= h($schedule['updated_by']) ?><br>
-            編集日: <?= date('Y-m-d H:i', strtotime($schedule['updated_at'])) ?><br>
-        <?php else : ?>
-            作成者: <?= h($schedule['creator']) ?><br>
-            作成日: <?= date('Y-m-d H:i', strtotime($schedule['created_at'])) ?><br>
-        <?php endif; ?>
-        共有: <?= h($schedule['shared_with'] ?: '共有なし') ?>
-    </div>
+                                                <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                                    <div class="meta-info extra-column hidden text-end">
+                                                        <?php if ($schedule['updated_at'] != $schedule['created_at']) : ?>
+                                                            編集者: <?= h($schedule['updated_by']) ?><br>
+                                                            編集日: <?= date('Y-m-d H:i', strtotime($schedule['updated_at'])) ?><br>
+                                                        <?php else : ?>
+                                                            作成者: <?= h($schedule['creator']) ?><br>
+                                                            作成日: <?= date('Y-m-d H:i', strtotime($schedule['created_at'])) ?><br>
+                                                        <?php endif; ?>
+                                                        共有: <?= h($schedule['shared_with'] ?: '共有なし') ?>
+                                                    </div>
                                                 <?php endif; ?>
                                             </td>
                                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                                 <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                                     <div class="flex flex-col space-y-2">
-                                                        <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded">編集</a>
-                                                        <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？');">削除</a>
+                                                        <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true');">編集</a>
+                                                        <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
                                                     </div>
                                                 </td>
                                             <?php endif; ?>
@@ -200,7 +219,6 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
             </div>
         </main>
     </div>
-    <?php include 'footer_schedule.php'; ?>
 </body>
-
+<?php include 'footer_schedule.php'; ?>
 </html>
