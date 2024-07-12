@@ -114,12 +114,17 @@ if (isset($_POST['remove_from_album'])) {
 </head>
 <body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
+    <div class="container mx-auto mt-20 mb-40 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>
 
         <?php if (isset($_SESSION['success_message'])) : ?>
             <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
             <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])) : ?>
+            <p class="text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+            <?php unset($_SESSION['error_message']); ?>
         <?php endif; ?>
 
         <?php if (!$album_id): ?>
@@ -129,7 +134,13 @@ if (isset($_POST['remove_from_album'])) {
                         <h2 class="text-xl font-bold mb-2"><?= h($album['name']) ?></h2>
                         <p class="text-sm text-gray-600 mb-2"><?= h($album['description']) ?></p>
                         <p class="text-xs text-gray-500"><?= h($album['created_at']) ?></p>
-                        <a href="?id=<?= h($album['id']) ?>" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">表示</a>
+                        <a href="?id=<?= h($album['id']) ?>" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white text-sm ms:text-base font-bold py-2 px-2 rounded">表示</a>
+                        <?php if ($_SESSION['role'] !== 'view'): ?>
+                            <form method="POST" action="album_delete.php" class="inline" onsubmit="return confirm('本当にこのアルバムを削除しますか？この操作は取り消せません。');">
+                                <input type="hidden" name="album_id" value="<?= h($album['id']) ?>">
+                                <button type="submit" class="mt-2 bg-red-500 hover:bg-red-700 text-white text-sm ms:text-base font-bold py-2 px-2 rounded">削除</button>
+                            </form>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             </div>
@@ -154,13 +165,13 @@ if (isset($_POST['remove_from_album'])) {
             </div>
 
             <div class="mt-6">
-                <a href="album_add_photos.php?id=<?= h($album_id) ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded text-lg transition duration-300">
+                <a href="album_add_photos.php?id=<?= h($album_id) ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-base transition duration-300">
                     アルバムに写真を追加
                 </a>
             </div>
 
-            <div class="mt-6">
-                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+        <div class="mt-2">
+                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded text-xs sm:text-base transition duration-300">
                     アルバム一覧に戻る
                 </a>
             </div>

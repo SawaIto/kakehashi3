@@ -204,8 +204,12 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                                 <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                                     <div class="flex flex-col space-y-2">
-                                                        <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true');">編集</a>
-                                                        <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
+                                                        
+                                                    <a href="<?php echo 'schedule_edit.php?id=' . $schedule['id']; ?>" 
+   onclick="console.log('Clicked edit for schedule ID: <?= $schedule['id'] ?>'); return true;">編集</a>
+   
+                                                    <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
+                                                    <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
                                                     </div>
                                                 </td>
                                             <?php endif; ?>
@@ -219,6 +223,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
             </div>
         </main>
     </div>
+    <?php include 'footer_schedule.php'; ?>
 </body>
-<?php include 'footer_schedule.php'; ?>
+
 </html>

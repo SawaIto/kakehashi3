@@ -16,7 +16,6 @@ $max_uploads = 5; // 一度にアップロードできる最大枚数
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $comment = $is_view_role ? '' : $_POST['comment'];
-    $tags = $is_view_role ? [] : (isset($_POST['tags']) ? explode(',', $_POST['tags']) : []);
     $album_id = $is_view_role ? null : $_POST['album_id'];
     $new_album_name = $is_view_role ? '' : $_POST['new_album_name'];
     $files = $_FILES['photos'];
@@ -33,9 +32,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // 新しいアルバムを作成（view権限以外）
         if (!$is_view_role && !empty($new_album_name)) {
-            $stmt = $pdo->prepare("INSERT INTO albums (group_id, name) VALUES (?, ?)");
-            $stmt->execute([$_SESSION['group_id'], $new_album_name]);
-            $album_id = $pdo->lastInsertId();
+            // アルバム名の重複チェック
+            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM albums WHERE group_id = ? AND name = ?");
+            $check_stmt->execute([$_SESSION['group_id'], $new_album_name]);
+            $album_exists = $check_stmt->fetchColumn();
+
+            if ($album_exists) {
+                $error = "同じ名前のアルバムが既に存在します。別の名前を選んでください。";
+            } else {
+                $stmt = $pdo->prepare("INSERT INTO albums (group_id, name) VALUES (?, ?)");
+                $stmt->execute([$_SESSION['group_id'], $new_album_name]);
+                $album_id = $pdo->lastInsertId();
+            }
         }
 
         $success_count = 0;
@@ -81,35 +89,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($status) {
                     $photo_id = $pdo->lastInsertId();
 
-                    // タグの保存（view権限以外）
-                    // if (!$is_view_role) {
-                    //     foreach ($tags as $tag) {
-                    //         $tag = trim($tag);
-                    //         if (!empty($tag)) {
-                    //             $stmt = $pdo->prepare("INSERT INTO photo_tags (photo_id, tag) VALUES (?, ?)");
-                    //             $stmt->execute([$photo_id, $tag]);
-                    //         }
-                    //     }
-
-                        // アルバムへの追加
-                        if (!empty($album_id)) {
-                            $stmt = $pdo->prepare("INSERT INTO album_photos (album_id, photo_id) VALUES (?, ?)");
-                            $stmt->execute([$album_id, $photo_id]);
-                        }
+                    // アルバムへの追加
+                    if (!empty($album_id)) {
+                        $stmt = $pdo->prepare("INSERT INTO album_photos (album_id, photo_id) VALUES (?, ?)");
+                        $stmt->execute([$album_id, $photo_id]);
                     }
-
-                    $success_count++;
                 }
+
+                $success_count++;
             }
         }
-
-        if ($success_count > 0) {
-            $_SESSION['success_message'] = $success_count . '枚の写真が正常にアップロードされました。';
-            redirect('photo_view.php');
-        } else {
-            $error = '写真のアップロードに失敗しました。';
-        }
     }
+
+    if ($success_count > 0) {
+        $_SESSION['success_message'] = $success_count . '枚の写真が正常にアップロードされました。';
+        redirect('photo_view.php');
+    } else {
+        $error = '写真のアップロードに失敗しました。';
+    }
+}
 // }
 
 // アルバム一覧の取得（view権限以外）
@@ -122,13 +120,14 @@ if (!$is_view_role) {
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>写真アップロード</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
-   <style>
+    <style>
         #drop_zone {
             border: 2px dashed #ccc;
             border-radius: 20px;
@@ -137,39 +136,37 @@ if (!$is_view_role) {
             text-align: center;
             cursor: pointer;
         }
+
         #drop_zone.dragover {
             background-color: #e9e9e9;
         }
     </style>
 </head>
 <?php include 'header0.php'; ?>
+
 <body class="bg-gray-200" id="body">
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
-        <?php if (isset($error)): ?>
+        <?php if (isset($error)) : ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
-        <form method="POST" enctype="multipart/form-data" class="space-y-4" id="upload-form">
+           <form method="POST" enctype="multipart/form-data" class="space-y-4" id="upload-form">
             <div id="drop_zone" class="mb-4">
                 <p>ここに写真をドラッグ＆ドロップするか、クリックして選択してください</p>
                 <p class="text-sm text-red-500">※一度にアップロードできる写真は5枚までです。</p>
                 <input type="file" id="photos" name="photos[]" accept="image/*" required multiple class="hidden">
             </div>
             <div id="preview" class="grid grid-cols-3 gap-2 mb-4"></div>
-            <?php if (!$is_view_role): ?>
+            <?php if (!$is_view_role) : ?>
                 <div>
                     <label for="comment" class="block text-lg font-semibold">コメント：</label>
                     <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
                 </div>
                 <div>
-                    <label for="tags" class="block text-lg font-semibold">タグ：</label>
-                    <input type="text" id="tags" name="tags" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="カンマ区切りで入力">
-                </div>
-                <div>
                     <label for="album_id" class="block text-lg font-semibold">既存のアルバム：</label>
                     <select id="album_id" name="album_id" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                         <option value="">選択してください</option>
-                        <?php foreach ($albums as $album): ?>
+                        <?php foreach ($albums as $album) : ?>
                             <option value="<?= h($album['id']) ?>"><?= h($album['name']) ?></option>
                         <?php endforeach; ?>
                     </select>
@@ -236,4 +233,5 @@ if (!$is_view_role) {
     </script>
 </body>
 <?php include 'footer_schedule.php'; ?>
+
 </html>

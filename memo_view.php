@@ -15,7 +15,6 @@ $is_admin_or_editor = ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'mod
 // 検索とフィルタリング
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $category = isset($_GET['category']) ? $_GET['category'] : '';
-$importance = isset($_GET['importance']) ? $_GET['importance'] : '';
 
 $query = "
     SELECT m.*, u.username as creator,
@@ -39,12 +38,8 @@ if ($category) {
     $params[] = $category;
 }
 
-if ($importance) {
-    $query .= " AND m.importance = ?";
-    $params[] = $importance;
-}
 
-$query .= " GROUP BY m.id ORDER BY m.due_date ASC, m.importance DESC, m.is_completed, m.id DESC";
+$query .= " GROUP BY m.id ORDER BY m.due_date ASC, m.is_completed, m.id DESC";
 
 $stmt = $pdo->prepare($query);
 $status = $stmt->execute($params);
@@ -55,8 +50,7 @@ if ($status == false) {
     $memos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-$categories = ['買い物', 'スケジュール', 'やること', 'その他'];
-$importance_levels = ['低', '普通', '高'];
+$categories = ['買い物', 'やること', 'その他'];
 ?>
 
 <!DOCTYPE html>

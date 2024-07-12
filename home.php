@@ -29,7 +29,7 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
 <body class="flex items-center justify-center min-h-screen bg-gray-200">
     <div class="container mx-auto m-2 p-2 bg-white rounded-lg shadow-md max-w-md">
     <div class="container mx-auto px-4 py-2 sm:py-4 flex justify-center items-center">
-    <img src="./img/header_logo.png" alt="かけはしロゴ" class="h-26 sm:h-24">
+    <img src="./img/header_logo.png" alt="かけ橋ロゴ" class="h-26 sm:h-24">
     </div>
         <h1 class="text-xl font-bold my-3 text-center">ようこそ、<?= h($user['username']) ?>さん</h1>
         <div class="flex justify-between items-center mb-4">

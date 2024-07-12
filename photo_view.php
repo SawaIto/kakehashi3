@@ -14,22 +14,15 @@ $is_admin_or_editor = ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'mod
 // 検索とソート
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'newest';
-$tag = isset($_GET['tag']) ? $_GET['tag'] : '';
 
 $query = "SELECT DISTINCT p.*, u.username FROM photos p
           JOIN users u ON p.user_id = u.id
-          LEFT JOIN photo_tags pt ON p.id = pt.photo_id
           WHERE p.group_id = :group_id";
 $params = [':group_id' => $group_id];
 
 if ($search) {
-    $query .= " AND (p.comment LIKE :search OR pt.tag LIKE :search)";
+    $query .= " AND (p.comment LIKE :search LIKE :search)";
     $params[':search'] = "%$search%";
-}
-
-if ($tag) {
-    $query .= " AND pt.tag = :tag";
-    $params[':tag'] = $tag;
 }
 
 if ($sort === 'oldest') {
@@ -47,10 +40,6 @@ if ($status == false) {
     $photos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// タグ一覧の取得
-$stmt = $pdo->prepare("SELECT DISTINCT tag FROM photo_tags WHERE photo_id IN (SELECT id FROM photos WHERE group_id = ?)");
-$stmt->execute([$group_id]);
-$tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
 ?>
 
 <!DOCTYPE html>
@@ -109,14 +98,7 @@ $tags = $stmt->fetchAll(PDO::FETCH_COLUMN);
                             <option value="oldest" <?= $sort == 'oldest' ? 'selected' : '' ?>>古い順</option>
                         </select>
                     </div>
-                    <div class="w-full md:w-1/3 px-2 mb-4 md:mb-0">
-                        <select name="tag" class="w-full p-2 border rounded">
-                            <option value="">タグ選択</option>
-                            <?php foreach ($tags as $t) : ?>
-                                <option value="<?= h($t) ?>" <?= $tag == $t ? 'selected' : '' ?>><?= h($t) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                    
                 </div>
                 <div class="flex justify-center space-x-4">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm">

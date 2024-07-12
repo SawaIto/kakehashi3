@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $mail->Port       = 587;
 
         //Recipients
-        $mail->setFrom('あなたのGmailアドレス', 'かけはし管理者'); // TODO: 変更してください
+        $mail->setFrom('あなたのGmailアドレス', 'かけ橋管理者'); // TODO: 変更してください
         $mail->addAddress('sawa110291@gmail.com', '管理者');
 
         // Content
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お問い合わせ - かけはし</title>
+    <title>お問い合わせ - かけ橋</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>

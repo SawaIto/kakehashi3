@@ -55,40 +55,54 @@ if (isset($_POST['add_to_album'])) {
     <title>アルバムに写真を追加</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
+    <style>
+        body {
+            padding-bottom: 120px; /* フッターの高さ分の余白を追加 */
+        }
+        .content-wrapper {
+            min-height: calc(100vh - 120px); /* ビューポートの高さからフッターの高さを引いた分 */
+            overflow-y: auto;
+        }
+    </style>
 </head>
-<body class="bg-gray-200" id="body">
-<?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
-        <h2 class="text-2xl font-bold mb-4"><?= h($album['name']) ?></h2>
+<body class="bg-gray-200 flex flex-col min-h-screen">
+    <?php include 'header0.php'; ?>
+    <div class="content-wrapper flex-grow">
+        <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
+            <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
+            <h2 class="text-2xl font-bold mb-4"><?= h($album['name']) ?></h2>
 
-        <?php if (isset($_SESSION['success_message'])) : ?>
-            <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
-            <?php unset($_SESSION['success_message']); ?>
-        <?php endif; ?>
+            <?php if (isset($_SESSION['success_message'])) : ?>
+                <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
+                <?php unset($_SESSION['success_message']); ?>
+            <?php endif; ?>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <?php foreach ($available_photos as $photo): ?>
-                <div class="bg-gray-200 p-4 rounded-lg shadow">
-                    <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded">
-                    <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
-                    <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
-                    <form method="POST" class="mt-2">
-                        <input type="hidden" name="photo_id" value="<?= h($photo['id']) ?>">
-                        <button type="submit" name="add_to_album" class="text-green-500 hover:text-green-700">
-                            アルバムに追加
-                        </button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                <?php foreach ($available_photos as $photo): ?>
+                    <div class="bg-gray-200 p-4 rounded-lg shadow">
+                        <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded">
+                        <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
+                        <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
+                        <form method="POST" class="mt-2">
+                            <input type="hidden" name="photo_id" value="<?= h($photo['id']) ?>">
+                            <button type="submit" name="add_to_album" class="text-green-500 hover:text-green-700">
+                                アルバムに追加
+                            </button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
 
-        <div class="mt-6">
-            <a href="album_view.php?id=<?= h($album_id) ?>" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
-                アルバムに戻る
-            </a>
+            <div class="mt-6 flex justify-between">
+                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                    アルバム一覧に戻る
+                </a>
+                <a href="album_view.php?id=<?= h($album_id) ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                    アルバムの写真一覧を見る
+                </a>
+            </div>
         </div>
     </div>
+    <?php include 'footer_photo.php'; ?>
 </body>
-<?php include 'footer_photo.php'; ?>
 </html>

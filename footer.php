@@ -39,7 +39,7 @@
                     お問い合わせ
                 </a>
             </div>
-            <p class="copyright text-xs text-gray-600 text-center">&copy; 2024 かけはし. All rights reserved.</p>
+            <p class="copyright text-xs text-gray-600 text-center">&copy; Kakehashi2024 All rights reserved.</p>
         </div>
     </footer>
     <script>

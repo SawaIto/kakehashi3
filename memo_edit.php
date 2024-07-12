@@ -77,7 +77,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
-<body class="bg-gray-200" id="body">
+<body class="bg-gray-200">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ編集</h1>
@@ -119,10 +119,5 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </body>
-<<<<<<< HEAD
-<?php include 'footer_memo.php'; ?>
-</html>
-=======
 
 </html>
->>>>>>> 46069e42e728b4965a60b07f1f144d48c64977eb
