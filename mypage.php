@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body class="bg-gray-200" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+    <div class="container mx-auto mt-20 mb-10 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">マイページ編集</h1>
 
         <?php if (isset($_SESSION['success_message'])): ?>

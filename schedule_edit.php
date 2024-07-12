@@ -95,7 +95,7 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
             display: flex;
             flex-direction: column;
             padding-top: 64px;
-            padding-bottom: 120px;
+            padding-bottom: 20px;
         }
 
         .content-wrapper {
@@ -167,7 +167,9 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
             </div>
         </div>
     </main>
-    <?php include 'footer_schedule.php'; ?>
+<footer>
+
+</footer>
     <script>
         document.getElementById('others_checkbox').addEventListener('change', function() {
             if (this.checked) {
@@ -177,6 +179,8 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
             }
         });
     </script>
+
+<p class="copyright text-xs text-gray-600 text-center pb-2">&copy; Kakehashi2024 All rights reserved.</p>
 </body>
 
 </html>

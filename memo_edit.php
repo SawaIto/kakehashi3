@@ -119,5 +119,6 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </body>
+<p class="copyright text-xs mt-5 text-gray-600 text-center pb-2">&copy; Kakehashi2024 All rights reserved.</p>
 
 </html>
