@@ -6,7 +6,7 @@ $pdo = db_conn();
 
 if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
     redirect('home.php');
-    exit("スケジュールの編集権限がありません。");
+    exit("予定の編集権限がありません。");
 }
 
 $photo_id = $_GET['id'];
@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (empty($date) || empty($content)) {
         $error = '日付と内容を入力してください。';
     } else {
-        // スケジュール更新
+        // 予定更新
         $stmt = $pdo->prepare("UPDATE photos SET date = ?, content = ? WHERE id = ? AND group_id = ?");
         $status = $stmt->execute([$date, $content, $schedule_id, $_SESSION['group_id']]);
 
@@ -34,22 +34,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->execute([$schedule_id, $user_id]);
             }
 
-            $_SESSION['success_message'] = 'スケジュールが正常に更新されました。';
+            $_SESSION['success_message'] = '予定が正常に更新されました。';
             redirect('schedule_view.php');
         } else {
-            $error = 'スケジュールの更新に失敗しました。';
+            $error = '予定の更新に失敗しました。';
         }
     }
 }
 
-// スケジュール情報取得
+// 予定情報取得
 $stmt = $pdo->prepare("SELECT * FROM schedules WHERE id = ? AND group_id = ?");
 $stmt->execute([$schedule_id, $_SESSION['group_id']]);
 $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$schedule) {
     redirect('schedule_view.php');
-    exit("スケジュールが見つかりません。");
+    exit("予定が見つかりません。");
 }
 
 // 共有情報取得
@@ -70,7 +70,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スケジュール編集</title>
+    <title>予定編集</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>

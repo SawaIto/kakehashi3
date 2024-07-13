@@ -107,10 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
         </form>
         <div class="mt-6 flex justify-center space-x-4">
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
                 ホーム
             </a>
-            <a href="user_list.php" class="bg-green-300 hover:bg-green-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+            <a href="user_list.php" class="bg--300 hover:bg-green-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
                 ユーザー一覧
             </a>
         </div>
@@ -135,6 +135,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     toggleEmailField();
     </script>
 </body>
-<p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
-
 </html>

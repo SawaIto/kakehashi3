@@ -7,18 +7,18 @@ $pdo = db_conn();
 
 if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
     redirect('home.php');
-    exit("スケジュールの削除権限がありません。");
+    exit("予定の削除権限がありません。");
 }
 
 $schedule_id = $_GET['id'];
 
-// スケジュールの存在確認
+// 予定の存在確認
 $stmt = $pdo->prepare("SELECT * FROM schedules WHERE id = ? AND group_id = ?");
 $stmt->execute([$schedule_id, $_SESSION['group_id']]);
 $schedule = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$schedule) {
-    $_SESSION['error_message'] = "指定されたスケジュールが見つかりません。";
+    $_SESSION['error_message'] = "指定された予定が見つかりません。";
     redirect('schedule_view.php');
     exit();
 }
@@ -26,7 +26,7 @@ if (!$schedule) {
 try {
     $pdo->beginTransaction();
 
-    // スケジュール削除
+    // 予定削除
     $stmt = $pdo->prepare("DELETE FROM schedules WHERE id = ? AND group_id = ?");
     $stmt->execute([$schedule_id, $_SESSION['group_id']]);
 
@@ -36,10 +36,10 @@ try {
 
     $pdo->commit();
 
-    $_SESSION['success_message'] = "スケジュールが正常に削除されました。";
+    $_SESSION['success_message'] = "予定が正常に削除されました。";
 } catch (Exception $e) {
     $pdo->rollBack();
-    $_SESSION['error_message'] = "スケジュールの削除中にエラーが発生しました: " . $e->getMessage();
+    $_SESSION['error_message'] = "予定の削除中にエラーが発生しました: " . $e->getMessage();
 }
 
 redirect('schedule_view.php');

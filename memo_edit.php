@@ -99,7 +99,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
             <div>
                 <p class="text-lg font-semibold">共有先：</p>
-                <div class="space-y-2">
+                <div class="space-y-2 text-sm sm:text-base">
                     <?php foreach ($group_members as $member) : ?>
                         <label class="flex items-center">
                             <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" <?= in_array($member['id'], $shared_with) ? 'checked' : '' ?> class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
@@ -113,10 +113,10 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <!-- ホーム,　メモ一覧に戻るボタン -->
         <div class="flex justify-center mt-4 space-x-4">
-    <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-center text-lg transition duration-300 w-1/4">
+    <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-3 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
         ホーム
     </a>
-    <a href="memo_view.php" class="bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded text-center text-lg transition duration-300 w-1/4">
+    <a href="memo_view.php" class="bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-3 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
         メモ一覧
     </a>
 </div>

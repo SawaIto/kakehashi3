@@ -19,7 +19,7 @@
                     詳細
                 </button>
                     <a href="memo_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
-                        新規登録
+                        メモ登録
                     </a>
                     <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
                     ホーム

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- ホスト: 127.0.0.1
--- 生成日時: 2024-07-06 06:11:14
+-- 生成日時: 2024-07-12 16:03:48
 -- サーバのバージョン： 10.4.32-MariaDB
 -- PHP のバージョン: 8.2.12
 
@@ -40,7 +40,8 @@ CREATE TABLE `albums` (
 --
 
 INSERT INTO `albums` (`id`, `group_id`, `name`, `description`, `created_at`) VALUES
-(4, 7, 'いらすとや', '', '2024-07-04 16:56:26');
+(5, 7, 'てすと', '', '2024-07-07 02:59:25'),
+(6, 7, 'てすと', 'てすと', '2024-07-10 21:51:08');
 
 -- --------------------------------------------------------
 
@@ -58,10 +59,9 @@ CREATE TABLE `album_photos` (
 --
 
 INSERT INTO `album_photos` (`album_id`, `photo_id`) VALUES
-(4, 11),
-(4, 12),
-(4, 13),
-(4, 26);
+(5, 11),
+(5, 12),
+(5, 13);
 
 -- --------------------------------------------------------
 
@@ -82,10 +82,7 @@ CREATE TABLE `groups` (
 --
 
 INSERT INTO `groups` (`id`, `user_id`, `name`, `created_at`, `updated_at`) VALUES
-(5, 11, 'さわ\'s Group', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
-(6, 17, 'テスト\'s Group', '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
-(7, 18, 'さわ\'s Group', '2024-07-04 15:43:32', '2024-07-04 15:43:32'),
-(8, 21, 'さわこまる\'s Group', '2024-07-06 01:54:33', '2024-07-06 01:54:33');
+(7, 18, 'さわ\'s Group', '2024-07-04 15:43:32', '2024-07-04 15:43:32');
 
 -- --------------------------------------------------------
 
@@ -106,11 +103,27 @@ CREATE TABLE `group_members` (
 --
 
 INSERT INTO `group_members` (`id`, `group_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(9, 6, 17, '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
 (10, 7, 18, '2024-07-04 15:43:32', '2024-07-04 15:43:32'),
 (11, 7, 19, '2024-07-04 15:44:03', '2024-07-04 15:44:03'),
 (12, 7, 20, '2024-07-04 15:48:00', '2024-07-04 15:48:00'),
-(13, 8, 21, '2024-07-06 01:54:33', '2024-07-06 01:54:33');
+(14, 7, 22, '2024-07-09 21:37:48', '2024-07-09 21:37:48');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `inquiries`
+--
+
+CREATE TABLE `inquiries` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `status` enum('未対応','対応中','解決済み') DEFAULT '未対応',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -137,14 +150,9 @@ CREATE TABLE `memos` (
 --
 
 INSERT INTO `memos` (`id`, `user_id`, `group_id`, `category`, `content`, `is_private`, `is_completed`, `created_at`, `updated_at`, `importance`, `due_date`) VALUES
-(5, 12, 5, 'その他', 'かおるテスト', 0, 1, '2024-06-28 00:27:22', '2024-06-29 08:50:06', 2, NULL),
-(6, 12, 5, 'その他', 'かおるてすと佐和共有', 0, 0, '2024-06-28 00:27:41', '2024-06-28 00:48:43', 2, '0000-00-00'),
-(8, 12, 5, 'やること', 'ｍｍｍｍ', 0, 1, '2024-06-29 08:49:57', '2024-06-29 08:50:26', 3, '2024-07-09'),
-(10, 18, 7, '買い物', 'あ\r\nあ\r\nあ', 0, 0, '2024-07-04 16:09:35', '2024-07-04 16:09:35', NULL, NULL),
 (11, 18, 7, 'やること', 'あいうえお　かか\nっきい', NULL, 0, '2024-07-04 16:18:42', '2024-07-04 16:18:42', NULL, NULL),
-(12, 18, 7, 'その他', 'あ', NULL, 0, '2024-07-04 16:23:54', '2024-07-04 16:23:54', NULL, NULL),
-(13, 18, 7, '買い物', 'あ', NULL, 0, '2024-07-04 16:26:33', '2024-07-04 16:26:33', NULL, NULL),
-(14, 18, 7, '買い物', 'あ', NULL, 0, '2024-07-04 16:32:43', '2024-07-04 16:32:43', NULL, NULL);
+(12, 18, 7, 'その他', 'あ', NULL, 0, '2024-07-04 16:23:54', '2024-07-11 09:05:03', 0, NULL),
+(13, 18, 7, '買い物', 'あ', NULL, 0, '2024-07-04 16:26:33', '2024-07-04 16:26:33', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -158,14 +166,6 @@ CREATE TABLE `memo_shares` (
   `user_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- テーブルのデータのダンプ `memo_shares`
---
-
-INSERT INTO `memo_shares` (`id`, `memo_id`, `user_id`, `created_at`) VALUES
-(10, 10, 19, '2024-07-04 16:09:35'),
-(11, 10, 20, '2024-07-04 16:09:35');
 
 -- --------------------------------------------------------
 
@@ -187,11 +187,6 @@ CREATE TABLE `photos` (
 --
 
 INSERT INTO `photos` (`id`, `group_id`, `user_id`, `file_name`, `comment`, `upload_date`) VALUES
-(1, 5, 11, '667f908e7652d_動画テロップ (8).png', '地球倫理', '2024-06-29 04:41:50'),
-(3, 5, 11, '667f944341f32_動画テロップ (7).png', '', '2024-06-29 04:57:39'),
-(8, 5, 11, '667fc7e06eccc_window_amado_open.png', '', '2024-06-29 08:37:52'),
-(9, 5, 12, '667fcb5aefd06_hakusyu_boy1-1.png', '', '2024-06-29 08:52:42'),
-(10, 5, 12, '667fcb660c1b5_chizu_color.png', '', '2024-06-29 08:52:54'),
 (11, 7, 18, '6686d21d1fced.jpg', '', '2024-07-04 16:47:25'),
 (12, 7, 18, '6686d21d22d2e.jpg', '', '2024-07-04 16:47:25'),
 (13, 7, 18, '6686d21d27258.jpg', '', '2024-07-04 16:47:25'),
@@ -205,9 +200,9 @@ INSERT INTO `photos` (`id`, `group_id`, `user_id`, `file_name`, `comment`, `uplo
 (21, 7, 18, '6686d21d373f7.jpg', '', '2024-07-04 16:47:25'),
 (22, 7, 18, '6686d21d38737.jpg', '', '2024-07-04 16:47:25'),
 (23, 7, 19, '66887c29bfebd.jpg', '', '2024-07-05 23:05:13'),
-(24, 7, 18, '6688b24709c31.jpg', '', '2024-07-06 02:56:07'),
 (25, 7, 18, '6688b2478662b.jpg', '', '2024-07-06 02:56:07'),
-(26, 7, 18, '6688b2869e9f0.jpg', '', '2024-07-06 02:57:11');
+(26, 7, 18, '6688b2869e9f0.jpg', '', '2024-07-06 02:57:11'),
+(27, 7, 18, '668e8a89dacdf.jpg', '', '2024-07-10 13:20:10');
 
 -- --------------------------------------------------------
 
@@ -235,15 +230,6 @@ CREATE TABLE `photo_tags` (
   `tag` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- テーブルのデータのダンプ `photo_tags`
---
-
-INSERT INTO `photo_tags` (`id`, `photo_id`, `tag`) VALUES
-(1, 1, 'JAM'),
-(2, 1, '2024'),
-(3, 8, 'テスト');
-
 -- --------------------------------------------------------
 
 --
@@ -256,26 +242,55 @@ CREATE TABLE `schedules` (
   `user_id` int(11) NOT NULL,
   `date` date NOT NULL,
   `content` text NOT NULL,
+  `others` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `updated_by` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- テーブルのデータのダンプ `schedules`
 --
 
-INSERT INTO `schedules` (`id`, `group_id`, `user_id`, `date`, `content`, `created_at`, `updated_at`) VALUES
-(1, 5, 11, '2024-06-28', 'あああ', '2024-06-27 08:08:48', '2024-06-27 08:08:48'),
-(3, 5, 11, '2024-06-29', 'あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ', '2024-06-27 10:45:55', '2024-06-27 10:45:55'),
-(4, 5, 11, '2024-07-05', 'テスト\r\nテスト', '2024-06-27 11:48:21', '2024-06-27 11:48:21'),
-(5, 5, 11, '2024-07-04', 'あああ\r\nあああ\r\nあああ\r\nああ\r\n', '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
-(6, 5, 11, '2024-06-29', '名古屋一泊', '2024-06-27 12:56:04', '2024-06-27 12:56:04'),
-(7, 5, 12, '2024-07-04', '僕だけの秘密', '2024-06-27 12:57:27', '2024-06-27 12:57:27'),
-(8, 5, 12, '2024-07-02', 'ハローワーク', '2024-06-29 08:49:15', '2024-06-29 08:49:15'),
-(9, 7, 18, '2024-07-18', 'あああ', '2024-07-04 16:34:17', '2024-07-04 16:34:17'),
-(10, 7, 18, '2024-07-09', 'あ\r\nあ\r\nあ', '2024-07-04 16:34:33', '2024-07-04 16:34:33'),
-(11, 7, 18, '2024-07-19', 'げんこつ山の狸さん\r\n最多最多チューリップの花が　　　咲いた', '2024-07-04 16:35:17', '2024-07-04 16:35:17'),
-(12, 7, 18, '2025-06-06', 'aaa', '2024-07-06 03:04:36', '2024-07-06 03:04:36');
+INSERT INTO `schedules` (`id`, `group_id`, `user_id`, `date`, `content`, `others`, `created_at`, `updated_at`, `updated_by`) VALUES
+(9, 7, 18, '2024-07-18', 'あああ', NULL, '2024-07-04 16:34:17', '2024-07-04 16:34:17', NULL),
+(11, 7, 18, '2024-07-19', 'げんこつ山の狸さん\r\n最多最多チューリップの花が　　　咲いた', NULL, '2024-07-04 16:35:17', '2024-07-04 16:35:17', NULL),
+(12, 7, 18, '2025-06-06', 'aaa', NULL, '2024-07-06 03:04:36', '2024-07-06 03:04:36', NULL),
+(14, 7, 18, '2024-07-16', '雅恵：\r\n〇〇〇〇', '', '2024-07-07 01:58:46', '2024-07-10 11:53:09', 20),
+(16, 7, 18, '2024-07-12', 'リハビリ。せすと', '', '2024-07-09 22:17:55', '2024-07-11 08:28:20', 18),
+(17, 7, 18, '2024-07-12', 'リハビリ', 'ああ', '2024-07-09 22:22:42', '2024-07-09 22:22:42', NULL),
+(18, 7, 18, '2024-07-13', 'えつこさんの予定を悦子さんにだけ見せる', '', '2024-07-09 22:37:52', '2024-07-09 22:37:52', NULL),
+(21, 7, 20, '2024-07-12', '名古屋マリオット', '', '2024-07-10 11:54:17', '2024-07-10 12:19:27', 20),
+(22, 7, 18, '2024-12-24', 'ｓｓ', '', '2024-07-10 13:07:32', '2024-07-10 13:07:32', 18);
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `schedule_for`
+--
+
+CREATE TABLE `schedule_for` (
+  `id` int(11) NOT NULL,
+  `schedule_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- テーブルのデータのダンプ `schedule_for`
+--
+
+INSERT INTO `schedule_for` (`id`, `schedule_id`, `user_id`, `created_at`) VALUES
+(1, 9, 18, '2024-07-10 11:51:29'),
+(3, 11, 18, '2024-07-10 11:51:29'),
+(4, 12, 18, '2024-07-10 11:51:29'),
+(6, 14, 18, '2024-07-10 11:51:29'),
+(9, 17, 18, '2024-07-10 11:51:29'),
+(10, 18, 18, '2024-07-10 11:51:29'),
+(20, 21, 18, '2024-07-10 12:19:27'),
+(21, 21, 20, '2024-07-10 12:19:27'),
+(22, 22, 18, '2024-07-10 13:07:32'),
+(23, 16, 18, '2024-07-11 08:28:20');
 
 -- --------------------------------------------------------
 
@@ -296,11 +311,17 @@ CREATE TABLE `schedule_shares` (
 --
 
 INSERT INTO `schedule_shares` (`id`, `schedule_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(5, 4, 12, '2024-06-27 11:48:21', '2024-06-27 11:48:21'),
-(6, 5, 12, '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
-(7, 5, 16, '2024-06-27 12:50:33', '2024-06-27 12:50:33'),
-(8, 6, 12, '2024-06-27 12:56:04', '2024-06-27 12:56:04'),
-(9, 9, 19, '2024-07-04 16:34:17', '2024-07-04 16:34:17');
+(9, 9, 19, '2024-07-04 16:34:17', '2024-07-04 16:34:17'),
+(18, 17, 19, '2024-07-09 22:22:42', '2024-07-09 22:22:42'),
+(19, 18, 22, '2024-07-09 22:37:52', '2024-07-09 22:37:52'),
+(20, 18, 22, '2024-07-09 22:37:52', '2024-07-09 22:37:52'),
+(24, 14, 19, '2024-07-10 11:53:09', '2024-07-10 11:53:09'),
+(25, 14, 19, '2024-07-10 11:53:09', '2024-07-10 11:53:09'),
+(29, 21, 18, '2024-07-10 12:19:27', '2024-07-10 12:19:27'),
+(30, 21, 19, '2024-07-10 12:19:27', '2024-07-10 12:19:27'),
+(31, 22, 20, '2024-07-10 13:07:32', '2024-07-10 13:07:32'),
+(32, 16, 19, '2024-07-11 08:28:20', '2024-07-11 08:28:20'),
+(33, 16, 20, '2024-07-11 08:28:20', '2024-07-11 08:28:20');
 
 -- --------------------------------------------------------
 
@@ -323,14 +344,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(11, '', NULL, '$2y$10$43sXvwpxeHvuyvyd0UQAlecvjBP/BEu4BhjozahTKmyoBRXvHARC2', 'admin', '2024-06-27 06:13:47', '2024-06-27 06:13:47'),
-(12, '', NULL, '$2y$10$NkOZmlE4UM89ce13RbFRqOJPC487mdiyGp5JYE9Y.cb2skqwXH5LG', 'modify', '2024-06-27 06:20:26', '2024-06-27 06:20:26'),
-(16, '', NULL, '$2y$10$fkPTJMQ.vnCQdo.opfsvcuZWkgWEuyHwOLBmD0JUmVavv7aIehWf6', 'view', '2024-06-27 07:50:37', '2024-07-02 11:51:04'),
-(17, '', NULL, '$2y$10$WbVz.3uYtVD/S.XTVEaH1utZrG4QR3euTjk/BGa1QG5hQfor7I2g6', 'admin', '2024-06-27 12:46:03', '2024-06-27 12:46:03'),
 (18, 'さわ', 'sawa110291@gmail.com', '$2y$10$6gKmxdLrxsV9xCoV8OJYUe0jFpKZc.TB19i8brwk.79LzPmAYKGpG', 'admin', '2024-07-04 15:43:32', '2024-07-04 15:52:08'),
 (19, 'まさえ', NULL, '$2y$10$Z.x4mbDGtGPCkyidCy4b5OUE6IyR99tMuZKXvBB2.YxQvi/Mdtlce', 'view', '2024-07-04 15:44:03', '2024-07-04 15:44:03'),
 (20, 'かおる', 'sawatin@yahoo.co.jp', '$2y$10$ahmgZM1zqtvtTaBhSkKD/.gIBt/Ckdtwctp8slIsh06K/ua.ezhc6', 'modify', '2024-07-04 15:48:00', '2024-07-06 02:10:43'),
-(21, 'さわこまる', 'sawa1@yahoo.co.jp', '$2y$10$0d3FrqDxVx37LJPdyriI4u2eYi4JhXQIt7xqcGa6kEQEFWs71RqsG', 'admin', '2024-07-06 01:54:33', '2024-07-06 01:54:33');
+(22, 'えつこ', NULL, '$2y$10$JX66SWhJUfL/m8kfYLHQa.bRFID84SsV7A2emaCEQoA4SX8eJ5bjK', 'view', '2024-07-09 21:37:48', '2024-07-09 21:37:48');
 
 --
 -- ダンプしたテーブルのインデックス
@@ -364,6 +381,13 @@ ALTER TABLE `group_members`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_group_members_group_id` (`group_id`),
   ADD KEY `idx_group_members_user_id` (`user_id`);
+
+--
+-- テーブルのインデックス `inquiries`
+--
+ALTER TABLE `inquiries`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`);
 
 --
 -- テーブルのインデックス `memos`
@@ -414,7 +438,16 @@ ALTER TABLE `schedules`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_schedules_group_id` (`group_id`),
   ADD KEY `idx_schedules_user_id` (`user_id`),
-  ADD KEY `idx_schedules_date` (`date`);
+  ADD KEY `idx_schedules_date` (`date`),
+  ADD KEY `updated_by` (`updated_by`);
+
+--
+-- テーブルのインデックス `schedule_for`
+--
+ALTER TABLE `schedule_for`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_schedule_for_schedule_id` (`schedule_id`),
+  ADD KEY `idx_schedule_for_user_id` (`user_id`);
 
 --
 -- テーブルのインデックス `schedule_shares`
@@ -438,7 +471,7 @@ ALTER TABLE `users`
 -- テーブルの AUTO_INCREMENT `albums`
 --
 ALTER TABLE `albums`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- テーブルの AUTO_INCREMENT `groups`
@@ -450,7 +483,13 @@ ALTER TABLE `groups`
 -- テーブルの AUTO_INCREMENT `group_members`
 --
 ALTER TABLE `group_members`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- テーブルの AUTO_INCREMENT `inquiries`
+--
+ALTER TABLE `inquiries`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- テーブルの AUTO_INCREMENT `memos`
@@ -468,7 +507,7 @@ ALTER TABLE `memo_shares`
 -- テーブルの AUTO_INCREMENT `photos`
 --
 ALTER TABLE `photos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- テーブルの AUTO_INCREMENT `photo_comments`
@@ -486,19 +525,25 @@ ALTER TABLE `photo_tags`
 -- テーブルの AUTO_INCREMENT `schedules`
 --
 ALTER TABLE `schedules`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- テーブルの AUTO_INCREMENT `schedule_for`
+--
+ALTER TABLE `schedule_for`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- テーブルの AUTO_INCREMENT `schedule_shares`
 --
 ALTER TABLE `schedule_shares`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- テーブルの AUTO_INCREMENT `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- ダンプしたテーブルの制約
@@ -529,6 +574,12 @@ ALTER TABLE `groups`
 ALTER TABLE `group_members`
   ADD CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `group_members_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- テーブルの制約 `inquiries`
+--
+ALTER TABLE `inquiries`
+  ADD CONSTRAINT `fk_inquiries_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL;
 
 --
 -- テーブルの制約 `memos`
@@ -569,7 +620,15 @@ ALTER TABLE `photo_tags`
 --
 ALTER TABLE `schedules`
   ADD CONSTRAINT `schedules_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `schedules_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `schedules_ibfk_3` FOREIGN KEY (`updated_by`) REFERENCES `users` (`id`);
+
+--
+-- テーブルの制約 `schedule_for`
+--
+ALTER TABLE `schedule_for`
+  ADD CONSTRAINT `schedule_for_ibfk_1` FOREIGN KEY (`schedule_id`) REFERENCES `schedules` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `schedule_for_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
 
 --
 -- テーブルの制約 `schedule_shares`

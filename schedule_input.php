@@ -6,7 +6,7 @@ $pdo = db_conn();
 
 if ($_SESSION['role'] != 'admin' && $_SESSION['role'] != 'modify') {
     redirect('home.php');
-    exit("スケジュールの登録権限がありません。");
+    exit("予定の登録権限がありません。");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $others = isset($_POST['others']) ? $_POST['others'] : '';
 
     if (empty($date) || empty($content)) {
-        $error = '日付とスケジュールを入力してください。';
+        $error = '日付と予定を入力してください。';
     } else {
         $stmt = $pdo->prepare("INSERT INTO schedules (group_id, user_id, date, content, others, created_at, updated_at, updated_by) VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?)");
         $status = $stmt->execute([$_SESSION['group_id'], $_SESSION['user_id'], $date, $content, $others, $_SESSION['user_id']]);
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($status) {
             $schedule_id = $pdo->lastInsertId();
 
-            // スケジュールの対象者を保存
+            // 予定の対象者を保存
             foreach ($schedule_for as $user_id) {
                 $stmt = $pdo->prepare("INSERT INTO schedule_for (schedule_id, user_id) VALUES (?, ?)");
                 $stmt->execute([$schedule_id, $user_id]);
@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->execute([$schedule_id, $user_id]);
             }
 
-            $_SESSION['success_message'] = 'スケジュールが正常に登録されました。';
+            $_SESSION['success_message'] = '予定が正常に登録されました。';
             redirect('schedule_view.php');
         } else {
-            $error = 'スケジュールの登録に失敗しました。';
+            $error = '予定の登録に失敗しました。';
         }
     }
 }
@@ -59,7 +59,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スケジュール登録</title>
+    <title>予定登録</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
     <style>
@@ -90,7 +90,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="content-wrapper">
             <div class="container mx-auto p-6">
                 <div class="bg-white rounded-lg shadow-md max-w-md mx-auto">
-                    <h1 class="text-3xl font-bold mb-6 text-center pt-6">スケジュール登録</h1>
+                    <h1 class="text-3xl font-bold mb-6 text-center pt-6">予定登録</h1>
                     <?php if (isset($error)) : ?>
                         <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
                     <?php endif; ?>
@@ -101,7 +101,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div>
                             <p class="text-lg font-semibold">誰の予定：</p>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-sm sm:text-base">
                                 <?php foreach ($group_members as $member) : ?>
                                     <label class="flex items-center">
                                         <input type="checkbox" name="schedule_for[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
@@ -116,13 +116,13 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                         </div>
                         <div>
-                            <label for="content" class="block text-lg font-semibold">スケジュール：</label>
+                            <label for="content" class="block text-lg font-semibold">予定：</label>
                             <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
                      
                         </div>
                         <div>
                             <p class="text-lg font-semibold">共有先：</p>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-sm sm:text-base">
                                 <?php foreach ($group_members as $member) : ?>
                                     <?php if ($member['id'] != $_SESSION['user_id']) : ?>
                                         <label class="flex items-center">

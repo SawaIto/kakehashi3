@@ -83,8 +83,8 @@ nav ul li a:hover {
         <ul>
             <li><a href="user_register.php">ユーザー登録</a></li>
             <li><a href="user_list.php">ユーザー一覧</a></li>
-            <li><a href="schedule_input.php">スケジュール登録</a></li>
-            <li><a href="schedule_view.php">スケジュール表示</a></li>
+            <li><a href="schedule_input.php">予定登録</a></li>
+            <li><a href="schedule_view.php">予定表示</a></li>
             <li><a href="memo_input.php">メモ登録</a></li>
             <li><a href="memo_view.php">メモ表示</a></li>
             <li><a href="photo_upload.php">写真アップロード</a></li>
@@ -97,8 +97,8 @@ nav ul li a:hover {
     <ul>
         <li><a href="user_register.php">ユーザー登録</a></li>
         <li><a href="user_list.php">ユーザー一覧</a></li>
-        <li><a href="schedule_input.php">スケジュール登録</a></li>
-        <li><a href="schedule_view.php">スケジュール表示</a></li>
+        <li><a href="schedule_input.php">予定登録</a></li>
+        <li><a href="schedule_view.php">予定表示</a></li>
         <li><a href="memo_input.php">メモ登録</a></li>
         <li><a href="memo_view.php">メモ表示</a></li>
         <li><a href="photo_upload.php">写真アップロード</a></li>

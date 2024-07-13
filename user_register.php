@@ -89,13 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-3 py-2 rounded-lg text-sm sm:text-base text-center transition duration-300">登録</button>
             </div>
         </form>
-        <div class="mt-6 text-center">
-            <a href="user_list.php" class="bg-green-300 hover:bg-green-400 text-black font-bold py-2 px-3 rounded text-sm sm:text-base transition duration-300">
+        <div class="flex justify-center space-x-4 mt-4">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+                ホーム
+            </a>
+            <a href="user_list.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
                 ユーザー一覧
             </a>
         </div>
+
     </div>
-    <p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
     <script>
         function toggleEmailField() {
             const role = document.getElementById('role').value;
@@ -126,6 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
-<p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+<p class="text-sm m-3 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
 
 </html>

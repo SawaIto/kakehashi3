@@ -61,7 +61,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>スケジュール表示</title>
+    <title>予定表示</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
     <script>
@@ -133,7 +133,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
         <main class="container mx-auto mt-5 mb-40">
             <div class="bg-white rounded-lg shadow-md p-1 sm:p-6">
                 <div class="text-center mb-6">
-                    <h1 class="text-2xl sm:text-3xl font-bold">スケジュール表示</h1>
+                    <h1 class="text-2xl sm:text-3xl font-bold">予定表示</h1>
                 </div>
                 <div id="searchFilter" class="mb-4 hidden">
                     <form method="GET" class="flex space-x-4">

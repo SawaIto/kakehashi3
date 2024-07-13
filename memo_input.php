@@ -99,7 +99,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div>
                             <p class="text-lg font-semibold">共有先：</p>
-                            <div class="space-y-2">
+                            <div class="space-y-2 text-sm sm:text-base">
                                 <?php foreach ($group_members as $member) : ?>
                                     <label class="flex items-center">
                                         <input type="checkbox" name="shared_with[]" value="<?= h($member['id']) ?>" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
