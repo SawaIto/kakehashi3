@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </span>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-green-400 hover:bg-green-500 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">登録</button>
+                    <button type="submit" class="w-full bg-green-400 hover:bg-green-500 text-black font-bold px-4 py-3 rounded-lg text-base text-center transition duration-300">登録</button>
                 </form>
                 <div class="mt-6 text-center">
                     <a href="login.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ログイン</a>

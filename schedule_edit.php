@@ -40,8 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->execute([$id, $user_id]);
             }
 
-            $_SESSION['success_message'] = 'スケジュールが正常に更新されました。';
+            $_SESSION['schedule_message'] = 'スケジュールが正常に更新されました。';
             redirect('schedule_view.php');
+            exit;
         } else {
             $error = 'スケジュールの更新に失敗しました。';
         }
@@ -167,9 +168,7 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
             </div>
         </div>
     </main>
-<footer>
-
-</footer>
+    <?php include 'footer_schedule.php'; ?>
     <script>
         document.getElementById('others_checkbox').addEventListener('change', function() {
             if (this.checked) {
@@ -179,8 +178,6 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
             }
         });
     </script>
-
-<p class="copyright text-xs text-gray-600 text-center pb-2">&copy; Kakehashi2024 All rights reserved.</p>
 </body>
 
 </html>

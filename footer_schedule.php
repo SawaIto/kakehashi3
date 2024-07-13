@@ -27,15 +27,25 @@
             <?php endif; ?>
         </div>
 
+        <?php if (isset($_SESSION['schedule_message'])) : ?>
+            <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+            <?php unset($_SESSION['schedule_message']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])) : ?>
+            <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
+
         <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
             <form method="GET" action="" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow">
                     <label for="start_date" class="block text-sm font-medium text-gray-700">開始日:</label>
-                    <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="date" id="start_date" name="start_date" value="<?= h($start_date ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
                 <div class="flex-grow">
                     <label for="end_date" class="block text-sm font-medium text-gray-700">終了日:</label>
-                    <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    <input type="date" id="end_date" name="end_date" value="<?= h($end_date ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
                 <div class="flex space-x-2">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">検索</button>

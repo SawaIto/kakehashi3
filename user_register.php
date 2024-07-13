@@ -1,12 +1,12 @@
 <?php
-
 require_once 'funcs.php';
+sschk();
 
-// データベース接続
 $pdo = db_conn();
 
-if (!isset($_SESSION['user_id']) || !isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
-    die("管理者のみがユーザーを登録できます。");
+if ($_SESSION['role'] != 'admin') {
+    redirect('home.php');
+    exit("管理者のみがユーザーを登録できます。");
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -36,7 +36,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt = $pdo->prepare("INSERT INTO group_members (group_id, user_id) VALUES (?, ?)");
             $stmt->execute([$_SESSION['group_id'], $user_id]);
 
-            $success_message = "ユーザー登録が完了しました。";
+            $_SESSION['success_message'] = "ユーザー登録が完了しました。";
+            redirect('user_list.php');
+            exit;
         } else {
             $error_message = "ユーザー登録に失敗しました。";
         }
@@ -56,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">ユーザー登録</h1>
-        <?php if (isset($success_message)): ?>
-            <p class="text-green-500 mb-4 text-center"><?= h($success_message) ?></p>
+        <?php if (isset($error_message)): ?>
+            <p class="text-red-500 mb-4 text-center"><?= h($error_message) ?></p>
         <?php endif; ?>
         <form method="POST" class="space-y-4" id="registrationForm">
             <div>
@@ -77,20 +79,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div>
                 <label for="password" class="block text-lg font-semibold">パスワード：</label>
-                <input type="text" id="password" name="password" required class="w-full p-2 border rounded" value="<?= isset($password) ? h($password) : '' ?>">
+                <input type="text" id="password" name="password" required class="w-full p-2 border rounded">
             </div>
             <div>
                 <label for="confirm_password" class="block text-lg font-semibold">パスワード(確認用)：</label>
-                <input type="text" id="confirm_password" name="confirm_password" required class="w-full p-2 border rounded" value="<?= isset($confirm_password) ? h($confirm_password) : '' ?>">
+                <input type="text" id="confirm_password" name="confirm_password" required class="w-full p-2 border rounded">
             </div>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
+            <div class="m-2 text-center space-x-4">
+                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-3 py-2 rounded-lg text-sm sm:text-base text-center transition duration-300">登録</button>
+            </div>
         </form>
         <div class="mt-6 text-center">
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                ホームに戻る
+            <a href="user_list.php" class="bg-green-300 hover:bg-green-400 text-black font-bold py-2 px-3 rounded text-sm sm:text-base transition duration-300">
+                ユーザー一覧
             </a>
         </div>
     </div>
+    <p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
     <script>
         function toggleEmailField() {
             const role = document.getElementById('role').value;
@@ -121,4 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         });
     </script>
 </body>
+<p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </html>

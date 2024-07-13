@@ -1,5 +1,4 @@
 <?php
-
 require_once 'funcs.php';
 sschk();
 
@@ -14,14 +13,15 @@ $memo_id = $_GET['id'];
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $category = $_POST['category'];
-    $content = $_POST['content'];
+    $content = preg_replace('/^\s*\n/', '', trim($_POST['content']));
+    $content = preg_replace('/\r\n|\r|\n/', "\n", $content);
     $shared_with = isset($_POST['shared_with']) ? $_POST['shared_with'] : [];
 
     if (empty($category) || empty($content)) {
-        $error = 'カテゴリー、表題、内容を入力してください。';
+        $error = 'カテゴリー、内容を入力してください。';
     } else {
         // メモ更新
-        $stmt = $pdo->prepare("UPDATE memos SET category = ?, content = ? = ? WHERE id = ? AND group_id = ?");
+        $stmt = $pdo->prepare("UPDATE memos SET category = ?, content = ? WHERE id = ? AND group_id = ?");
         $status = $stmt->execute([$category, $content, $memo_id, $_SESSION['group_id']]);
 
         if ($status) {
@@ -111,12 +111,15 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
         </form>
 
-        <!-- ホームに戻るボタン -->
-        <div class="mt-6 text-center">
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                ホームに戻る
-            </a>
-        </div>
+        <!-- ホーム,　メモ一覧に戻るボタン -->
+        <div class="flex justify-center mt-4 space-x-4">
+    <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-center text-lg transition duration-300 w-1/4">
+        ホーム
+    </a>
+    <a href="memo_view.php" class="bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-4 rounded text-center text-lg transition duration-300 w-1/4">
+        メモ一覧
+    </a>
+</div>
     </div>
 </body>
 <p class="copyright text-xs mt-5 text-gray-600 text-center pb-2">&copy; Kakehashi2024 All rights reserved.</p>

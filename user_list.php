@@ -94,18 +94,17 @@ if (isset($_SESSION['error_message'])) {
                 </tbody>
             </table>
         </div>
-
-        <div class="mt-6 text-center space-x-4">
-            <?php if ($_SESSION['role'] == 'admin') : ?>
-                <a href="user_register.php" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
-                    新規ユーザー追加
-                </a>
-            <?php endif; ?>
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base md:text-lg transition duration-300">
-                ホームに戻る
+        <div class="flex justify-center space-x-4">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+                ホーム
+            </a>
+            <a href="user_register.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+                ユーザー登録
             </a>
         </div>
     </div>
+    <p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </body>
 
 </html>

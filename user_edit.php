@@ -1,5 +1,4 @@
 <?php
-
 require_once 'funcs.php';
 sschk();
 
@@ -50,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($status) {
             $_SESSION['success_message'] = "ユーザー情報が正常に更新されました。";
             redirect('user_list.php');
+            exit;
         } else {
             $error = "ユーザー情報の更新に失敗しました。";
         }
@@ -102,30 +102,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="password" class="block text-base font-medium text-gray-700 mb-1">新しいパスワード（変更する場合のみ）</label>
                 <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base">
             </div>
-            <div class="flex items-center justify-between pt-4">
-                <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200 text-lg">更新</button>
-                <a href="user_list.php" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition duration-200 text-lg">キャンセル</a>
+            <div class="flex justify-center">
+                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
             </div>
         </form>
+        <div class="mt-6 flex justify-center space-x-4">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+                ホーム
+            </a>
+            <a href="user_list.php" class="bg-green-300 hover:bg-green-400 text-black font-bold py-2 px-4 rounded text-lg transition duration-300">
+                ユーザー一覧
+            </a>
+        </div>
     </div>
     <script>
     function toggleEmailField() {
-    const role = document.getElementById('role').value;
-    const emailField = document.getElementById('emailField');
-    const emailInput = document.getElementById('email');
+        const role = document.getElementById('role').value;
+        const emailField = document.getElementById('emailField');
+        const emailInput = document.getElementById('email');
 
-    if (role === 'view') {
-        emailField.style.display = 'none';
-        emailInput.value = ''; // メールアドレスの値を空文字列にする
-        emailInput.removeAttribute('required');
-    } else {
-        emailField.style.display = 'block';
-        emailInput.setAttribute('required', 'required');
+        if (role === 'view') {
+            emailField.style.display = 'none';
+            emailInput.value = ''; // メールアドレスの値を空文字列にする
+            emailInput.removeAttribute('required');
+        } else {
+            emailField.style.display = 'block';
+            emailInput.setAttribute('required', 'required');
+        }
     }
-}
 
-        // 初期表示時にも実行
-        toggleEmailField();
+    // 初期表示時にも実行
+    toggleEmailField();
     </script>
 </body>
+<p class="text-sm mt-2 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </html>

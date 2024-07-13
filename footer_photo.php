@@ -44,7 +44,17 @@
 
         <p class="text-xs text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
     </div>
+    <?php if (isset($_SESSION['success_message'])) : ?>
+            <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
+            <?php unset($_SESSION['success_message']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])) : ?>
+            <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+            <?php unset($_SESSION['error_message']); ?>
+        <?php endif; ?>
 </footer>
+
 
 <script>
     function toggleSearchFilter() {
