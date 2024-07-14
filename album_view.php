@@ -186,11 +186,13 @@ if (isset($_POST['remove_from_album'])) {
                         <p class="text-sm truncate"><?php echo h(substr($photo['comment'], 0, 50)); ?></p>
                         <p class="text-xs text-gray-500 mt-1">投稿者: <?php echo h($photo['username']); ?></p>
                         <form method="POST" class="mt-2">
+                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                             <input type="hidden" name="photo_id" value="<?php echo h($photo['id']); ?>">
                             <input type="hidden" name="album_id" value="<?php echo h($album_id); ?>">
-                            <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
-                                アルバムから削除
-                            </button>
+                    <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
+                        アルバムから削除
+                    </button>
+                <?php endif; ?>
                         </form>
                     </div>
                 <?php endforeach; ?>
