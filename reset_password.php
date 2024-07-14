@@ -4,13 +4,12 @@ include("funcs.php");
 $error_message = "";
 $success_message = "";
 
-// トークンの確認
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
     $pdo = db_conn();
-    
+
     // トークンの有効性を確認
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE reset_token = :token AND token_expires > NOW()");
+    $stmt = $pdo->prepare("SELECT * FROM users WHERE reset_token = :token AND token_expires > NOW() AND (role = 'admin' OR role = 'modify')");
     $stmt->bindValue(':token', $token, PDO::PARAM_STR);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -22,31 +21,25 @@ if (isset($_GET['token'])) {
     $error_message = "トークンが見つかりません。";
 }
 
-// 新しいパスワードの設定
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['new_password']) && isset($_POST['confirm_password'])) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['new_password'])) {
     $new_password = $_POST['new_password'];
     $confirm_password = $_POST['confirm_password'];
 
     if ($new_password === $confirm_password) {
-        if (strlen($new_password) >= 8) {  // パスワードの長さチェック
-            $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-            
-            $stmt = $pdo->prepare("UPDATE users SET lpw = :lpw, reset_token = NULL, token_expires = NULL WHERE id = :id");
-            $stmt->bindValue(':lpw', $hashed_password, PDO::PARAM_STR);
-            $stmt->bindValue(':id', $user['id'], PDO::PARAM_INT);
-            
-            if ($stmt->execute()) {
-                $success_message = "パスワードが正常に更新されました。";
-            } else {
-                $error_message = "パスワードの更新中にエラーが発生しました。";
-            }
-        } else {
-            $error_message = "パスワードは8文字以上である必要があります。";
-        }
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+
+        $stmt = $pdo->prepare("UPDATE users SET password = :password, reset_token = NULL, token_expires = NULL WHERE id = :id");
+        $stmt->bindValue(':password', $hashed_password, PDO::PARAM_STR);
+        $stmt->bindValue(':id', $user['id'], PDO::PARAM_INT);
+        $stmt->execute();
+
+        $success_message = "パスワードが正常にリセットされました。";
     } else {
         $error_message = "パスワードが一致しません。";
     }
 }
+
+// HTML部分は既存のコードをそのまま使用
 ?>
 
 <!DOCTYPE html>

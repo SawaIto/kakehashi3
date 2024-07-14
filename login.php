@@ -94,6 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="mt-6 text-center">
                     <a href="admin_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">管理者登録</a>
                 </div>
+                                    <!-- login.php の <form> タグの後に追加 -->
+<div class="mt-4 text-end text-sm">
+    <a href="password_reset.php" class="text-blue-500 hover:text-blue-700">パスワードを忘れた場合</a>
+</div>
                 <div class="mt-6 text-right">
                     <a href="login_auto_template.php" class="text-black font-bold text-base">special_login</a>
                 </div>

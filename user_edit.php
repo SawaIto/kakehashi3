@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
                 ホーム
             </a>
-            <a href="user_list.php" class="bg--300 hover:bg-green-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+            <a href="user_list.php" class="bg-green-300 hover:bg-green-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
                 ユーザー一覧
             </a>
         </div>
