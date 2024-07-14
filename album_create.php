@@ -73,4 +73,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php include 'footer_photo.php'; ?>
 </body>
 
+<script>
+    function scrollToComment() {
+        // Get the target element
+        const commentSection = document.querySelector('.h-32');
+
+        // Scroll to the target element
+        commentSection.scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+
+
 </html>

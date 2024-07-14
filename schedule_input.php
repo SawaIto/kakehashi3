@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $content = $_POST['content'];
     $schedule_for = isset($_POST['schedule_for']) ? $_POST['schedule_for'] : [];
     $shared_with = isset($_POST['shared_with']) ? $_POST['shared_with'] : [];
-    $others = isset($_POST['others']) ? $_POST['others'] : '';
+    $others = isset($_POST['others']) && isset($_POST['others_checkbox']) ? $_POST['others'] : '';
 
     if (empty($date) || empty($content)) {
         $error = '日付と予定を入力してください。';
@@ -117,8 +117,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                         <div>
                             <label for="content" class="block text-lg font-semibold">予定：</label>
-                            <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
-                     
+                            <textarea id="content" name="content" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
                         </div>
                         <div>
                             <p class="text-lg font-semibold">共有先：</p>

@@ -166,42 +166,46 @@ if ($status == false) {
     </div>
 
 <!-- View Modal -->
-<div id="photoModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" style="margin-bottom: 80px;">
-            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div class="sm:flex sm:items-start flex-col">
-                    <div class="w-full flex justify-between items-center mb-6">
-                        <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            写真詳細
-                        </h3>
-                        <button type="button" class="text-gray-900 hover:text-blue-700 focus:outline-none text-lg" onclick="closeModal()">
-                            閉じる
-                        </button>
-                    </div>
-                    <div class="flex justify-between items-center w-full mb-6">
-                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2" onclick="prevPhoto()">
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2" onclick="nextPhoto()">
-                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
-                    <div class="modal-content overflow-y-auto w-full" style="max-height: calc(100vh - 300px);">
-                        <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain mb-4">
-                        <p id="modalComment" class="text-sm text-gray-500"></p>
+<div id="photoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen p-0">
+            <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="special_popup relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded-lg shadow-xl overflow-hidden flex flex-col">
+                <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10 bg-opacity-50 bg-gray-800">
+                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="prevPhoto()">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="closeModal()">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="nextPhoto()">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="overflow-y-auto flex-grow pt-16">
+                    <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain">
+                    <div class="p-4 bg-white">
+
+                        <div class="mt-2">
+                            <p id="modalComment" class="text-sm text-gray-500"></p>
+                        </div>
+                        <?php if ($is_admin_or_editor) : ?>
+                            <div id="commentSection" class="mt-4">
+                                <form id="commentForm" class="mt-4">
+                                    <input type="hidden" id="photoId" name="photo_id">
+                                </form>
+                            </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
 <!-- Edit Modal -->
 <div id="editModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
