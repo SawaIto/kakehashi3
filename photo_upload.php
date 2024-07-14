@@ -2,236 +2,276 @@
 require_once 'funcs.php';
 sschk();
 
-// ファイルアップロードの設定を調整
-ini_set('upload_max_filesize', '10M');
-ini_set('post_max_size', '10M');
-ini_set('memory_limit', '128M');
-ini_set('max_execution_time', 300);
-
 $pdo = db_conn();
 
-$is_view_role = ($_SESSION['role'] == 'view');
-
-$max_uploads = 5; // 一度にアップロードできる最大枚数
+// アルバム一覧を取得
+$stmt = $pdo->prepare("SELECT id, name FROM albums WHERE group_id = ?");
+$stmt->execute([$_SESSION['group_id']]);
+$albums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $comment = $is_view_role ? '' : $_POST['comment'];
-    $album_id = $is_view_role ? null : $_POST['album_id'];
-    $new_album_name = $is_view_role ? '' : $_POST['new_album_name'];
-    $files = $_FILES['photos'];
+    $upload_dir = 'uploads/';
+    $max_file_size = 5 * 1024 * 1024; // 5MB に制限
+    $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+    $max_files = 3;
 
-    if (empty($files['name'][0])) {
-        $error = '写真を選択してください。';
-    } elseif (count($files['name']) > $max_uploads) {
-        $error = "一度にアップロードできる写真は{$max_uploads}枚までです。";
-    } else {
-        $upload_dir = __DIR__ . '/uploads/';
-        if (!file_exists($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
+    $uploaded_files = $_FILES['photos'];
+    $file_count = count($uploaded_files['name']);
+
+    if ($file_count > $max_files) {
+        echo json_encode(['error' => "一度にアップロードできる写真は{$max_files}枚までです。"]);
+        exit;
+    }
+
+    $success_count = 0;
+    $uploaded_photo_ids = [];
+
+    for ($i = 0; $i < $file_count; $i++) {
+        $file_name = $uploaded_files['name'][$i];
+        $file_tmp = $uploaded_files['tmp_name'][$i];
+        $file_type = $uploaded_files['type'][$i];
+        $file_size = $uploaded_files['size'][$i];
+
+        if (!in_array($file_type, $allowed_types)) {
+            echo json_encode(['error' => "許可されていないファイル形式です: {$file_name}"]);
+            continue;
         }
 
-        // 新しいアルバムを作成（view権限以外）
-        if (!$is_view_role && !empty($new_album_name)) {
-            // アルバム名の重複チェック
-            $check_stmt = $pdo->prepare("SELECT COUNT(*) FROM albums WHERE group_id = ? AND name = ?");
-            $check_stmt->execute([$_SESSION['group_id'], $new_album_name]);
-            $album_exists = $check_stmt->fetchColumn();
+        if ($file_size > $max_file_size) {
+            echo json_encode(['error' => "ファイルサイズが大きすぎます: {$file_name}"]);
+            continue;
+        }
+
+        $image = imagecreatefromstring(file_get_contents($file_tmp));
+        if (!$image) {
+            echo json_encode(['error' => "画像の処理に失敗しました: {$file_name}"]);
+            continue;
+        }
+
+        $max_width = 1024;
+        $max_height = 768;
+        list($width, $height) = getimagesize($file_tmp);
+        $ratio = min($max_width / $width, $max_height / $height);
+        $new_width = $width * $ratio;
+        $new_height = $height * $ratio;
+
+        $resized_image = imagecreatetruecolor($new_width, $new_height);
+        imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+        $new_file_name = uniqid('photo_') . '.jpg';
+        $upload_path = $upload_dir . $new_file_name;
+
+        imagejpeg($resized_image, $upload_path, 60);
+
+        imagedestroy($image);
+        imagedestroy($resized_image);
+
+        $comment = $_POST['comments'][$i] ?? '';
+        $stmt = $pdo->prepare("INSERT INTO photos (file_name, comment, upload_date, user_id, group_id) VALUES (?, ?, NOW(), ?, ?)");
+        if ($stmt->execute([$new_file_name, $comment, $_SESSION['user_id'], $_SESSION['group_id']])) {
+            $success_count++;
+            $uploaded_photo_ids[] = $pdo->lastInsertId();
+        }
+    }
+
+    if (!empty($uploaded_photo_ids)) {
+        $album_id = $_POST['album_id'];
+        if ($album_id == 'new' && !empty($_POST['new_album_name'])) {
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM albums WHERE name = ? AND group_id = ?");
+            $stmt->execute([$_POST['new_album_name'], $_SESSION['group_id']]);
+            $album_exists = $stmt->fetchColumn();
 
             if ($album_exists) {
-                $error = "同じ名前のアルバムが既に存在します。別の名前を選んでください。";
-            } else {
-                $stmt = $pdo->prepare("INSERT INTO albums (group_id, name) VALUES (?, ?)");
-                $stmt->execute([$_SESSION['group_id'], $new_album_name]);
-                $album_id = $pdo->lastInsertId();
+                echo json_encode(['error' => "同じ名前のアルバムが既に存在します。"]);
+                exit;
             }
+
+            $stmt = $pdo->prepare("INSERT INTO albums (name, group_id) VALUES (?, ?)");
+            $stmt->execute([$_POST['new_album_name'], $_SESSION['group_id']]);
+            $album_id = $pdo->lastInsertId();
         }
 
-        $success_count = 0;
-        for ($i = 0; $i < count($files['name']); $i++) {
-            $filename = uniqid() . '.jpg';
-            $upload_file = $upload_dir . $filename;
-
-            // 画像をJPEG形式に変換して保存
-            $image_info = getimagesize($files['tmp_name'][$i]);
-            $image_type = $image_info[2];
-
-            if ($image_type == IMAGETYPE_JPEG) {
-                $image = imagecreatefromjpeg($files['tmp_name'][$i]);
-            } elseif ($image_type == IMAGETYPE_PNG) {
-                $image = imagecreatefrompng($files['tmp_name'][$i]);
-            } elseif ($image_type == IMAGETYPE_GIF) {
-                $image = imagecreatefromgif($files['tmp_name'][$i]);
-            } else {
-                continue; // 対応していない形式はスキップ
-            }
-
-            // 画像のリサイズと圧縮
-            $max_width = 1920;
-            $max_height = 1080;
-            list($width, $height) = getimagesize($files['tmp_name'][$i]);
-            $ratio = min($max_width / $width, $max_height / $height);
-            if ($ratio < 1) {
-                $new_width = $width * $ratio;
-                $new_height = $height * $ratio;
-                $new_image = imagecreatetruecolor($new_width, $new_height);
-                imagecopyresampled($new_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
-                $image = $new_image;
-            }
-
-            // 画質を落としてJPEG形式で保存
-            $quality = 75;
-            if (imagejpeg($image, $upload_file, $quality)) {
-                imagedestroy($image);
-
-                $stmt = $pdo->prepare("INSERT INTO photos (group_id, user_id, file_name, comment) VALUES (?, ?, ?, ?)");
-                $status = $stmt->execute([$_SESSION['group_id'], $_SESSION['user_id'], $filename, $comment]);
-
-                if ($status) {
-                    $photo_id = $pdo->lastInsertId();
-
-                    // アルバムへの追加
-                    if (!empty($album_id)) {
-                        $stmt = $pdo->prepare("INSERT INTO album_photos (album_id, photo_id) VALUES (?, ?)");
-                        $stmt->execute([$album_id, $photo_id]);
-                    }
-                }
-
-                $success_count++;
+        if ($album_id != 'none') {
+            foreach ($uploaded_photo_ids as $photo_id) {
+                $stmt = $pdo->prepare("INSERT INTO album_photos (album_id, photo_id) VALUES (?, ?)");
+                $stmt->execute([$album_id, $photo_id]);
             }
         }
     }
-
-    if ($success_count > 0) {
-        $_SESSION['success_message'] = $success_count . '枚の写真が正常にアップロードされました。';
-        redirect('photo_view.php');
-    } else {
-        $error = '写真のアップロードに失敗しました。';
-    }
-}
-// }
-
-// アルバム一覧の取得（view権限以外）
-if (!$is_view_role) {
-    $stmt = $pdo->prepare("SELECT id, name FROM albums WHERE group_id = ?");
-    $stmt->execute([$_SESSION['group_id']]);
-    $albums = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    echo json_encode(['success' => true, 'message' => "{$success_count}枚の写真がアップロードされました。"]);
+    exit;
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>写真アップロード</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/compressorjs/1.1.1/compressor.min.js"></script>
     <style>
-        #drop_zone {
-            border: 2px dashed #ccc;
-            border-radius: 20px;
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-        }
-
-        #drop_zone.dragover {
-            background-color: #e9e9e9;
-        }
+        body { padding-bottom: 100px; }
+        .content-wrapper { min-height: calc(100vh - 180px); overflow-y: auto; }
     </style>
 </head>
-<?php include 'header0.php'; ?>
-
-<body class="bg-gray-200" id="body">
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
-        <?php if (isset($error)) : ?>
-            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
-        <?php endif; ?>
-           <form method="POST" enctype="multipart/form-data" class="space-y-4" id="upload-form">
-            <div id="drop_zone" class="mb-4">
-                <p>ここに写真をドラッグ＆ドロップするか、クリックして選択してください</p>
-                <p class="text-sm text-red-500">※一度にアップロードできる写真は5枚までです。</p>
-                <input type="file" id="photos" name="photos[]" accept="image/*" required multiple class="hidden">
-            </div>
-            <div id="preview" class="grid grid-cols-3 gap-2 mb-4"></div>
-            <?php if (!$is_view_role) : ?>
-                <div>
-                    <label for="comment" class="block text-lg font-semibold">コメント：</label>
-                    <textarea id="comment" name="comment" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" rows="2"></textarea>
+<body class="bg-gray-200">
+    <?php include 'header0.php'; ?>
+    <div class="content-wrapper">
+        <div class="container mx-auto mt-20 p-4 bg-white rounded-lg shadow-md max-w-2xl">
+            <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
+            <div id="error-message" class="text-red-500 mb-4 text-center hidden"></div>
+            <form id="upload-form" class="space-y-4">
+                <div class="mb-4">
+                    <label for="photos" class="block text-sm font-medium text-gray-700">写真を選択（最大3枚）:</label>
+                    <input type="file" id="photos" name="photos[]" accept="image/*" multiple required class="mt-1 block w-full">
                 </div>
-                <div>
-                    <label for="album_id" class="block text-lg font-semibold">既存のアルバム：</label>
-                    <select id="album_id" name="album_id" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                        <option value="">選択してください</option>
-                        <?php foreach ($albums as $album) : ?>
+                <div id="imagePreview" class="grid grid-cols-3 gap-4 mb-4"></div>
+                <div id="commentFields"></div>
+                <div class="mb-4">
+                    <label for="album_id" class="block text-sm font-medium text-gray-700">アルバムを選択:</label>
+                    <select id="album_id" name="album_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                        <option value="none">アルバムに追加しない</option>
+                        <?php foreach ($albums as $album): ?>
                             <option value="<?= h($album['id']) ?>"><?= h($album['name']) ?></option>
                         <?php endforeach; ?>
+                        <option value="new">新しいアルバムを作成</option>
                     </select>
                 </div>
-                <div>
-                    <label for="new_album_name" class="block text-lg font-semibold">新規アルバム名：</label>
-                    <input type="text" id="new_album_name" name="new_album_name" class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50" placeholder="新しいアルバム名を入力">
+                <div id="newAlbumField" class="mb-4 hidden">
+                    <label for="new_album_name" class="block text-sm font-medium text-gray-700">新しいアルバム名:</label>
+                    <input type="text" id="new_album_name" name="new_album_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
-            <?php endif; ?>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">アップロード</button>
-        </form>
-
-        <div class="mt-6 text-center">
-            <a href="photo_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                写真一覧に戻る
-            </a>
+                <div id="progress-bar" class="w-full bg-gray-200 rounded-full h-2.5 mb-4 hidden">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">アップロード</button>
+            </form>
         </div>
     </div>
+    <?php include 'footer_photo.php'; ?>
 
     <script>
-        const dropZone = document.getElementById('drop_zone');
-        const fileInput = document.getElementById('photos');
-        const preview = document.getElementById('preview');
-        const maxUploads = 5;
+        const form = document.getElementById('upload-form');
+        const photosInput = document.getElementById('photos');
+        const imagePreview = document.getElementById('imagePreview');
+        const commentFields = document.getElementById('commentFields');
+        const progressBar = document.getElementById('progress-bar');
+        const errorMessage = document.getElementById('error-message');
 
-        dropZone.addEventListener('click', () => fileInput.click());
+        photosInput.addEventListener('change', previewImages);
+        form.addEventListener('submit', uploadPhotos);
 
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
+        document.getElementById('album_id').addEventListener('change', function() {
+            const newAlbumField = document.getElementById('newAlbumField');
+            newAlbumField.classList.toggle('hidden', this.value !== 'new');
         });
 
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
+        function previewImages(event) {
+            imagePreview.innerHTML = '';
+            commentFields.innerHTML = '';
+            const files = event.target.files;
 
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            fileInput.files = e.dataTransfer.files;
-            updatePreview();
-        });
-
-        fileInput.addEventListener('change', updatePreview);
-
-        function updatePreview() {
-            preview.innerHTML = '';
-            if (fileInput.files.length > maxUploads) {
-                alert(`一度にアップロードできる写真は${maxUploads}枚までです。`);
-                fileInput.value = ''; // ファイル選択をリセット
-                return;
-            }
-            for (let file of fileInput.files) {
+            for (let i = 0; i < Math.min(files.length, 3); i++) {
+                const file = files[i];
                 const reader = new FileReader();
-                reader.onload = (e) => {
+
+                reader.onload = function(e) {
+                    const div = document.createElement('div');
+                    div.className = 'relative';
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.classList.add('w-full', 'h-32', 'object-cover', 'rounded');
-                    preview.appendChild(img);
+                    img.className = 'w-full h-32 object-cover rounded';
+                    div.appendChild(img);
+                    imagePreview.appendChild(div);
+
+                    const commentField = document.createElement('div');
+                    commentField.className = 'mb-4';
+                    commentField.innerHTML = `
+                        <label for="comment${i}" class="block text-sm font-medium text-gray-700">コメント (写真 ${i + 1}):</label>
+                        <textarea id="comment${i}" name="comments[]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"></textarea>
+                    `;
+                    commentFields.appendChild(commentField);
                 }
+
                 reader.readAsDataURL(file);
             }
         }
+
+        function uploadPhotos(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const files = photosInput.files;
+
+            if (files.length === 0) {
+                showError('写真を選択してください。');
+                return;
+            }
+
+            if (files.length > 3) {
+                showError('一度にアップロードできる写真は3枚までです。');
+                return;
+            }
+
+            progressBar.classList.remove('hidden');
+            errorMessage.classList.add('hidden');
+
+            const compressedFiles = [];
+            let processedFiles = 0;
+
+            for (let i = 0; i < files.length; i++) {
+                new Compressor(files[i], {
+                    quality: 0.6,
+                    maxWidth: 1024,
+                    maxHeight: 768,
+                    success(result) {
+                        compressedFiles.push(result);
+                        processedFiles++;
+
+                        if (processedFiles === files.length) {
+                            sendCompressedFiles(formData, compressedFiles);
+                        }
+                    },
+                    error(err) {
+                        showError('画像の圧縮中にエラーが発生しました: ' + err.message);
+                    },
+                });
+            }
+        }
+
+        function sendCompressedFiles(formData, compressedFiles) {
+            formData.delete('photos[]');
+            compressedFiles.forEach(file => formData.append('photos[]', file, file.name));
+
+            fetch('photo_upload.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    showError(data.error);
+                } else {
+                    alert(data.message);
+                    window.location.href = 'photo_view.php';
+                }
+            })
+            .catch(error => {
+                showError('アップロード中にエラーが発生しました: ' + error.message);
+            })
+            .finally(() => {
+                progressBar.classList.add('hidden');
+            });
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.remove('hidden');
+            progressBar.classList.add('hidden');
+        }
     </script>
 </body>
-<?php include 'footer_schedule.php'; ?>
-
 </html>

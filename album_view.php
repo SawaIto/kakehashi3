@@ -1,4 +1,5 @@
 <?php
+
 include("funcs.php");
 sschk();
 $pdo = db_conn();
@@ -10,8 +11,19 @@ if (!isset($_SESSION['user_id'])) {
 
 $group_id = $_SESSION['group_id'];
 
-// アルバム一覧の取得
-$stmt = $pdo->prepare("SELECT * FROM albums WHERE group_id = ? ORDER BY created_at DESC");
+// アルバム一覧の取得（サムネイル付き）
+$stmt = $pdo->prepare("
+    SELECT a.*, p.file_name AS thumbnail
+    FROM albums a
+    LEFT JOIN (
+        SELECT ap.album_id, p.file_name, 
+               ROW_NUMBER() OVER (PARTITION BY ap.album_id ORDER BY p.upload_date DESC) as rn
+        FROM album_photos ap
+        JOIN photos p ON ap.photo_id = p.id
+    ) p ON a.id = p.album_id AND p.rn = 1
+    WHERE a.group_id = ?
+    ORDER BY a.created_at DESC
+");
 $stmt->execute([$group_id]);
 $albums = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -126,27 +138,47 @@ if (isset($_POST['remove_from_album'])) {
             <p class="text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
             <?php unset($_SESSION['error_message']); ?>
         <?php endif; ?>
-
         <?php if (!$album_id): ?>
-            <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <?php foreach ($albums as $album): ?>
-                    <div class="bg-gray-200 p-4 rounded-lg shadow">
-                        <h2 class="text-xl font-bold mb-2"><?= h($album['name']) ?></h2>
-                        <p class="text-sm text-gray-600 mb-2"><?= h($album['description']) ?></p>
-                        <p class="text-xs text-gray-500"><?= h($album['created_at']) ?></p>
-                        <a href="?id=<?= h($album['id']) ?>" class="mt-2 inline-block bg-blue-500 hover:bg-blue-700 text-white text-sm ms:text-base font-bold py-2 px-2 rounded">表示</a>
-                        <?php if ($_SESSION['role'] !== 'view'): ?>
-                            <form method="POST" action="album_delete.php" class="inline" onsubmit="return confirm('本当にこのアルバムを削除しますか？この操作は取り消せません。');">
-                                <input type="hidden" name="album_id" value="<?= h($album['id']) ?>">
-                                <button type="submit" class="mt-2 bg-red-500 hover:bg-red-700 text-white text-sm ms:text-base font-bold py-2 px-2 rounded">削除</button>
-                            </form>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <?php foreach ($albums as $album): ?>
+            <div class="bg-gray-200 p-4 rounded-lg shadow flex flex-col">
+                <div class="mb-2 h-40 overflow-hidden rounded">
+                    <?php if ($album['thumbnail']): ?>
+                        <img src="uploads/<?= h($album['thumbnail']) ?>" alt="Album thumbnail" class="w-full h-full object-cover">
+                    <?php else: ?>
+                        <div class="w-full h-full bg-gray-300 flex items-center justify-center">
+                            <span class="text-gray-500">No image</span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <h2 class="text-xl font-bold mb-2 truncate"><?= h($album['name']) ?></h2>
+                <p class="text-sm text-gray-600 mb-2 line-clamp-2"><?= h($album['description']) ?></p>
+                <p class="text-xs text-gray-500 mb-4"><?= h($album['created_at']) ?></p>
+                <div class="flex flex-col space-y-2 mt-auto">
+                    <a href="?id=<?= h($album['id']) ?>" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded text-center">表示</a>
+                    <?php if ($_SESSION['role'] !== 'view'): ?>
+                        <form method="POST" action="album_delete.php" class="inline" onsubmit="return confirm('本当にこのアルバムを削除しますか？この操作は取り消せません。');">
+                            <input type="hidden" name="album_id" value="<?= h($album['id']) ?>">
+                            <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded">削除</button>
+                        </form>
+                    <?php endif; ?>
+                    <a href="album_add_photos.php?id=<?= h($album['id']) ?>" class="bg-green-500 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded text-center">写真を追加</a>
+                </div>
             </div>
-        <?php else: ?>
+        <?php endforeach; ?>
+    </div>
+<?php else: ?>
+
             <h2 class="text-2xl font-bold mb-4"><?= h($current_album['name']) ?></h2>
             <p class="text-gray-600 mb-4"><?= h($current_album['description']) ?></p>
+            <div class="mb-4 flex justify-between">
+                <a href="album_add_photos.php?id=<?= h($album_id) ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    写真を追加
+                </a>
+                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
+                    アルバム一覧に戻る
+                </a>
+            </div>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <?php foreach ($photos as $index => $photo): ?>
                     <div class="bg-gray-200 p-4 rounded-lg shadow">
@@ -156,27 +188,14 @@ if (isset($_POST['remove_from_album'])) {
                         <form method="POST" class="mt-2">
                             <input type="hidden" name="photo_id" value="<?= h($photo['id']) ?>">
                             <input type="hidden" name="album_id" value="<?= h($album_id) ?>">
-                            <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
+                            <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
                                 アルバムから削除
                             </button>
                         </form>
                     </div>
                 <?php endforeach; ?>
             </div>
-
-            <div class="mt-6">
-                <a href="album_add_photos.php?id=<?= h($album_id) ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded text-xs sm:text-base transition duration-300">
-                    アルバムに写真を追加
-                </a>
-            </div>
-
-        <div class="mt-2">
-                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-1 px-2 rounded text-xs sm:text-base transition duration-300">
-                    アルバム一覧に戻る
-                </a>
-            </div>
         <?php endif; ?>
-
     </div>
 
     <!-- モーダル -->
@@ -196,7 +215,7 @@ if (isset($_POST['remove_from_album'])) {
         var captionText = document.getElementById("caption");
         var span = document.getElementsByClassName("close")[0];
         var currentPhotoIndex = 0;
-        var photos = <?php echo json_encode($photos); ?>;
+        var photos = <?php echo json_encode($photos ?? []); ?>;
 
         function openModal(src, comment, username, index) {
             modal.style.display = "block";

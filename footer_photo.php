@@ -20,6 +20,9 @@
                 <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
                 写真を追加
             </a>
+            <a href="photo_view.php" class="bg-pink-400 hover:bg-pink-500 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                写真一覧
+            </a>
             <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
                 ホーム
             </a>

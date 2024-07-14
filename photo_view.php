@@ -10,6 +10,8 @@ if (!isset($_SESSION['user_id'])) {
 
 $group_id = $_SESSION['group_id'];
 $is_admin_or_editor = ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify');
+$is_edit_or_modify = ($_SESSION['role'] == 'edit' || $_SESSION['role'] == 'modify' || $_SESSION['role'] == 'admin');
+
 
 // 検索とソート
 $search = isset($_GET['search']) ? $_GET['search'] : '';
@@ -21,7 +23,7 @@ $query = "SELECT DISTINCT p.*, u.username FROM photos p
 $params = [':group_id' => $group_id];
 
 if ($search) {
-    $query .= " AND (p.comment LIKE :search LIKE :search)";
+    $query .= " AND (p.comment LIKE :search OR u.username LIKE :search)";
     $params[':search'] = "%$search%";
 }
 
@@ -55,24 +57,46 @@ if ($status == false) {
     <style>
         body {
             font-family: "メイリオ", Meiryo, sans-serif;
-            padding-top: 64px; /* ヘッダーの高さ分のパディング */
-            padding-bottom: 80px; /* フッターの高さ分のパディング */
+            padding-top: 64px;
+            padding-bottom: 80px;
         }
         @media (max-width: 640px) {
             body {
-                padding-top: 128px; /* スマートフォン用のヘッダーの高さ */
-                padding-bottom: 120px; /* スマートフォン用のフッターの高さ */
+                padding-top: 128px;
+                padding-bottom: 120px;
             }
         }
         .content-wrapper {
-            min-height: calc(100vh - 144px); /* ヘッダーとフッターの高さを引いた最小の高さ */
+            min-height: calc(100vh - 144px);
             overflow-y: auto;
         }
         @media (max-width: 640px) {
             .content-wrapper {
-                min-height: calc(100vh - 248px); /* スマートフォン用 */
+                min-height: calc(100vh - 248px);
             }
         }
+        .special_popup {
+            width: 90%;
+            max-width: 500px;
+        }
+        img#modalImage {
+            max-height: 280px;
+        }
+
+        .overflow-y-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-content {
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+#modalImage {
+    max-height: calc(100vh - 250px);
+    width: 100%;
+    object-fit: contain;
+}
+
     </style>
 </head>
 
@@ -81,6 +105,20 @@ if ($status == false) {
     <div class="content-wrapper">
         <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">
             <h1 class="text-3xl font-bold mb-6 text-center">写真一覧</h1>
+
+            <div class="flex justify-end mb-4 space-x-2">
+            <a href="album_create.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                アルバム作成          
+             </a>
+            <a href="album_view.php" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                アルバム一覧          
+             </a>
+                <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+                写真を追加
+            </a>
+          
+        </div>
+
 
             <?php if (isset($_SESSION['success_message'])) : ?>
                 <p class="text-green-500 mb-4 text-center"><?= h($_SESSION['success_message']) ?></p>
@@ -98,7 +136,6 @@ if ($status == false) {
                             <option value="oldest" <?= $sort == 'oldest' ? 'selected' : '' ?>>古い順</option>
                         </select>
                     </div>
-                    
                 </div>
                 <div class="flex justify-center space-x-4">
                     <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-sm">
@@ -110,128 +147,186 @@ if ($status == false) {
                 </div>
             </form>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <?php foreach ($photos as $index => $photo) : ?>
-                    <div class="bg-gray-200 p-4 rounded-lg shadow">
-                        <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
-                        <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
-                        <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
-                        <p class="text-xs text-gray-500"><?= h($photo['upload_date']) ?></p>
-                        <?php if ($is_admin_or_editor) : ?>
-                            <div class="mt-2 flex justify-end">
-                                <button onclick="deletePhoto(<?= h($photo['id']) ?>)" class="text-red-500 hover:text-red-700">削除</button>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
-            </div>
+    <?php foreach ($photos as $index => $photo) : ?>
+        <div class="bg-gray-200 p-4 rounded-lg shadow">
+            <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal(<?= $index ?>)">
+            <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
+            <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
+            <p class="text-xs text-gray-500"><?= h($photo['upload_date']) ?></p>
+            <?php if ($is_edit_or_modify) : ?>
+                <div class="mt-2 flex justify-between">
+                    <button onclick="editComment(<?= $index ?>)" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded text-xs">修正</button>
+                    <button onclick="deletePhoto(<?= h($photo['id']) ?>)" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded text-xs">削除</button>
+                </div>
+            <?php endif; ?>
+        </div>
+    <?php endforeach; ?>
+</div>
         </div>
     </div>
 
-    <style>
-    .special_popup{
-        width:90%;
-        max-width: 500px;
-    }
-    img#modalImage {
-        max-height: 280px;
-    }
-    </style>
-
-    <!-- Modal -->
-    <div id="photoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-        <div class="flex items-center justify-center min-h-screen p-0">
-            <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-            <div class="special_popup relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded-lg shadow-xl overflow-hidden flex flex-col">
-                <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10 bg-opacity-50 bg-gray-800">
-                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="prevPhoto()">
-                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="closeModal()">
-                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                    <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="nextPhoto()">
-                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="overflow-y-auto flex-grow pt-16">
-                    <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain">
-                    <div class="p-4 bg-white">
+<!-- View Modal -->
+<div id="photoModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" style="margin-bottom: 80px;">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start flex-col">
+                    <div class="w-full flex justify-between items-center mb-6">
                         <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                            コメント
+                            写真詳細
                         </h3>
-                        <div class="mt-2">
-                            <p id="modalComment" class="text-sm text-gray-500"></p>
-                        </div>
-                        <?php if ($is_admin_or_editor) : ?>
-                            <div id="commentSection" class="mt-4">
-                                <h4 class="text-md font-medium text-gray-900">コメント一覧</h4>
-                                <div id="commentList" class="mt-2"></div>
-                                <form id="commentForm" class="mt-4">
-                                    <input type="hidden" id="photoId" name="photo_id">
-                                    <textarea id="newComment" name="comment" class="w-full p-2 border rounded" placeholder="コメントを入力..."></textarea>
-                                    <button type="submit" class="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">コメントを追加</button>
-                                </form>
-                            </div>
-                        <?php endif; ?>
+                        <button type="button" class="text-gray-900 hover:text-blue-700 focus:outline-none text-lg" onclick="closeModal()">
+                            閉じる
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-center w-full mb-6">
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2" onclick="prevPhoto()">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none p-2" onclick="nextPhoto()">
+                            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-content overflow-y-auto w-full" style="max-height: calc(100vh - 300px);">
+                        <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain mb-4">
+                        <p id="modalComment" class="text-sm text-gray-500"></p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
+<!-- Edit Modal -->
+<div id="editModal" class="fixed z-50 inset-0 overflow-y-auto hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-center justify-center min-h-screen mb-6 pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" style="margin-bottom: 80px;">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                                コメント編集
+                            </h3>
+                            <button type="button" class="text-gray-900 hover:text-blue-700 focus:outline-none text-lg" onclick="closeEditModal()">
+                                閉じる
+                            </button>
+                        </div>
+                        <div class="modal-content overflow-y-auto" style="max-height: calc(100vh - 250px);">
+                            <img id="editModalImage" src="" alt="Edit photo" class="w-full h-auto object-contain mb-4">
+                            <form id="commentForm">
+                                <input type="hidden" id="photoId" name="photo_id">
+                                <textarea id="editComment" name="comment" class="w-full p-2 border rounded" rows="3"></textarea>
+                                <div class="flex justify-end">
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">コメントを更新</button>
+    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <?php include 'footer_photo.php'; ?>
 
-    <script>
-        const photos = <?= json_encode($photos) ?>;
-        let currentPhotoIndex = 0;
+<script>
+    const photos = <?= json_encode($photos) ?>;
+    let currentPhotoIndex = 0;
 
-        function openModal(index) {
-            currentPhotoIndex = index;
-            showPhoto(currentPhotoIndex);
-            document.getElementById('photoModal').classList.remove('hidden');
-            window.history.pushState({
-                photoIndex: currentPhotoIndex
-            }, "", `#photo-${currentPhotoIndex}`);
-        }
+    function openModal(index) {
+        currentPhotoIndex = index;
+        showPhoto(currentPhotoIndex);
+        document.getElementById('photoModal').classList.remove('hidden');
+    }
 
-        function closeModal() {
-            document.getElementById('photoModal').classList.add('hidden');
-            window.history.pushState(null, "", window.location.pathname);
-        }
+    function closeModal() {
+        document.getElementById('photoModal').classList.add('hidden');
+    }
 
-        function showPhoto(index) {
-            const photo = photos[index];
-            document.getElementById('modalImage').src = 'uploads/' + photo.file_name;
-            document.getElementById('modalComment').textContent = photo.comment;
-            if (document.getElementById('photoId')) {
-                document.getElementById('photoId').value = photo.id;
-            }
-            if (<?= json_encode($is_admin_or_editor) ?>) {
-                loadComments(photo.id);
-            }
-        }
+    function showPhoto(index) {
+        const photo = photos[index];
+        document.getElementById('modalImage').src = 'uploads/' + photo.file_name;
+        document.getElementById('modalComment').textContent = photo.comment;
+    }
 
-        function nextPhoto() {
-            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
-            showPhoto(currentPhotoIndex);
-            window.history.pushState({
-                photoIndex: currentPhotoIndex
-            }, "", `#photo-${currentPhotoIndex}`);
-        }
+    function nextPhoto() {
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        showPhoto(currentPhotoIndex);
+    }
 
-        function prevPhoto() {
-            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
-            showPhoto(currentPhotoIndex);
-            window.history.pushState({
-                photoIndex: currentPhotoIndex
-            }, "", `#photo-${currentPhotoIndex}`);
+    function prevPhoto() {
+        currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+        showPhoto(currentPhotoIndex);
+    }
+
+    function editComment(index) {
+        const photo = photos[index];
+        document.getElementById('editModalImage').src = 'uploads/' + photo.file_name;
+        document.getElementById('photoId').value = photo.id;
+        document.getElementById('editComment').value = photo.comment;
+        document.getElementById('editModal').classList.remove('hidden');
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.add('hidden');
+    }
+
+    function deletePhoto(photoId) {
+        if (confirm('本当にこの写真を削除しますか？')) {
+            fetch('photo_delete.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `photo_id=${photoId}`
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        alert('写真が削除されました。');
+                        location.reload(); // ページをリロードして更新された写真一覧を表示
+                    } else {
+                        alert('写真の削除に失敗しました。');
+                    }
+                });
         }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const photoId = document.getElementById('photoId').value;
+            const comment = document.getElementById('editComment').value;
+            fetch('update_comment.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `photo_id=${photoId}&comment=${encodeURIComponent(comment)}`
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        const photoIndex = photos.findIndex(photo => photo.id == photoId);
+                        if (photoIndex !== -1) {
+                            photos[photoIndex].comment = comment;
+                        }
+                        closeEditModal();
+                        location.reload(); // ページをリロードして更新された写真一覧を表示
+                    } else {
+                        alert('コメントの更新に失敗しました。');
+                    }
+                });
+        });
 
         // Hammer.js を使用してスワイプ操作を検出
         const modal = document.getElementById('photoModal');
@@ -244,76 +339,7 @@ if ($status == false) {
         hammer.on('swiperight', function() {
             prevPhoto();
         });
-
-        // ブラウザの戻るボタンの処理
-        window.addEventListener('popstate', function(event) {
-            if (event.state && event.state.photoIndex !== undefined) {
-                currentPhotoIndex = event.state.photoIndex;
-                showPhoto(currentPhotoIndex);
-            } else {
-                closeModal();
-            }
-        });
-
-        function loadComments(photoId) {
-            fetch(`get_comments.php?photo_id=${photoId}`)
-                .then(response => response.json())
-                .then(comments => {
-                    const commentList = document.getElementById('commentList');
-                    commentList.innerHTML = '';
-                    comments.forEach(comment => {
-                        const commentElement = document.createElement('div');
-                        commentElement.className = 'mb-2 p-2 bg-gray-200 rounded';
-                        commentElement.textContent = `${comment.username}: ${comment.comment}`;
-                        commentList.appendChild(commentElement);
-                    });
-                });
-        }
-
-        if (document.getElementById('commentForm')) {
-            document.getElementById('commentForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const photoId = document.getElementById('photoId').value;
-                const comment = document.getElementById('newComment').value;
-                fetch('add_comment.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `photo_id=${photoId}&comment=${encodeURIComponent(comment)}`
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            document.getElementById('newComment').value = '';
-                            loadComments(photoId);
-                        } else {
-                            alert('コメントの追加に失敗しました。');
-                        }
-                    });
-            });
-        }
-
-        function deletePhoto(photoId) {
-            if (confirm('本当にこの写真を削除しますか？')) {
-                fetch('photo_delete.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `photo_id=${photoId}`
-                    })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            alert('写真が削除されました。');
-                            location.reload(); // ページをリロードして更新された写真一覧を表示
-                        } else {
-                            alert('写真の削除に失敗しました。');
-                        }
-                    });
-            }
-        }
-    </script>
+    });
+</script>
 </body>
 </html>

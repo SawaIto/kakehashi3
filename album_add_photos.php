@@ -70,6 +70,14 @@ if (isset($_POST['add_to_album'])) {
     <div class="content-wrapper flex-grow">
         <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
             <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
+            <div class="mt-6 flex justify-between">
+                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                    アルバム一覧に戻る
+                </a>
+                <a href="album_view.php?id=<?= h($album_id) ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                    アルバムの写真一覧を見る
+                </a>
+            </div>
             <h2 class="text-2xl font-bold mb-4"><?= h($album['name']) ?></h2>
 
             <?php if (isset($_SESSION['success_message'])) : ?>
@@ -77,7 +85,7 @@ if (isset($_POST['add_to_album'])) {
                 <?php unset($_SESSION['success_message']); ?>
             <?php endif; ?>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <?php foreach ($available_photos as $photo): ?>
                     <div class="bg-gray-200 p-4 rounded-lg shadow">
                         <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded">
@@ -93,15 +101,7 @@ if (isset($_POST['add_to_album'])) {
                 <?php endforeach; ?>
             </div>
 
-            <div class="mt-6 flex justify-between">
-                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
-                    アルバム一覧に戻る
-                </a>
-                <a href="album_view.php?id=<?= h($album_id) ?>" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
-                    アルバムの写真一覧を見る
-                </a>
-            </div>
-        </div>
+         </div>
     </div>
     <?php include 'footer_photo.php'; ?>
 </body>
