@@ -1,4 +1,38 @@
 <?php
+
+echo '<pre>';
+var_dump($_POST);
+echo '</pre>';
+
+
+echo $_POST["email"];
+mb_language("Japanese");
+mb_internal_encoding("UTF-8");
+
+// ページでユーザがメールアドレスを入力すればユーザ特定できる
+$to = $_POST["email"];
+$title = "パスワード再設定の手続き";
+$content = "下記のURLにアクセスして再発行手続きを行なってください。\r\n下記のURLにアクセスして再発行手続きを行なってください。\r\n下記のURLにアクセスして再発行手続きを行なってください。\r\n";
+// ユーザ特定できたならそのメールアドレスのユーザIDを取得するSQL
+
+$password_link = "https://google.com";
+$content .= $password_link;
+$headers = "From: info@sakura110.sakura.ne.jp";
+
+if(mb_send_mail($to, $title, $content, $headers)){
+	echo "メールを送信しました";
+} else {
+	echo "メールの送信に失敗しました";
+}
+
+
+
+
+
+
+
+
+
 include("funcs.php");
 $config = include("config.php"); 
 
@@ -78,7 +112,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <title>パスワードリセット処理</title>
 </head>
-<body class="bg-gray-200 min-h-screen flex flex-col">
+<body class="bg-blue-50 min-h-screen flex flex-col">
     <?php include 'header0.php'; ?>
     
     <main class="flex-grow container mx-auto px-4 py-8 mt-16 sm:mt-20 flex items-center justify-center">

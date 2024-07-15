@@ -11,7 +11,7 @@ include("funcs.php");
     <link rel="stylesheet" href="styles/main.css">
     <title>パスワード再設定</title>
 </head>
-<body class="bg-gray-200 min-h-screen flex flex-col">
+<body class="bg-blue-50 min-h-screen flex flex-col">
 <?php include 'header.php'; ?>
     
     <main class="flex-grow container mx-auto px-4 py-8 mt-16 sm:mt-20 flex items-center justify-center">

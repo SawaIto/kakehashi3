@@ -122,7 +122,7 @@ $categories = ['買い物', 'やること', 'その他'];
     </script>
 </head>
 
-<body class="bg-gray-200" id="body">
+<body class="bg-blue-50" id="body">
     <?php include 'header0.php'; ?>
     <main class="flex-grow mb-40">
         <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-4xl">

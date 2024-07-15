@@ -124,7 +124,7 @@ if (isset($_POST['remove_from_album'])) {
         }
     </style>
 </head>
-<body class="bg-gray-200" id="body">
+<body class="bg-blue-50" id="body">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 mb-40 p-6 bg-white rounded-lg shadow-md">
         <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>

@@ -42,7 +42,7 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
     </style>
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-blue-50">
     <main class="flex items-center justify-center py-8">
         <div class="container mx-auto m-2 p-2 bg-white rounded-lg shadow-md max-w-md">
             <div class="container mx-auto px-4 py-2 sm:py-4 flex justify-center items-center">

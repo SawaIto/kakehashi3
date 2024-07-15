@@ -77,7 +77,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="styles/main.css">
 </head>
 
-<body class="bg-gray-200">
+<body class="bg-blue-50">
 <?php include 'header0.php'; ?>
     <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ編集</h1>

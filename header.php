@@ -13,9 +13,9 @@
     <div class="container-fluid">
     <nav class="flex flex-col sm:flex-row">
         <ul class="flex justify-end items-center space-x-6">
-            <li class="text-xs sm:text-base hover:text-white hover:bg-yellow-500"><a href="about_kakehashi.php">かけ橋について</a></li>
-            <li class="text-xs sm:text-base hover:text-white hover:bg-yellow-500"><a href="howtouse.php">使い方</a></li>
-            <li class="text-xs sm:text-base hover:text-white hover:bg-yellow-500"><a href="login.php">ログイン</a></li>
+            <li class="text-sm sm:text-base hover:text-white hover:bg-yellow-500"><a href="about_kakehashi.php">かけ橋について</a></li>
+            <li class="text-sm sm:text-base hover:text-white hover:bg-yellow-500"><a href="howtouse.php">使い方</a></li>
+            <li class="text-sm sm:text-base hover:text-white hover:bg-yellow-500"><a href="login.php">ログイン</a></li>
         </ul>
 </div>
 </header>

@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="bg-blue-50">
     <?php include 'header.php'; ?>
     <main>
         <div class="content-wrapper">

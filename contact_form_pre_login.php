@@ -63,55 +63,56 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>お問い合わせ - かけ橋</title>
+    <title>かけはし - お問い合わせ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="styles/main.css">
 </head>
-<body class="bg-gray-200">
-    <?php include 'header.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">お問い合わせ</h1>
+<body class="bg-blue-50 text-gray-800 font-sans leading-relaxed">
+<?php include 'header.php'; ?>
 
-        <?php if ($error): ?>
-            <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
-        <?php endif; ?>
+    <div class="container mx-auto px-4 py-8 max-w-3xl mt-32 mb-10">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-blue-600 mb-2">かけはし</h1>
+            <p class="text-xl text-gray-600">お問い合わせ</p>
+        </header>
 
-        <?php if ($success): ?>
-            <p class="text-green-500 mb-4 text-center"><?= h($success) ?></p>
-        <?php else: ?>
-            <p class="mb-4 text-center">登録済みのユーザーの方は<a href="login.php" class="text-blue-500 hover:underline">ログイン</a>してからお問い合わせください。</p>
+        <main class="bg-white shadow-lg rounded-lg p-6 mb-8">
+            <?php if ($error): ?>
+                <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
+            <?php endif; ?>
 
-            <form method="POST" class="space-y-4">
-                <div>
-                    <label for="user_id" class="block text-lg font-semibold">ユーザーID または 登録メールアドレス：</label>
-                    <input type="text" id="user_id" name="user_id" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
+            <?php if ($success): ?>
+                <p class="text-green-500 mb-4 text-center"><?= h($success) ?></p>
+            <?php else: ?>
+                <p class="mb-4 text-center">登録済みのユーザーの方は<a href="login.php" class="text-blue-500 hover:underline">ログイン</a>してからお問い合わせください。</p>
 
-                <div>
-                    <label for="email" class="block text-lg font-semibold">連絡先メールアドレス：</label>
-                    <input type="email" id="email" name="email" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
+                <form method="POST" class="space-y-6">
+                    <div>
+                        <label for="user_id" class="block text-lg font-semibold text-blue-700 mb-2">ユーザーID または 登録メールアドレス：</label>
+                        <input type="text" id="user_id" name="user_id" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    </div>
 
-                <div>
-                    <label for="email_confirm" class="block text-lg font-semibold">連絡先メールアドレス（確認）：</label>
-                    <input type="email" id="email_confirm" name="email_confirm" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
-                </div>
+                    <div>
+                        <label for="email" class="block text-lg font-semibold text-blue-700 mb-2">連絡先メールアドレス：</label>
+                        <input type="email" id="email" name="email" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    </div>
 
-                <div>
-                    <label for="content" class="block text-lg font-semibold">お問い合わせ内容：</label>
-                    <textarea id="content" name="content" rows="4" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 whitespace-pre-line"></textarea>
-                </div>
+                    <div>
+                        <label for="email_confirm" class="block text-lg font-semibold text-blue-700 mb-2">連絡先メールアドレス（確認）：</label>
+                        <input type="email" id="email_confirm" name="email_confirm" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                    </div>
 
-                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">送信</button>
-            </form>
-        <?php endif; ?>
+                    <div>
+                        <label for="content" class="block text-lg font-semibold text-blue-700 mb-2">お問い合わせ内容：</label>
+                        <textarea id="content" name="content" rows="6" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 whitespace-pre-line"></textarea>
+                    </div>
 
-        <div class="mt-6 text-center">
-            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                ホームに戻る
-            </a>
-        </div>
-    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg text-center transition duration-300">送信</button>
+                </form>
+            <?php endif; ?>
+        </main>
+
+           </div>
 
     <?php include 'footer.php'; ?>
 </body>

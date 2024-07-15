@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         .content-wrapper { min-height: calc(100vh - 180px); overflow-y: auto; }
     </style>
 </head>
-<body class="bg-gray-200">
+<body class="bg-blue-50">
     <?php include 'header0.php'; ?>
     <div class="content-wrapper">
         <div class="container mx-auto mt-20 p-4 bg-white rounded-lg shadow-md max-w-2xl">

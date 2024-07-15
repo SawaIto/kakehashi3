@@ -100,7 +100,7 @@ if ($status == false) {
     </style>
 </head>
 
-<body class="bg-gray-200" id="body">
+<body class="bg-blue-50" id="body">
     <?php include 'header0.php'; ?>
     <div class="content-wrapper">
         <div class="container mx-auto p-6 bg-white rounded-lg shadow-md">

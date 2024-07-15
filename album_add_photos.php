@@ -65,7 +65,7 @@ if (isset($_POST['add_to_album'])) {
         }
     </style>
 </head>
-<body class="bg-gray-200 flex flex-col min-h-screen">
+<body class="bg-blue-50 flex flex-col min-h-screen">
     <?php include 'header0.php'; ?>
     <div class="content-wrapper flex-grow">
         <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">

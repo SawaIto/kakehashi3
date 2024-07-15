@@ -84,7 +84,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </style>
 </head>
 
-<body class="bg-gray-200" id=body>
+<body class="bg-blue-50" id=body>
     <?php include 'header0.php'; ?>
     <main>
         <div class="content-wrapper">
