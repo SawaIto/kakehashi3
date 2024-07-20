@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p class="text-xl text-gray-600">お問い合わせ</p>
         </header>
 
-        <main class="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <main class="bg-white shadow-lg rounded p-6 mb-8">
             <?php if ($error): ?>
                 <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
             <?php endif; ?>
@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <textarea id="content" name="content" rows="6" required class="w-full p-2 border rounded-md border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 whitespace-pre-line"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg text-lg text-center transition duration-300">送信</button>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded text-lg text-center transition duration-300">送信</button>
                 </form>
             <?php endif; ?>
         </main>

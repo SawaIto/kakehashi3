@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="bg-blue-50">
     <?php include 'header0.php'; ?>
     <div class="content-wrapper">
-        <div class="container mx-auto mt-20 p-4 bg-white rounded-lg shadow-md max-w-2xl">
+        <div class="container mx-auto mt-20 p-4 bg-white rounded shadow-md max-w-2xl">
             <h1 class="text-3xl font-bold mb-6 text-center">写真アップロード</h1>
             <div id="error-message" class="text-red-500 mb-4 text-center hidden"></div>
             <form id="upload-form" class="space-y-4">
@@ -148,11 +148,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div id="progress-bar" class="w-full bg-gray-200 rounded-full h-2.5 mb-4 hidden">
                     <div class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
                 </div>
-                <button type="submit" class="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">アップロード</button>
+                <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold py-2 px-4 rounded">アップロード</button>
+                <div class="container mx-auto px-4">
+        <div class="flex justify-end mb-4 space-x-2">
+        <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-black font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
+                ホーム
+            </a>
+        <a href="album_view.php" class="bg-purple-500 hover:bg-purple-600 text-black font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                アルバム一覧          
+             </a>
+            <a href="photo_view.php" class="bg-pink-400 hover:bg-pink-500 text-black font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
+                写真一覧
+            </a>
+        </div>
+
+        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded">
+            <form method="GET" action="" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
+                <div class="flex-grow">
+                    <label for="start_date" class="block text-sm font-medium text-gray-700">開始日:</label>
+                    <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div class="flex-grow">
+                    <label for="end_date" class="block text-sm font-medium text-gray-700">終了日:</label>
+                    <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div class="flex space-x-2">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">検索</button>
+                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">リセット</a>
+                </div>
+            </form>
+        </div>
+         
             </form>
         </div>
     </div>
-    <?php include 'footer_photo.php'; ?>
+    <!-- <?php include 'footer_photo.php'; ?> -->
 
     <script>
         const form = document.getElementById('upload-form');
@@ -274,4 +304,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </script>
 </body>
+<p class="mt-10 text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </html>

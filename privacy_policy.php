@@ -16,7 +16,7 @@
             <p class="text-xl text-gray-600">プライバシーポリシー</p>
         </header>
 
-        <main class="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <main class="bg-white shadow-lg rounded p-6 mb-8">
             <p class="mb-4 text-base">
                 かけはし（以下，「当社」といいます。）は，本ウェブサイト上で提供するサービス（以下,「本サービス」といいます。）における，ユーザーの個人情報の取扱いについて，以下のとおりプライバシーポリシー（以下，「本ポリシー」といいます。）を定めます。
             </p>

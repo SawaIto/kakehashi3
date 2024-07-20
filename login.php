@@ -89,10 +89,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </span>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ログイン</button>
+                    <button type="submit" class="w-full bg-blue-500 hover:bg-blue-300 text-white font-bold px-4 py-3 rounded text-xl text-center transition duration-300">ログイン</button>
                 </form>
                 <div class="mt-6 text-center">
-                    <a href="admin_register.php" class="block bg-green-500 hover:bg-green-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">管理者登録</a>
+                    <a href="admin_register.php" class="block bg-amber-700 hover:bg-amber-500 text-white font-bold px-4 py-3 rounded text-xl text-center transition duration-300">管理者登録</a>
                 </div>
                                     <!-- login.php の <form> タグの後に追加 -->
 <div class="mt-4 text-end text-sm">

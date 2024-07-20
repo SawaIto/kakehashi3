@@ -111,7 +111,7 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
     <main>
         <div class="content-wrapper">
             <div class="container mx-auto p-6">
-                <div class="bg-white rounded-lg shadow-md max-w-md mx-auto">
+                <div class="bg-white rounded shadow-md max-w-md mx-auto">
                     <h1 class="text-3xl font-bold mb-6 text-center pt-6">予定編集</h1>
                     <?php if (isset($error)) : ?>
                         <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
@@ -155,20 +155,42 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
+                        <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded text-lg text-center transition duration-300">更新</button>
+  
+                        <div class="flex justify-end mb-4 mt-10 space-x-2">
+                    <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                ホーム
+                            </a>
+                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                                詳細表示/非表示
+                            </button>
+                            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                予定登録
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (isset($_SESSION['schedule_message'])) : ?>
+                        <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+                        <?php unset($_SESSION['schedule_message']); ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error_message'])) : ?>
+                        <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+                        <?php unset($_SESSION['error_message']); ?>
+                    <?php endif; ?>
+
+            </div>
+
                     </form>
 
-                    <!-- ホームに戻るボタン -->
-                    <div class="mt-6 text-center pb-6">
-                        <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xl transition duration-300">
-                            ホームに戻る
-                        </a>
+
                     </div>
                 </div>
             </div>
         </div>
     </main>
-    <?php include 'footer_schedule.php'; ?>
+    <!-- <?php include 'footer_schedule.php'; ?> -->
     <script>
         document.getElementById('others_checkbox').addEventListener('change', function() {
             if (this.checked) {
@@ -179,5 +201,5 @@ $shared_with = $stmt->fetchAll(PDO::FETCH_COLUMN);
         });
     </script>
 </body>
-
+<p class="text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
 </html>

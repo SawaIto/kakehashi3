@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php include 'header.php'; ?>
     <main>
         <div class="content-wrapper">
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="bg-white rounded shadow-md p-6">
                 <h1 class="text-3xl font-bold mb-6 text-center">管理者登録</h1>
                 <?php if (isset($error)): ?>
                     <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
@@ -109,10 +109,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </span>
                         </div>
                     </div>
-                    <button type="submit" class="w-full bg-green-400 hover:bg-green-500 text-black font-bold px-4 py-3 rounded-lg text-base text-center transition duration-300">登録</button>
+                    <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold px-4 py-3 rounded text-xl text-center transition duration-300">登録</button>
                 </form>
                 <div class="mt-6 text-center">
-                    <a href="login.php" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300">ログイン</a>
+                    <a href="login.php" class="block bg-blue-500 hover:bg-blue-300 text-white font-bold px-4 py-3 rounded text-xl text-center transition duration-300">ログイン</a>
                 </div>
             </div>
         </div>

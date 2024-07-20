@@ -79,7 +79,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <body class="bg-blue-50">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
+    <div class="container mx-auto mt-20 p-2 bg-white rounded shadow-md max-w-2xl">
         <h1 class="text-3xl font-bold mb-6 text-center">メモ編集</h1>
         <?php if (isset($error)) : ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
@@ -108,15 +108,16 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 </div>
             </div>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
+            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded text-lg text-center transition duration-300">更新</button>
         </form>
 
         <!-- ホーム,　メモ一覧に戻るボタン -->
-        <div class="flex justify-center mt-4 space-x-4">
-    <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-3 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
+         
+        <div class="flex justify-end mt-4 space-x-4">
+    <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-2 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
         ホーム
     </a>
-    <a href="memo_view.php" class="bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-3 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
+    <a href="memo_view.php" class="bg-orange-300 hover:bg-orange-400 text-black font-bold py-2 px-2 rounded text-center text-sm sm:text-base transition duration-300 w-1/4">
         メモ一覧
     </a>
 </div>

@@ -70,14 +70,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="bg-blue-50" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-2xl">
+    <div class="container mx-auto mt-20 p-6 bg-white rounded shadow-md max-w-2xl">
         <h1 class="text-4xl font-bold mb-6 text-center">ユーザー編集</h1>
         <?php if (isset($error)): ?>
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
                 <span class="block sm:inline text-base"><?= h($error) ?></span>
             </div>
         <?php endif; ?>
-        <form method="POST" class="space-y-6 bg-blue-50 p-6 rounded-lg border border-blue-200">
+        <form method="POST" class="space-y-6 bg-blue-50 p-6 rounded border border-blue-200">
             <div>
                 <label for="username" class="block text-base font-medium text-gray-700 mb-1">ユーザー名</label>
                 <input type="text" name="username" id="username" required class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base" value="<?= h($user['username']) ?>">
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="password" name="password" id="password" class="mt-1 block w-full rounded-md border-blue-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 bg-white text-base">
             </div>
             <div class="flex justify-center">
-                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
+                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded text-lg text-center transition duration-300">更新</button>
             </div>
         </form>
         <div class="mt-6 flex justify-center space-x-4">

@@ -11,7 +11,7 @@ require_once 'funcs.php';
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-blue-50" id="body">
-<div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
+<div class="container mx-auto mt-20 p-6 bg-white rounded shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6">登録完了</h1>
         <?php
         if (isset($_SESSION['success_message'])) {

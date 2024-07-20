@@ -57,7 +57,7 @@ if (isset($_POST['add_to_album'])) {
     <link rel="stylesheet" href="styles/main.css">
     <style>
         body {
-            padding-bottom: 120px; /* フッターの高さ分の余白を追加 */
+            padding-bottom: 20px; /* フッターの高さ分の余白を追加 */
         }
         .content-wrapper {
             min-height: calc(100vh - 120px); /* ビューポートの高さからフッターの高さを引いた分 */
@@ -68,13 +68,13 @@ if (isset($_POST['add_to_album'])) {
 <body class="bg-blue-50 flex flex-col min-h-screen">
     <?php include 'header0.php'; ?>
     <div class="content-wrapper flex-grow">
-        <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md">
+        <div class="container mx-auto mt-20 p-6 bg-white rounded shadow-md">
             <h1 class="text-3xl font-bold mb-6 text-center">アルバムに写真を追加</h1>
             <div class="mt-6 flex justify-between">
                 <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
                     アルバム一覧
                 </a>
-                <a href="album_view.php?id=<?= h($album_id) ?>" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                <a href="album_view.php?id=<?= h($album_id) ?>" class="ml-2 bg-blue-500 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
                     アルバムの写真
                 </a>
             </div>
@@ -87,13 +87,13 @@ if (isset($_POST['add_to_album'])) {
 
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <?php foreach ($available_photos as $photo): ?>
-                    <div class="bg-gray-200 p-4 rounded-lg shadow">
+                    <div class="bg-gray-200 p-4 rounded shadow">
                         <img src="uploads/<?= h($photo['file_name']) ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded">
                         <p class="text-sm truncate"><?= h(substr($photo['comment'], 0, 50)) ?></p>
                         <p class="text-xs text-gray-500 mt-1">投稿者: <?= h($photo['username']) ?></p>
                         <form method="POST" class="mt-2">
                             <input type="hidden" name="photo_id" value="<?= h($photo['id']) ?>">
-                            <button type="submit" name="add_to_album" class="text-green-500 hover:text-green-700">
+                            <button type="submit" name="add_to_album" class="text-green-500 hover:text-green-700 text-sm">
                                 アルバムに追加
                             </button>
                         </form>
@@ -103,6 +103,8 @@ if (isset($_POST['add_to_album'])) {
 
          </div>
     </div>
-    <?php include 'footer_photo.php'; ?>
+    <!-- <?php include 'footer_photo.php'; ?> -->
 </body>
+<p class="mt-10 text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </html>

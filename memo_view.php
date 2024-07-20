@@ -125,7 +125,7 @@ $categories = ['買い物', 'やること', 'その他'];
 <body class="bg-blue-50" id="body">
     <?php include 'header0.php'; ?>
     <main class="flex-grow mb-40">
-        <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-4xl">
+        <div class="container mx-auto mt-20 p-2 bg-white rounded shadow-md max-w-4xl">
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6">
                 <h1 class="text-2xl sm:text-3xl font-bold mb-4 sm:mb-0">メモ一覧</h1>
 
@@ -175,10 +175,34 @@ $categories = ['買い物', 'やること', 'その他'];
                         <?php endif; ?>
                     </tbody>
                 </table>
+                <div class="flex justify-end mb-4 mt-10 space-x-2">
+                            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                ホーム
+                            </a>
+                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-black font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
+                                    詳細
+                                </button>
+                                <a href="memo_input.php" class="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                    メモ登録
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (isset($_SESSION['schedule_message'])) : ?>
+                            <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+                            <?php unset($_SESSION['schedule_message']); ?>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['error_message'])) : ?>
+                            <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+                            <?php unset($_SESSION['error_message']); ?>
+                        <?php endif; ?>
+
+                </div>
             </div>
         </div>
     </main>
-    <?php include 'footer_memo.php'; ?>
+    <!-- <?php include 'footer_memo.php'; ?> -->
 </body>
 
 </html>

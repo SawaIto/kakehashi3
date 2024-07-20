@@ -76,8 +76,8 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-blue-50" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-2 bg-white rounded-lg shadow-md max-w-2xl">
-        <h1 class="text-3xl font-bold mb-6 text-center">フォト修正必要</h1>
+    <div class="container mx-auto mt-20 p-2 bg-white rounded shadow-md max-w-2xl">
+        <h1 class="text-3xl font-bold mb-6 text-center">フォト編集必要</h1>
         <?php if (isset($error)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
         <?php endif; ?>
@@ -101,11 +101,12 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php endforeach; ?>
                 </div>
             </div>
-            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">更新</button>
+            <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded text-lg text-center transition duration-300">更新</button>
         </form>
 
    </div>
 </body>
+<p class="mt-10 text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
 
-<?php include 'footer_photo.php'; ?>
+<!-- <?php include 'footer_photo.php'; ?> -->
 </html>

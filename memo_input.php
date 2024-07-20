@@ -47,6 +47,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,6 +60,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             flex-direction: column;
             min-height: 100vh;
         }
+
         main {
             flex: 1;
             display: flex;
@@ -66,6 +68,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             padding-top: 64px;
             padding-bottom: 100px;
         }
+
         .content-wrapper {
             flex: 1;
             overflow-y: auto;
@@ -78,7 +81,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <main>
         <div class="content-wrapper">
             <div class="container mx-auto p-6">
-                <div class="bg-white rounded-lg shadow-md max-w-md mx-auto">
+                <div class="bg-white rounded shadow-md max-w-md mx-auto">
                     <h1 class="text-3xl font-bold mb-6 text-center pt-6">メモ登録</h1>
                     <?php if (isset($error)) : ?>
                         <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
@@ -108,14 +111,39 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
-                    </form>
+                        <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded text-lg text-center transition duration-300">登録</button>
+                        <div class="flex justify-end mb-4 mt-10 space-x-2">
+                            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                ホーム
+                            </a>
+                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                <!-- <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-black font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
+                                    詳細
+                                </button> -->
+                                <a href="memo_view.php" class="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                    メモ一覧
+                                </a>
+                            <?php endif; ?>
+                        </div>
+                        <?php if (isset($_SESSION['schedule_message'])) : ?>
+                            <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+                            <?php unset($_SESSION['schedule_message']); ?>
+                        <?php endif; ?>
+
+                        <?php if (isset($_SESSION['error_message'])) : ?>
+                            <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+                            <?php unset($_SESSION['error_message']); ?>
+                        <?php endif; ?>
+
                 </div>
+
+                </form>
             </div>
+        </div>
         </div>
     </main>
 
-    <?php include 'footer_memo.php'; ?>
+    <!-- <?php include 'footer_memo.php'; ?> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -132,4 +160,5 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
         });
     </script>
 </body>
+
 </html>

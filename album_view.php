@@ -57,6 +57,7 @@ if (isset($_POST['remove_from_album'])) {
 
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -73,8 +74,9 @@ if (isset($_POST['remove_from_album'])) {
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0,0,0,0.9);
+            background-color: rgba(0, 0, 0, 0.9);
         }
+
         .modal-content {
             margin: auto;
             display: block;
@@ -83,6 +85,7 @@ if (isset($_POST['remove_from_album'])) {
             max-height: 80vh;
             object-fit: contain;
         }
+
         .close {
             position: absolute;
             top: 15px;
@@ -92,12 +95,14 @@ if (isset($_POST['remove_from_album'])) {
             font-weight: bold;
             transition: 0.3s;
         }
+
         .close:hover,
         .close:focus {
             color: #bbb;
             text-decoration: none;
             cursor: pointer;
         }
+
         .prev,
         .next {
             cursor: pointer;
@@ -114,21 +119,25 @@ if (isset($_POST['remove_from_album'])) {
             user-select: none;
             -webkit-user-select: none;
         }
+
         .next {
             right: 0;
             border-radius: 3px 0 0 3px;
         }
+
         .prev:hover,
         .next:hover {
             background-color: rgba(0, 0, 0, 0.8);
         }
     </style>
 </head>
-<body class="bg-blue-50" id="body">
-<?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 mb-40 p-6 bg-white rounded-lg shadow-md">
-        <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>
 
+<body class="bg-blue-50" id="body">
+    <?php include 'header0.php'; ?>
+    <div class="container mx-auto mt-20 mb-15i p-6 bg-white rounded shadow-md">
+    <?php if (!$album_id) : ?>
+    <h1 class="text-3xl font-bold mb-6 text-center">アルバム一覧</h1>
+<?php endif; ?>
         <?php if (isset($_SESSION['success_message'])) : ?>
             <p class="text-green-500 mb-4 text-center"><?php echo h($_SESSION['success_message']); ?></p>
             <?php unset($_SESSION['success_message']); ?>
@@ -138,15 +147,15 @@ if (isset($_POST['remove_from_album'])) {
             <p class="text-red-500 mb-4 text-center"><?php echo h($_SESSION['error_message']); ?></p>
             <?php unset($_SESSION['error_message']); ?>
         <?php endif; ?>
-        
-        <?php if (!$album_id): ?>
+
+        <?php if (!$album_id) : ?>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <?php foreach ($albums as $album): ?>
-                    <div class="bg-gray-200 p-4 rounded-lg shadow flex flex-col">
+                <?php foreach ($albums as $album) : ?>
+                    <div class="bg-gray-200 p-4 rounded shadow flex flex-col">
                         <div class="mb-2 h-40 overflow-hidden rounded">
-                            <?php if ($album['thumbnail']): ?>
+                            <?php if ($album['thumbnail']) : ?>
                                 <img src="uploads/<?php echo h($album['thumbnail']); ?>" alt="Album thumbnail" class="w-full h-full object-cover">
-                            <?php else: ?>
+                            <?php else : ?>
                                 <div class="w-full h-full bg-gray-300 flex items-center justify-center">
                                     <span class="text-gray-500">No image</span>
                                 </div>
@@ -156,144 +165,160 @@ if (isset($_POST['remove_from_album'])) {
                         <p class="text-sm text-gray-600 mb-2 line-clamp-2"><?php echo h($album['description']); ?></p>
                         <p class="text-xs text-gray-500 mb-4"><?php echo h($album['created_at']); ?></p>
                         <div class="flex flex-col space-y-2 mt-auto">
-                            <a href="?id=<?php echo h($album['id']); ?>" class="bg-blue-500 hover:bg-blue-700 text-white text-sm font-bold py-2 px-4 rounded text-center">表示</a>
-                            <?php if ($_SESSION['role'] !== 'view'): ?>
+                            <a href="?id=<?php echo h($album['id']); ?>" class="bg-blue-500 hover:bg-blue-700 text-black text-sm font-bold py-2 px-4 rounded text-center">表示</a>
+                            <?php if ($_SESSION['role'] !== 'view') : ?>
                                 <form method="POST" action="album_delete.php" class="inline" onsubmit="return confirm('本当にこのアルバムを削除しますか？この操作は取り消せません。');">
                                     <input type="hidden" name="album_id" value="<?php echo h($album['id']); ?>">
-                                    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white text-sm font-bold py-2 px-4 rounded">削除</button>
+                                    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-black text-sm font-bold py-2 px-4 rounded">削除</button>
                                 </form>
                             <?php endif; ?>
-                            <a href="album_add_photos.php?id=<?php echo h($album['id']); ?>" class="bg-green-500 hover:bg-green-700 text-white text-sm font-bold py-2 px-4 rounded text-center">写真を追加</a>
+                            <?php if ($_SESSION['role'] !== 'view') : ?>
+                            <a href="album_add_photos.php?id=<?php echo h($album['id']); ?>" class="bg-green-500 hover:bg-green-700 text-black text-sm font-bold py-2 px-4 rounded text-center">写真を追加</a>
+                            <?php endif; ?>
                         </div>
                     </div>
                 <?php endforeach; ?>
             </div>
-        <?php else: ?>
+        <?php else : ?>
             <h2 class="text-2xl font-bold mb-4"><?php echo h($current_album['name']); ?></h2>
             <p class="text-gray-600 mb-4"><?php echo h($current_album['description']); ?></p>
             <div class="mb-4 flex justify-between">
-                <a href="album_add_photos.php?id=<?php echo h($album_id); ?>" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                <a href="album_add_photos.php?id=<?php echo h($album_id); ?>" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">
                     写真を追加
-                </a>
-                <a href="album_view.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded">
-                    アルバム一覧
                 </a>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <?php foreach ($photos as $index => $photo): ?>
-                    <div class="bg-gray-200 p-4 rounded-lg shadow">
+                <?php foreach ($photos as $index => $photo) : ?>
+                    <div class="bg-gray-200 p-4 rounded shadow">
                         <img src="uploads/<?php echo h($photo['file_name']); ?>" alt="Photo" class="w-full h-40 object-cover mb-2 rounded cursor-pointer" onclick="openModal('uploads/<?php echo h($photo['file_name']); ?>', '<?php echo h($photo['comment']); ?>', '<?php echo h($photo['username']); ?>', <?php echo $index; ?>)">
                         <p class="text-sm truncate"><?php echo h(substr($photo['comment'], 0, 50)); ?></p>
                         <p class="text-xs text-gray-500 mt-1">投稿者: <?php echo h($photo['username']); ?></p>
                         <form method="POST" class="mt-2">
-                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                            <input type="hidden" name="photo_id" value="<?php echo h($photo['id']); ?>">
-                            <input type="hidden" name="album_id" value="<?php echo h($album_id); ?>">
-                    <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
-                        アルバムから削除
-                    </button>
-                <?php endif; ?>
+                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                <input type="hidden" name="photo_id" value="<?php echo h($photo['id']); ?>">
+                                <input type="hidden" name="album_id" value="<?php echo h($album_id); ?>">
+                                <button type="submit" name="remove_from_album" class="text-red-500 hover:text-red-700 text-sm" onclick="return confirm('本当にこの写真をアルバムから削除しますか？');">
+                                    アルバムから削除
+                                </button>
+                            <?php endif; ?>
+
                         </form>
                     </div>
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
+        <br>
+           <div class="flex justify-end space-x-2">
+           <?php if ($_SESSION['role'] !== 'view') : ?>
+            <a href="album_create.php" class="bg-purple-500 hover:bg-purple-600 text-black font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                アルバム作成
+            </a>
+            <?php endif; ?>
+            <a href="photo_view.php" class="bg-green-400 hover:bg-green-500 text-black font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                写真一覧
+            </a>
+            <a href="photo_upload.php" class="bg-green-500 hover:bg-green-600 text-black font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                写真を追加
+            </a>
+        </div>
     </div>
 
-   <!-- モーダル -->
-<div id="myoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-    <div class="flex items-center justify-center min-h-screen p-0">
-        <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
-        <div class="special_popup relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded-lg shadow-xl overflow-hidden flex flex-col">
-            <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10 bg-opacity-50 bg-gray-800">
-                <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="changePhoto(-1)">
-                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="closeModal()">
-                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-                <button type="button" class="text-white hover:text-gray-300 focus:outline-none" onclick="changePhoto(1)">
-                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </button>
-            </div>
-            <div class="overflow-y-auto flex-grow pt-16">
-                <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain">
-                <div class="p-4 bg-white">
-                    <div class="mt-2">
-                        <p id="modalComment" class="text-sm text-gray-500"></p>
-                    </div>
-                    <?php if ($is_admin_or_editor) : ?>
-                        <div id="commentSection" class="mt-4">
-                            <form id="commentForm" class="mt-4">
-                                <input type="hidden" id="photoId" name="photo_id">
-                            </form>
+    <!-- モーダル -->
+    <div id="myoModal" class="fixed z-50 inset-0 overflow-hidden hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen p-0">
+            <div class="fixed inset-0 bg-black bg-opacity-75 transition-opacity" aria-hidden="true"></div>
+            <div class="special_popup relative bg-white w-full h-full sm:h-auto sm:max-h-[90vh] max-w-3xl mx-auto rounded shadow-xl overflow-hidden flex flex-col">
+                <div class="absolute top-0 left-0 right-0 flex justify-between items-center p-4 z-10 bg-opacity-50 bg-gray-800">
+                    <button type="button" class="text-black hover:text-gray-300 focus:outline-none" onclick="changePhoto(-1)">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-black hover:text-gray-300 focus:outline-none" onclick="closeModal()">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-black hover:text-gray-300 focus:outline-none" onclick="changePhoto(1)">
+                        <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="overflow-y-auto flex-grow pt-16">
+                    <img id="modalImage" src="" alt="Full size photo" class="w-full h-auto object-contain">
+                    <div class="p-4 bg-white">
+                        <div class="mt-2">
+                            <p id="modalComment" class="text-sm text-gray-500"></p>
                         </div>
-                    <?php endif; ?>
+                        <?php if ($is_admin_or_editor) : ?>
+                            <div id="commentSection" class="mt-4">
+                                <form id="commentForm" class="mt-4">
+                                    <input type="hidden" id="photoId" name="photo_id">
+                                </form>
+                            </div>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-    var modal = document.getElementById("myoModal");
-    var modalImg = document.getElementById("modalImage");
-    var modalComment = document.getElementById("modalComment");
-    var currentPhotoIndex = 0;
-    var photos = <?php echo json_encode($photos ?? array()); ?>;
+    <script>
+        var modal = document.getElementById("myoModal");
+        var modalImg = document.getElementById("modalImage");
+        var modalComment = document.getElementById("modalComment");
+        var currentPhotoIndex = 0;
+        var photos = <?php echo json_encode($photos ?? array()); ?>;
 
-    function openModal(src, comment, username, index) {
-        modal.classList.remove('hidden');
-        modalImg.src = src;
-        modalComment.innerHTML = comment + "<br>投稿者: " + username;
-        currentPhotoIndex = index;
-    }
-
-    function closeModal() {
-        modal.classList.add('hidden');
-    }
-
-    function changePhoto(direction) {
-        currentPhotoIndex += direction;
-        if (currentPhotoIndex >= photos.length) {
-            currentPhotoIndex = 0;
-        } else if (currentPhotoIndex < 0) {
-            currentPhotoIndex = photos.length - 1;
+        function openModal(src, comment, username, index) {
+            modal.classList.remove('hidden');
+            modalImg.src = src;
+            modalComment.innerHTML = comment + "<br>投稿者: " + username;
+            currentPhotoIndex = index;
         }
-        var photo = photos[currentPhotoIndex];
-        modalImg.src = "uploads/" + photo.file_name;
-        modalComment.innerHTML = photo.comment + "<br>投稿者: " + photo.username;
-    }
 
-    // モーダルの外側をクリックしたときにモーダルを閉じる
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            closeModal();
+        function closeModal() {
+            modal.classList.add('hidden');
         }
-    }
 
-    // キーボードでの操作
-    document.onkeydown = function(e) {
-        if (!modal.classList.contains('hidden')) {
-            if (e.keyCode == 37) { // 左矢印キー
-                changePhoto(-1);
-            } else if (e.keyCode == 39) { // 右矢印キー
-                changePhoto(1);
-            } else if (e.keyCode == 27) { // ESCキー
+        function changePhoto(direction) {
+            currentPhotoIndex += direction;
+            if (currentPhotoIndex >= photos.length) {
+                currentPhotoIndex = 0;
+            } else if (currentPhotoIndex < 0) {
+                currentPhotoIndex = photos.length - 1;
+            }
+            var photo = photos[currentPhotoIndex];
+            modalImg.src = "uploads/" + photo.file_name;
+            modalComment.innerHTML = photo.comment + "<br>投稿者: " + photo.username;
+        }
+
+        // モーダルの外側をクリックしたときにモーダルを閉じる
+        window.onclick = function(event) {
+            if (event.target == modal) {
                 closeModal();
             }
         }
-    }
-</script>
 
-    <?php include 'footer_photo.php'; ?>
+        // キーボードでの操作
+        document.onkeydown = function(e) {
+            if (!modal.classList.contains('hidden')) {
+                if (e.keyCode == 37) { // 左矢印キー
+                    changePhoto(-1);
+                } else if (e.keyCode == 39) { // 右矢印キー
+                    changePhoto(1);
+                } else if (e.keyCode == 27) { // ESCキー
+                    closeModal();
+                }
+            }
+        }
+    </script>
 
-   
+    <!-- <?php include 'footer_photo.php'; ?> -->
+
+
 </body>
+<p class="mt-10 text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
 </html>

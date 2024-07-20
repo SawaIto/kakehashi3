@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="bg-blue-50">
     <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
+    <div class="container mx-auto mt-20 p-6 bg-white rounded shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">お問い合わせ</h1>
 
         <?php if ($error): ?>
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <p class="text-sm text-gray-600">※閲覧者の方へ：お問い合わせの回答は管理者が行います。</p>
                 <?php endif; ?>
 
-                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">送信</button>
+                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded text-lg text-center transition duration-300">送信</button>
             </form>
         <?php endif; ?>
 

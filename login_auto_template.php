@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   </script>
 </head>
 <body class="bg-blue-50" id="body">
-    <div class="container mx-auto mt-10 p-6 bg-white rounded-lg shadow-md max-w-md">
+    <div class="container mx-auto mt-10 p-6 bg-white rounded shadow-md max-w-md">
     <div class="flex justify-center">
       <button class="bg-blue-700 hover:bg-green-700 text-white font-bold text-2xl sm:text-2xl py-5 px-6 rounded mb-4" onclick="autofillAndSubmit()">正恵さん用<br>スタートボタン</button>
     </div>
@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </span>
                 </div>
             </div>
-            <button type="submit" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded-lg text-xl text-center transition duration-300 w-full">ログイン</button>
+            <button type="submit" class="block bg-blue-500 hover:bg-blue-300 text-black font-bold px-4 py-3 rounded text-xl text-center transition duration-300 w-full">ログイン</button>
         </form>
         <div class="mt-6 text-right space-x-4">
         <a href="login.php" class="text-black font-bold text-base">一般ログインページへ</a>

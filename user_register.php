@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 <body class="bg-blue-50" id="body">
 <?php include 'header0.php'; ?>
-    <div class="container mx-auto mt-20 p-6 bg-white rounded-lg shadow-md max-w-md">
+    <div class="container mx-auto mt-20 p-6 bg-white rounded shadow-md max-w-md">
         <h1 class="text-3xl font-bold mb-6 text-center">ユーザー登録</h1>
         <?php if (isset($error_message)): ?>
             <p class="text-red-500 mb-4 text-center"><?= h($error_message) ?></p>
@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="text" id="confirm_password" name="confirm_password" required class="w-full p-2 border rounded">
             </div>
             <div class="m-2 text-center space-x-4">
-                <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-3 py-2 rounded-lg text-sm sm:text-base text-center transition duration-300">登録</button>
+                <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold px-3 py-2 rounded text-xl text-center transition duration-300">登録</button>
             </div>
         </form>
         <div class="flex justify-center space-x-4 mt-4">

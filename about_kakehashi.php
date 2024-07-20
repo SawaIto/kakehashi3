@@ -16,7 +16,7 @@
             <p class="text-xl text-gray-600">About Kakehashi</p>
         </header>
 
-        <main class="bg-white shadow-lg rounded-lg p-6 mb-8">
+        <main class="bg-white shadow-lg rounded p-6 mb-8">
             <p class="mb-4 text-base">
                 私たちは、高齢者とその家族がより簡単につながり、大切な思い出を共有できるアプリ「Kakehashi」を開発しました。
             </p>

@@ -11,17 +11,17 @@
 <footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex justify-end mb-4 space-x-2">
-                <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
                     検索
                 </button>
                 <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
                     詳細
                 </button>
-                    <a href="memo_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                    <a href="memo_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
                         メモ登録
                     </a>
-                    <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+                    <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
                     ホーム
                 </a>
                     <?php endif; ?>
@@ -39,7 +39,7 @@
         <?php endif; ?>
 
         <!-- 検索とフィルタリングフォーム -->
-        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
+        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded">
             <form action="" method="GET" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow text-black">
                     <input type="text" name="search" placeholder="検索..." value="<?= h($search) ?>" class="w-full p-2 border rounded">
@@ -53,8 +53,8 @@
                     </select>
                 </div>
                 <div class="flex justify-end space-x-2">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">検索</button>
-                    <a href="memo_view.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg text-xs sm:text-base transition duration-300">リセット</a>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">検索</button>
+                    <a href="memo_view.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">リセット</a>
                 </div>
             </form>
         </div>

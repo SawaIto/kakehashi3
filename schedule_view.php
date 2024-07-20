@@ -98,7 +98,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
     </script>
     <style>
         .content-wrapper {
-            height: calc(100vh - 64px);
+            height: calc(100vh -20px);
             overflow-y: auto;
         }
 
@@ -131,7 +131,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
     <?php include 'header0.php'; ?>
     <div class="pt-16 sm:pt-20">
         <main class="container mx-auto mt-5 mb-40">
-            <div class="bg-white rounded-lg shadow-md p-1 sm:p-6">
+            <div class="bg-white rounded shadow-md p-1 sm:p-6">
                 <div class="text-center mb-6">
                     <h1 class="text-2xl sm:text-3xl font-bold">予定表示</h1>
                 </div>
@@ -139,11 +139,11 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                     <form method="GET" class="flex space-x-4">
                         <div>
                             <label for="start_date" class="block text-sm font-medium text-gray-700">開始日</label>
-                            <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                         <div>
                             <label for="end_date" class="block text-sm font-medium text-gray-700">終了日</label>
-                            <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                         <div class="flex items-end">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -154,7 +154,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                 </div>
 
                 <div class="overflow-x-auto schedule_table">
-                    <div class="inline-block w-full py-1 px-1 align-middle sm:px-6 lg:px-8">
+                    <div class="inline-block w-full py-1 px-2 align-middle sm:px-6 lg:px-8">
                         <?php foreach ($schedulesByYear as $year => $yearSchedules) : ?>
                             <h3 class="text-xl sm:text-2xl font-bold mb-2 mt-4"><?= h($year) ?>年</h3>
                             <table class="min-w-full border-collapse border border-blue-200">
@@ -205,8 +205,7 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                                                 <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                                     <div class="flex flex-col space-y-2">
 
-                                                        <a href="<?php echo 'schedule_edit.php?id=' . $schedule['id']; ?>" 
-                                                        <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
+                                                        <a href="<?php echo 'schedule_edit.php?id=' . $schedule['id']; ?>" <a href="schedule_edit.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
                                                         <a href="schedule_delete.php?id=<?= $schedule['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
                                                     </div>
                                                 </td>
@@ -218,10 +217,35 @@ foreach ($schedulesByYear as $year => $yearSchedules) {
                         <?php endforeach; ?>
                     </div>
                 </div>
+                    <div class="flex justify-end mb-4 mt-10 space-x-2">
+                    <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                ホーム
+                            </a>
+                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 sm:px-4 rounded text-xs sm:text-base transition duration-300">
+                                詳細表示/非表示
+                            </button>
+                            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                                予定登録
+                            </a>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (isset($_SESSION['schedule_message'])) : ?>
+                        <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+                        <?php unset($_SESSION['schedule_message']); ?>
+                    <?php endif; ?>
+
+                    <?php if (isset($_SESSION['error_message'])) : ?>
+                        <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+                        <?php unset($_SESSION['error_message']); ?>
+                    <?php endif; ?>
+
             </div>
         </main>
     </div>
-    <?php include 'footer_schedule.php'; ?>
+    <p class="text-sm text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
+    <!-- <?php include 'footer_schedule.php'; ?> -->
 </body>
 
 </html>

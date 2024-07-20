@@ -74,7 +74,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
             display: flex;
             flex-direction: column;
             padding-top: 64px;
-            padding-bottom: 120px;
+            /* padding-bottom: 120px; */
         }
 
         .content-wrapper {
@@ -89,7 +89,7 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <main>
         <div class="content-wrapper">
             <div class="container mx-auto p-6">
-                <div class="bg-white rounded-lg shadow-md max-w-md mx-auto">
+                <div class="bg-white rounded shadow-md max-w-md mx-auto">
                     <h1 class="text-3xl font-bold mb-6 text-center pt-6">予定登録</h1>
                     <?php if (isset($error)) : ?>
                         <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
@@ -132,13 +132,26 @@ $group_members = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php endforeach; ?>
                             </div>
                         </div>
-                        <button type="submit" class="w-full bg-blue-400 hover:bg-blue-500 text-black font-bold px-4 py-2 rounded-lg text-lg text-center transition duration-300">登録</button>
+                        <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded text-lg text-center transition duration-300">登録</button>
+                        <div class="flex justify-center space-x-4 mb-4">
+            <a href="home.php" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+                ホーム
+            </a>
+            <a href="schedule_view.php" class="bg-blue-400 hover:bg-blue-500 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">
+                予定表示
+            </a>
+            <br>
+                                    </div>    
                     </form>
+                    
+        </div>
                 </div>
             </div>
         </div>
     </main>
-    <?php include 'footer_schedule.php'; ?>
+    <p class="text-sm m-3 text-gray-600 text-center">&copy; Kakehashi2024. All rights reserved.</p>
+
+    <!-- <?php include 'footer_schedule.php'; ?> -->
     <script>
         document.getElementById('others_checkbox').addEventListener('change', function() {
             if (this.checked) {

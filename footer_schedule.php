@@ -11,17 +11,17 @@
 <footer class="bg-gray-300 text-white py-4 fixed bottom-0 left-0 right-0 z-50">
     <div class="container mx-auto px-4">
         <div class="flex justify-end mb-4 space-x-2">
-            <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+            <button onclick="toggleSearchFilter()" class="bg-blue-400 hover:bg-blue-500 text-white font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
                 検索
             </button>
             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
-            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-2 sm:px-4 rounded-lg text-xs sm:text-base transition duration-300">
+            <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-2 sm:px-4 rounded text-xs sm:text-base transition duration-300">
                 詳細表示/非表示
             </button>
-            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-3 sm:px-2 rounded-lg text-xs sm:text-base transition duration-300">
+            <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 py-4 sm:px-2 rounded text-xs sm:text-base transition duration-300">
                 予定登録
             </a>
-            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-2 rounded-lg text-xs sm:text-base transition duration-300">
+            <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 py-4 sm:px-2 rounded text-xs sm:text-base transition duration-300">
                 ホーム
             </a>
             <?php endif; ?>
@@ -37,7 +37,7 @@
             <?php unset($_SESSION['error_message']); ?>
         <?php endif; ?>
 
-        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded-lg">
+        <div id="searchFilter" class="hidden mb-4 bg-gray-200 p-4 rounded">
             <form method="GET" action="" class="flex flex-col sm:flex-row sm:items-end space-y-2 sm:space-y-0 sm:space-x-4">
                 <div class="flex-grow">
                     <label for="start_date" class="block text-sm font-medium text-gray-700">開始日:</label>
@@ -48,8 +48,8 @@
                     <input type="date" id="end_date" name="end_date" value="<?= h($end_date ?? '') ?>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                 </div>
                 <div class="flex space-x-2">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">検索</button>
-                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded-lg text-sm sm:text-base transition duration-300">リセット</a>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">検索</button>
+                    <a href="<?= $_SERVER['PHP_SELF'] ?>" class="bg-gray-300 hover:bg-gray-400 text-black font-bold py-2 px-4 rounded text-sm sm:text-base transition duration-300">リセット</a>
                 </div>
             </form>
         </div>
