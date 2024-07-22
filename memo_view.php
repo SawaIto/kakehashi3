@@ -181,7 +181,7 @@ $categories = ['買い物', 'やること', 'その他'];
                             </a>
                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                 <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-black font-bold py-2 px-2 rounded text-xs sm:text-base transition duration-300">
-                                    詳細
+                                詳細表示/非表示
                                 </button>
                                 <a href="memo_input.php" class="bg-orange-500 hover:bg-orange-600 text-black font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
                                     メモ登録

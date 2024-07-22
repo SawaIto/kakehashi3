@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <a href="password_reset.php" class="text-blue-500 hover:text-blue-700">パスワードを忘れた場合</a>
 </div>
                 <div class="mt-6 text-right">
-                    <a href="login_auto_template.php" class="text-black font-bold text-base">special_login</a>
+                    <a href="login_auto_template.php" class="text-black font-bold text-base">special_login(課題提出用)</a>
                 </div>
             </div>
         </div>

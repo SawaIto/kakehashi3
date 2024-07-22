@@ -173,7 +173,7 @@ if (isset($_POST['remove_from_album'])) {
                                 </form>
                             <?php endif; ?>
                             <?php if ($_SESSION['role'] !== 'view') : ?>
-                            <a href="album_add_photos.php?id=<?php echo h($album['id']); ?>" class="bg-green-500 hover:bg-green-700 text-black text-sm font-bold py-2 px-4 rounded text-center">写真を追加</a>
+                            <a href="album_add_photos.php?id=<?php echo h($album['id']); ?>" class="bg-green-500 hover:bg-green-700 text-black text-sm font-bold py-2 px-4 rounded text-center">写真をアルバムに追加</a>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -184,7 +184,7 @@ if (isset($_POST['remove_from_album'])) {
             <p class="text-gray-600 mb-4"><?php echo h($current_album['description']); ?></p>
             <div class="mb-4 flex justify-between">
                 <a href="album_add_photos.php?id=<?php echo h($album_id); ?>" class="bg-green-500 hover:bg-green-700 text-black font-bold py-2 px-4 rounded">
-                    写真を追加
+                    写真をアルバムに追加
                 </a>
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
