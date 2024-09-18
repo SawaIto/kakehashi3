@@ -95,6 +95,8 @@ $group = $stmt->fetch(PDO::FETCH_ASSOC);
                     <a href="photo_view.php" class="block bg-pink-500 hover:bg-pink-300 text-black font-bold px-3 py-2.5 rounded text-sm sm:text-xl text-center transition duration-300">写真表示</a>
                     <a href="album_create.php" class="block bg-purple-300 hover:bg-purple-500 text-black font-bold px-3 py-2.5 rounded text-sm  sm:text-xl text-center transition duration-300">アルバム作成</a>
                     <a href="album_view.php" class="block bg-purple-500 hover:bg-purple-300 text-black font-bold px-3 py-2.5 rounded text-sm sm:text-xl text-center transition duration-300">アルバム表示</a>
+                    <a href="chat_create.php" class="block bg-purple-300 hover:bg-purple-500 text-black font-bold px-3 py-2.5 rounded text-sm  sm:text-xl text-center transition duration-300">チャット作成</a>
+                    <a href="chat_list.php" class="block bg-purple-300 hover:bg-purple-500 text-black font-bold px-3 py-2.5 rounded text-sm  sm:text-xl text-center transition duration-300">チャット一覧</a>
 
                 </div>
             </div>
