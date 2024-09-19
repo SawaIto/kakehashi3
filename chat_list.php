@@ -87,7 +87,7 @@ td.schedule-cell {padding: 0.5rem;}
 </head>
 
 <body class="bg-blue-50" id="body">
-    <?include 'header0.php'; ?>
+    <?php include 'header0.php'; ?>
     <div class="pt-16 sm:pt-20">
         <main class="container mx-auto mt-5 mb-40">
             <div class="bg-white rounded shadow-md p-1 sm:p-6">
@@ -116,9 +116,9 @@ td.schedule-cell {padding: 0.5rem;}
                             <thead>
                                 <tr class="bg-blue-100">
                                     <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 text-center">内容</th>
-                                    <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                    <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                         <th class="text-left text-xs sm:text-sm font-semibold p-2 border border-blue-200 extra-column hidden text-center w-16 sm:w-24">操作</th>
-                                    <?endif; ?>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody>
@@ -135,7 +135,7 @@ td.schedule-cell {padding: 0.5rem;}
                                             <div class="schedule-owner"><?php echo nl2br(h($chat['chat_name'])) ?></div>
                                             <div class="">
                                                 <div class="">
-                                                    <?
+                                                    <?php
                                                     foreach($chat_members as $member){
                                                         echo getUsernameById($member,$pdo).',';
                                                     }
@@ -143,16 +143,16 @@ td.schedule-cell {padding: 0.5rem;}
                                                 </div>
                                                 <a href="./chat_room.php?chat_id=<?php echo $chat['id']?>">トークへ</a>
 
-                                                <?if(empty($style)){?>
+                                                <?php if(empty($style)){?>
                                                 <form method="post" style="display:inline;">
                                                     <input type="hidden" name="chat_id" value="<?php echo $chat['id']?>">
                                                     <button type="submit" name="is_top_flag" class="bg-blue-500 text-white py-1 px-3 rounded">
                                                         上部へ
                                                     </button>
                                                 </form>
-                                                <?}?>
+                                                <?php }?>
                                             </div>
-                                            <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                            <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                                 <div class="meta-info extra-column hidden text-end">
                                                     <?if ($chat['updated_at'] != $chat['created_at']) : ?>
                                                         編集者: <?php echo  h($chat['updated_by']) ?><br>
@@ -162,7 +162,7 @@ td.schedule-cell {padding: 0.5rem;}
                                                         作成日: <?php echo  date('Y-m-d H:i', strtotime($chat['created_at'])) ?><br>
                                                     <?endif; ?>
                                                 </div>
-                                            <?endif; ?>
+                                            <?php endif; ?>
 
                                         </td>
                                         <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
@@ -181,24 +181,24 @@ td.schedule-cell {padding: 0.5rem;}
                 </div>
                 <div class="flex justify-end mb-4 mt-10 space-x-2">
                 <a href="home.php" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">ホーム</a>
-                    <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                    <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                         <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 sm:px-4 rounded text-xs sm:text-base transition duration-300">
                             詳細表示/非表示
                         </button>
                         <a href="chat_create.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
                             チャット作成
                         </a>
-                    <?endif; ?>
+                    <?php endif; ?>
                 </div>
-                <?if (isset($_SESSION['schedule_message'])) : ?>
-                    <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?php echo  h($_SESSION['schedule_message']) ?></p>
-                    <?unset($_SESSION['schedule_message']); ?>
-                <?endif; ?>
+                <?php if (isset($_SESSION['schedule_message'])) : ?>
+                    <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?php  echo  h($_SESSION['schedule_message']) ?></p>
+                    <?php unset($_SESSION['schedule_message']); ?>
+                <?php endif; ?>
 
-                <?if (isset($_SESSION['error_message'])) : ?>
-                    <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?php echo  h($_SESSION['error_message']) ?></p>
-                    <?unset($_SESSION['error_message']); ?>
-                <?endif; ?>
+                <?php if (isset($_SESSION['error_message'])) : ?>
+                    <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?php  echo  h($_SESSION['error_message']) ?></p>
+                    <?php unset($_SESSION['error_message']); ?>
+                <?php endif; ?>
             </div>
         </main>
     </div>

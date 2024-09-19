@@ -52,7 +52,7 @@ main {flex: 1;display: flex;flex-direction: column;padding-top: 64px;}
                 <div class="bg-white rounded shadow-md max-w-md mx-auto">
                     <h1 class="text-3xl font-bold mb-6 text-center pt-6">チャット作成</h1>
                     <?php if (isset($error)) : ?>
-                        <p class="text-red-500 mb-4 text-center"><?= h($error) ?></p>
+                        <p class="text-red-500 mb-4 text-center"><? echo h($error) ?></p>
                     <?php endif; ?>
                     <form method="POST" class="space-y-4 p-6">
                         <div>
@@ -79,7 +79,7 @@ main {flex: 1;display: flex;flex-direction: column;padding-top: 64px;}
                             <input type="checkbox" name="is_top_flag" id="is_top_flag" class="mr-2 rounded border-blue-300 text-blue-500 focus:ring-blue-200">
                             <label for="is_top_flag">最上部に表示(ピン留め)</label>
                         </div>
-                        <?}?>
+                        <?php }?>
 
                         <button type="submit" class="w-full bg-amber-700 hover:bg-amber-500 text-white font-bold px-4 py-2 rounded text-lg text-center transition duration-300">登録</button>
                         <div class="flex justify-center space-x-4 mb-4">
