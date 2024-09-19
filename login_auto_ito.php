@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       const usernameInput = form.querySelector('#username');
       const passwordInput = form.querySelector('#password');
 
-      usernameInput.value = 'まさえ';
-      passwordInput.value = 'masae110';
+      usernameInput.value = '正恵';
+      passwordInput.value = 'masae';
 
       form.submit();
     }
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body class="bg-blue-50" id="body">
     <div class="container mx-auto mt-10 p-6 bg-white rounded shadow-md max-w-md">
     <div class="flex justify-center">
-      <button class="bg-blue-700 hover:bg-green-700 text-white font-bold text-2xl sm:text-2xl py-5 px-6 rounded mb-4" onclick="autofillAndSubmit()">課題提出用ワンクリック<br>スタートボタン</button>
+      <button class="bg-blue-700 hover:bg-green-700 text-white font-bold text-2xl sm:text-2xl py-5 px-6 rounded mb-4" onclick="autofillAndSubmit()">正恵さん用<br>スタートボタン</button>
     </div>
 
         <form id="login-form" method="POST" class="space-y-4 hidden">
