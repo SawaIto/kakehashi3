@@ -154,27 +154,27 @@ td.schedule-cell {padding: 0.5rem;}
                                             </div>
                                             <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                                 <div class="meta-info extra-column hidden text-end">
-                                                    <?if ($chat['updated_at'] != $chat['created_at']) : ?>
+                                                    <?php if ($chat['updated_at'] != $chat['created_at']) : ?>
                                                         編集者: <?php echo  h($chat['updated_by']) ?><br>
                                                         編集日: <?php echo  date('Y-m-d H:i', strtotime($chat['updated_at'])) ?><br>
-                                                    <?else : ?>
+                                                    <?php else : ?>
                                                         編集者: <?php echo  h($chat['updated_by']) ?><br>
                                                         作成日: <?php echo  date('Y-m-d H:i', strtotime($chat['created_at'])) ?><br>
-                                                    <?endif; ?>
+                                                    <?php endif; ?>
                                                 </div>
                                             <?php endif; ?>
 
                                         </td>
-                                        <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
+                                        <?php if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                             <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                                 <div class="flex flex-col space-y-2">
                                                     <a href="<?php echo 'schedule_edit.php?id=' . $chat['id']; ?>" href="schedule_edit.php?id=<?php echo  $chat['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
                                                     <a href="schedule_delete.php?id=<?php echo  $chat['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
                                                 </div>
                                             </td>
-                                        <?endif; ?>
+                                        <?php endif; ?>
                                     </tr>
-                                <?endforeach; ?>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
