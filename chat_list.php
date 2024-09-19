@@ -98,11 +98,11 @@ td.schedule-cell {padding: 0.5rem;}
                     <form method="GET" class="flex space-x-4">
                         <div>
                             <label for="start_date" class="block text-sm font-medium text-gray-700">開始日</label>
-                            <input type="date" id="start_date" name="start_date" value="<?= h($start_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="date" id="start_date" name="start_date" value="<?php echo  h($start_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                         <div>
                             <label for="end_date" class="block text-sm font-medium text-gray-700">終了日</label>
-                            <input type="date" id="end_date" name="end_date" value="<?= h($end_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                            <input type="date" id="end_date" name="end_date" value="<?php echo  h($end_date) ?>" class="mt-1 block w-full py-2 py-4 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                         </div>
                         <div class="flex items-end">
                             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">検索</button>
@@ -122,17 +122,17 @@ td.schedule-cell {padding: 0.5rem;}
                                 </tr>
                             </thead>
                             <tbody>
-                                <?foreach ($chats as $chat) : ?>
-                                    <?
+                                <?php foreach ($chats as $chat) : ?>
+                                    <?php
                                     $chat_members = json_decode($chat['chat_member']);
                                     $style = "";
                                     if(!empty($chat["is_top_flag"])){
                                         $style = "#ffdbdb";
                                     }
                                     ?>
-                                    <tr class="hover:bg-blue-50 transition-colors duration-200" style="background:<?=$style?>">
+                                    <tr class="hover:bg-blue-50 transition-colors duration-200" style="background:<?php echo $style?>">
                                         <td class="text-xs sm:text-sm border border-blue-200 schedule-cell">
-                                            <div class="schedule-owner"><?=nl2br(h($chat['chat_name'])) ?></div>
+                                            <div class="schedule-owner"><?php echo nl2br(h($chat['chat_name'])) ?></div>
                                             <div class="">
                                                 <div class="">
                                                     <?
@@ -141,11 +141,11 @@ td.schedule-cell {padding: 0.5rem;}
                                                     }
                                                     ?>
                                                 </div>
-                                                <a href="./chat_room.php?chat_id=<?=$chat['id']?>">トークへ</a>
+                                                <a href="./chat_room.php?chat_id=<?php echo $chat['id']?>">トークへ</a>
 
                                                 <?if(empty($style)){?>
                                                 <form method="post" style="display:inline;">
-                                                    <input type="hidden" name="chat_id" value="<?=$chat['id']?>">
+                                                    <input type="hidden" name="chat_id" value="<?php echo $chat['id']?>">
                                                     <button type="submit" name="is_top_flag" class="bg-blue-500 text-white py-1 px-3 rounded">
                                                         上部へ
                                                     </button>
@@ -155,11 +155,11 @@ td.schedule-cell {padding: 0.5rem;}
                                             <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                                 <div class="meta-info extra-column hidden text-end">
                                                     <?if ($chat['updated_at'] != $chat['created_at']) : ?>
-                                                        編集者: <?= h($chat['updated_by']) ?><br>
-                                                        編集日: <?= date('Y-m-d H:i', strtotime($chat['updated_at'])) ?><br>
+                                                        編集者: <?php echo  h($chat['updated_by']) ?><br>
+                                                        編集日: <?php echo  date('Y-m-d H:i', strtotime($chat['updated_at'])) ?><br>
                                                     <?else : ?>
-                                                        編集者: <?= h($chat['updated_by']) ?><br>
-                                                        作成日: <?= date('Y-m-d H:i', strtotime($chat['created_at'])) ?><br>
+                                                        編集者: <?php echo  h($chat['updated_by']) ?><br>
+                                                        作成日: <?php echo  date('Y-m-d H:i', strtotime($chat['created_at'])) ?><br>
                                                     <?endif; ?>
                                                 </div>
                                             <?endif; ?>
@@ -168,8 +168,8 @@ td.schedule-cell {padding: 0.5rem;}
                                         <?if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'modify') : ?>
                                             <td class="text-xs sm:text-base md:text-lg p-2 border border-blue-200 extra-column hidden">
                                                 <div class="flex flex-col space-y-2">
-                                                    <a href="<?='schedule_edit.php?id=' . $chat['id']; ?>" href="schedule_edit.php?id=<?= $chat['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
-                                                    <a href="schedule_delete.php?id=<?= $chat['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
+                                                    <a href="<?php echo 'schedule_edit.php?id=' . $chat['id']; ?>" href="schedule_edit.php?id=<?php echo  $chat['id'] ?>" class="text-center py-1 px-2 bg-blue-500 text-white hover:bg-blue-700 rounded" onclick="localStorage.setItem('extraColumnsVisible', 'true'); return true;">編集</a>
+                                                    <a href="schedule_delete.php?id=<?php echo  $chat['id'] ?>" class="text-center py-1 px-2 bg-red-500 text-white hover:bg-red-700 rounded" onclick="return confirm('本当に削除しますか？') && localStorage.setItem('extraColumnsVisible', 'true');">削除</a>
                                                 </div>
                                             </td>
                                         <?endif; ?>
@@ -185,18 +185,18 @@ td.schedule-cell {padding: 0.5rem;}
                         <button onclick="toggleExtraColumns()" class="bg-purple-400 hover:bg-purple-500 text-white font-bold py-2 px-4 sm:px-4 rounded text-xs sm:text-base transition duration-300">
                             詳細表示/非表示
                         </button>
-                        <a href="schedule_input.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
-                            予定登録
+                        <a href="chat_create.php" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded text-xs sm:text-base transition duration-300">
+                            チャット作成
                         </a>
                     <?endif; ?>
                 </div>
                 <?if (isset($_SESSION['schedule_message'])) : ?>
-                    <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?= h($_SESSION['schedule_message']) ?></p>
+                    <p class="text-sm sm:text-base text-green-500 mb-4 text-center"><?php echo  h($_SESSION['schedule_message']) ?></p>
                     <?unset($_SESSION['schedule_message']); ?>
                 <?endif; ?>
 
                 <?if (isset($_SESSION['error_message'])) : ?>
-                    <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?= h($_SESSION['error_message']) ?></p>
+                    <p class="text-sm sm:text-base text-red-500 mb-4 text-center"><?php echo  h($_SESSION['error_message']) ?></p>
                     <?unset($_SESSION['error_message']); ?>
                 <?endif; ?>
             </div>
